@@ -6,10 +6,12 @@ project(${PROJECT_NAME})
 
 set(Q3D_HEADERS
     includes/q3d/window/window.hpp
+    includes/q3d/log/log.hpp
 )
 
 set(Q3D_SOURCES
     src/q3d/window/window.cpp
+    src/q3d/log/log.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})
@@ -17,3 +19,20 @@ add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC includes)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23)
+
+# Dependencies
+
+add_subdirectory(ext/glfw)
+
+add_subdirectory(ext/glad-core/glad)
+set(GLAD_STATIC ON)
+
+add_subdirectory(ext/glm)
+
+# Linking
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC glfw
+    PUBLIC glad
+    PUBLIC glm
+)
