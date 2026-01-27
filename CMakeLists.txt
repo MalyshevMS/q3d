@@ -8,12 +8,13 @@ set(Q3D_HEADERS
     includes/q3d/window/window.hpp
     includes/q3d/log/log.hpp
     includes/q3d/res/resources.hpp
+    includes/q3d/gl/shader.hpp
 )
 
 set(Q3D_SOURCES
     src/q3d/window/window.cpp
-    src/q3d/log/log.cpp
     src/q3d/res/resources.cpp
+    src/q3d/gl/shader.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})

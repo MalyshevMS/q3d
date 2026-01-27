@@ -11,6 +11,7 @@ namespace q3d {
         GLFWwindow* handle;
 
         glm::vec2 size;
+        glm::vec2 fb_size;
         std::string title;
     public:
         Window(std::string_view title, glm::vec2 size);
@@ -25,6 +26,8 @@ namespace q3d {
 
         glm::vec2 getSize() { return size; }
         void setSize(glm::vec2 size);
+
+        glm::vec2 getFBSize();
 
         std::string getTitle() { return title; }
         void setTitle(std::string_view title);

@@ -27,6 +27,7 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
 
     this->size  = size;
     this->title = title;
+    this->fb_size = getFBSize();
 
     glfwMakeContextCurrent(handle);
     glfwSetWindowUserPointer(handle, this);
@@ -38,6 +39,8 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
         terminate();
         return;
     }
+
+    glViewport(0, 0, fb_size.x, fb_size.y);
 }
 
 bool q3d::Window::isOpen() {
@@ -64,12 +67,21 @@ void q3d::Window::update() {
 void q3d::Window::setSize(glm::vec2 size) {
     if (!handle) return;
 
-    this->size = size;
     glfwSetWindowSize(handle, size.x, size.y);
-    glViewport(0, 0, size.x, size.y);
+
+    this->size = size;
+    this->fb_size = getFBSize();
+
+    glViewport(0, 0, fb_size.x, fb_size.y);
 }
 
 void q3d::Window::setTitle(std::string_view title) {
     this->title = title;
     glfwSetWindowTitle(handle, title.cbegin());
+}
+
+glm::vec2 q3d::Window::getFBSize() {
+    int x, y;
+    glfwGetFramebufferSize(handle, &x, &y);
+    return {x, y};
 }

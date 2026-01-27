@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+q3d::Resources* q3d::Resources::instance = nullptr;
+
 q3d::Resources::Resources(std::string_view exePath) {
     auto found = exePath.find_last_of("/\\");
     path = exePath.substr(0, ++found);
