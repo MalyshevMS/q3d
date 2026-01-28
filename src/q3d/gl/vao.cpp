@@ -1,6 +1,23 @@
 #include <q3d/gl/vao.hpp>
 #include <glad/glad.h>
 
+unsigned int q3d::gl::methodToGl(DrawMethod method) {
+    using enum DrawMethod;
+
+    switch (method) {
+        case Points:           return GL_POINTS;
+        case Lines:            return GL_LINES;
+        case LineStrip:        return GL_LINE_STRIP;
+        case LineLoop:         return GL_LINE_LOOP;
+        case Triangles:        return GL_TRIANGLES;
+        case TriangleStrip:    return GL_TRIANGLE_STRIP;
+        case TriangleFan:      return GL_TRIANGLE_FAN;
+        case Patches:          return GL_PATCHES;
+    }
+
+    return GL_TRIANGLES;
+}
+
 q3d::gl::Vao::Vao() {
     glGenVertexArrays(1, &id);
 }
@@ -42,12 +59,12 @@ void q3d::gl::Vao::setIbo(Ibo &ibo) {
     indCount = ibo.getCount();
 }
 
-void q3d::gl::Vao::draw(unsigned int method) {
+void q3d::gl::Vao::draw(DrawMethod method) {
     bind();
 
     if(indCount > 0) {
-        glDrawElements(method, indCount, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(methodToGl(method), indCount, GL_UNSIGNED_INT, nullptr);
     } else {
-        glDrawArrays(method, 0, vertexCount);
+        glDrawArrays(methodToGl(method), 0, vertexCount);
     }
 }

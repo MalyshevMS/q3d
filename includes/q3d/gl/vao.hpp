@@ -5,6 +5,19 @@
 
 namespace q3d {
     namespace gl {
+        enum class DrawMethod {
+            Points,
+            Lines,
+            LineStrip,
+            LineLoop,
+            Triangles,
+            TriangleStrip,
+            TriangleFan,
+            Patches
+        };
+
+        unsigned int methodToGl(DrawMethod method);
+
         class Vao {
         private:
             unsigned int id;
@@ -23,8 +36,7 @@ namespace q3d {
 
             unsigned int getIndeciesCount() const { return indCount; }
 
-            // TODO: инкапсулировать GL-методы рисования
-            void draw(unsigned int method = 0x0004); // GL_TRIANGLES by default
+            void draw(DrawMethod method = DrawMethod::Triangles);
         };
     }
 }
