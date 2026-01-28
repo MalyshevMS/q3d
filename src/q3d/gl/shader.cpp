@@ -2,8 +2,16 @@
 #include <q3d/log/log.hpp>
 #include <glad/glad.h>
 
-bool q3d::gl::Shader::compileShader(std::string_view src, const unsigned int type, unsigned int &id) {
-    id = glCreateShader(type);
+unsigned int q3d::gl::Shader::typeToGl(Type type) {
+    switch(type) {
+        case Type::Vertex: return GL_VERTEX_SHADER;
+        case Type::Fragment: return GL_FRAGMENT_SHADER;
+    }
+    return 0;
+}
+
+bool q3d::gl::Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
+    id = glCreateShader(typeToGl(type));
 
     const char* code = src.cbegin();
 
@@ -29,15 +37,15 @@ void q3d::gl::Shader::init() {
 }
 
 q3d::gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
-    GLuint vs_id = attach(vert_src, GL_VERTEX_SHADER);
-    GLuint fs_id = attach(frag_src, GL_FRAGMENT_SHADER);
+    GLuint vs_id = attach(vert_src, Type::Vertex);
+    GLuint fs_id = attach(frag_src, Type::Fragment);
     init();
     link();
     glDeleteShader(vs_id);
     glDeleteShader(fs_id);
 }
 
-unsigned int q3d::gl::Shader::attach(std::string_view src, const unsigned int type) {
+unsigned int q3d::gl::Shader::attach(std::string_view src, const Type type) {
     GLuint shader_id;
     if (!compileShader(src, type, shader_id)) {
         glDeleteShader(shader_id);
@@ -45,9 +53,9 @@ unsigned int q3d::gl::Shader::attach(std::string_view src, const unsigned int ty
 
     glAttachShader(id, shader_id);
 
-    if (type == GL_VERTEX_SHADER) {
+    if (type == Type::Vertex) {
         attachedVS = true;
-    } else if (type == GL_FRAGMENT_SHADER) {
+    } else if (type == Type::Fragment) {
         attachedFS = true;
     }
 

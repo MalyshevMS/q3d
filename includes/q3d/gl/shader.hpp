@@ -7,15 +7,23 @@
 
 namespace q3d {
     namespace gl {
+        
+
         class Shader {
+        public:
+            enum class Type {
+                Vertex, Fragment
+            };
         private:
-            static bool compileShader(std::string_view src, const unsigned int type, unsigned int& id); // TODO: инкапсулировать GL-тип шейдера
+            static bool compileShader(std::string_view src, const Type type, unsigned int& id);
 
             bool _isLinked = false;
             bool attachedFS = false;
             bool attachedVS = false;
             unsigned int id;
         public:
+            static unsigned int typeToGl(Type type);
+
             void init();
 
             Shader() { init(); }
@@ -24,7 +32,7 @@ namespace q3d {
 
             bool isLinked() { return this->_isLinked; }
 
-            unsigned int attach(std::string_view src, const unsigned int type);
+            unsigned int attach(std::string_view src, const Type type);
             void link();
 
             void use();
