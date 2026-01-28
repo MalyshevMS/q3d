@@ -80,3 +80,6 @@ void q3d::gl::Shader::use() {
 void q3d::gl::Shader::unuse() {
     glUseProgram(0u);
 }
+q3d::gl::Shader::~Shader() {
+    glDeleteProgram(id);
+}
