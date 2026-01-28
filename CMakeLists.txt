@@ -18,6 +18,7 @@ set(Q3D_SOURCES
     src/q3d/window/window.cpp
     src/q3d/res/resources.cpp
     src/q3d/gl/shader.cpp
+    src/q3d/gl/uniform.cpp
     src/q3d/gl/vbo.cpp
     src/q3d/gl/ibo.cpp
     src/q3d/gl/vao.cpp

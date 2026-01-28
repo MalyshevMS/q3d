@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string_view>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace q3d {
     namespace gl {
@@ -27,7 +30,16 @@ namespace q3d {
             void use();
             static void unuse();
 
-            // TODO: сделать uniform
+            int locate(std::string_view name);
+
+            void uniform(std::string_view name, bool val);
+            void uniform(std::string_view name, int val);
+            void uniform(std::string_view name, float val);
+            void uniform(std::string_view name, glm::vec2 val);
+            void uniform(std::string_view name, glm::vec3 val);
+            void uniform(std::string_view name, glm::mat4 val);
+            
+            // TODO: сделать uniform array
         };
     }
 }
