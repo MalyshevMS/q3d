@@ -15,6 +15,8 @@ namespace q3d {
 
             /// @warning shader program must have `uniform sampler2D u_texture`
             void use(class Shader& shader, const unsigned int unit = 0);
+
+            // TODO: методы для настройки поведения текстуры
         };
     }
 }

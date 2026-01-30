@@ -8,6 +8,7 @@ set(Q3D_HEADERS
     includes/q3d/window/window.hpp
     includes/q3d/log/log.hpp
     includes/q3d/res/resources.hpp
+    includes/q3d/system/color.hpp
     includes/q3d/gl/gl.hpp
     includes/q3d/gl/shader.hpp
     includes/q3d/gl/vbo.hpp
@@ -19,6 +20,7 @@ set(Q3D_HEADERS
 set(Q3D_SOURCES
     src/q3d/window/window.cpp
     src/q3d/res/resources.cpp
+    src/q3d/system/color.cpp
     src/q3d/gl/gl.cpp
     src/q3d/gl/shader.cpp
     src/q3d/gl/uniform.cpp
