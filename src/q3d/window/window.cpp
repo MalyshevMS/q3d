@@ -3,8 +3,9 @@
 #include <q3d/log/log.hpp>
 
 void __q3d_window_size_cb(GLFWwindow* w, int x, int y) {
-    auto win = *static_cast<q3d::Window*>(glfwGetWindowUserPointer(w));
-    win.setSize({x, y});
+    auto* win = static_cast<q3d::Window*>(glfwGetWindowUserPointer(w));
+    if (!win) return;
+    win->setSize({static_cast<float>(x), static_cast<float>(y)});
 }
 
 q3d::Window::Window(std::string_view title, glm::vec2 size) {
@@ -28,6 +29,10 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
     this->size  = size;
     this->title = title;
     this->fb_size = getFBSize();
+
+    lastTime = glfwGetTime();
+    currentTime = lastTime;
+    deltaTime = 0.f;
 
     glfwMakeContextCurrent(handle);
     glfwSetWindowUserPointer(handle, this);
@@ -59,6 +64,10 @@ void q3d::Window::terminate() {
 
 void q3d::Window::update() {
     if (!handle) return;
+
+    currentTime = glfwGetTime();
+    deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
 
     glfwSwapBuffers(handle);
     glfwPollEvents();
