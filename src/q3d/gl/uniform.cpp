@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 int q3d::gl::Shader::locate(std::string_view name) {
-    return glGetUniformLocation(id, name.cbegin());
+    return glGetUniformLocation(id, name.data());
 }
 
 void q3d::gl::Shader::uniform(std::string_view name, bool val) {

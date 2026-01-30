@@ -2,8 +2,16 @@
 
 #include <string>
 #include <string_view>
+#include <unordered_map>
+#include <q3d/gl/texture.hpp>
+#include <memory>
 
 namespace q3d {
+    /// @brief `std::shared_ptr`
+    /// @tparam _Tp typename to store
+    template<typename _Tp>
+    using ptr = std::shared_ptr<_Tp>;
+
     /// @warning SINGLETONE!!!
     class Resources {
     private:
@@ -11,6 +19,14 @@ namespace q3d {
         static Resources* instance;
 
         std::string path;
+
+        // Maps Typenames
+
+        using TextureMap = std::unordered_map<std::string, ptr<gl::Texture>>;
+
+        // Maps
+
+        TextureMap textures;
     public:
         // some singletone...
         Resources(const Resources&) = delete;
@@ -20,5 +36,8 @@ namespace q3d {
         std::string getExePath() { return path; }
 
         std::string readFile(std::string_view path);
+
+        ptr<gl::Texture> loadTexture(std::string_view name, std::string_view path);
+        ptr<gl::Texture> getTexture(std::string_view name);
     };
 }

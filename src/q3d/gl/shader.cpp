@@ -13,7 +13,7 @@ unsigned int q3d::gl::Shader::typeToGl(Type type) {
 bool q3d::gl::Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
     id = glCreateShader(typeToGl(type));
 
-    const char* code = src.cbegin();
+    const char* code = src.data();
 
     glShaderSource(id, 1, &code, nullptr);
     glCompileShader(id);

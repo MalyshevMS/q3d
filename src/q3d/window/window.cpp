@@ -17,7 +17,7 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    handle = glfwCreateWindow(size.x, size.y, title.cbegin(), nullptr, nullptr);
+    handle = glfwCreateWindow(size.x, size.y, title.data(), nullptr, nullptr);
 
     if (!handle) {
         log::error("glfwCreateWindow failed");
@@ -77,7 +77,7 @@ void q3d::Window::setSize(glm::vec2 size) {
 
 void q3d::Window::setTitle(std::string_view title) {
     this->title = title;
-    glfwSetWindowTitle(handle, title.cbegin());
+    glfwSetWindowTitle(handle, title.data());
 }
 
 glm::vec2 q3d::Window::getFBSize() {
