@@ -2,7 +2,9 @@
 #include <q3d/log/log.hpp>
 #include <glad/glad.h>
 
-unsigned int q3d::gl::Shader::typeToGl(Type type) {
+using namespace q3d;
+
+unsigned int gl::Shader::typeToGl(Type type) {
     switch(type) {
         case Type::Vertex: return GL_VERTEX_SHADER;
         case Type::Fragment: return GL_FRAGMENT_SHADER;
@@ -10,7 +12,7 @@ unsigned int q3d::gl::Shader::typeToGl(Type type) {
     return 0;
 }
 
-bool q3d::gl::Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
+bool gl::Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
     id = glCreateShader(typeToGl(type));
 
     const char* code = src.data();
@@ -32,11 +34,11 @@ bool q3d::gl::Shader::compileShader(std::string_view src, const Type type, unsig
     return true;
 }
 
-void q3d::gl::Shader::init() {
+void gl::Shader::init() {
     id = glCreateProgram();
 }
 
-q3d::gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
+gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
     GLuint vs_id = attach(vert_src, Type::Vertex);
     GLuint fs_id = attach(frag_src, Type::Fragment);
     init();
@@ -45,7 +47,7 @@ q3d::gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
     glDeleteShader(fs_id);
 }
 
-unsigned int q3d::gl::Shader::attach(std::string_view src, const Type type) {
+unsigned int gl::Shader::attach(std::string_view src, const Type type) {
     GLuint shader_id;
     if (!compileShader(src, type, shader_id)) {
         glDeleteShader(shader_id);
@@ -62,7 +64,7 @@ unsigned int q3d::gl::Shader::attach(std::string_view src, const Type type) {
     return shader_id;
 }
 
-void q3d::gl::Shader::link() {
+void gl::Shader::link() {
     if (!(attachedVS && attachedFS)) {
         log::error("gl::Shader::link failed: not all shaders are attached");
         return;
@@ -81,13 +83,13 @@ void q3d::gl::Shader::link() {
     } else _isLinked = true;
 }
 
-void q3d::gl::Shader::use() {
+void gl::Shader::use() {
     glUseProgram(id);
 }
 
-void q3d::gl::Shader::unuse() {
+void gl::Shader::unuse() {
     glUseProgram(0u);
 }
-q3d::gl::Shader::~Shader() {
+gl::Shader::~Shader() {
     glDeleteProgram(id);
 }

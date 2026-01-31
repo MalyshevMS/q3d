@@ -2,7 +2,9 @@
 #include <q3d/gl/shader.hpp>
 #include <glad/glad.h>
 
-q3d::gl::Texture::Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels) {
+using namespace q3d;
+
+gl::Texture::Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels) {
     glGenTextures(1, &id);
     bind();
 
@@ -20,15 +22,15 @@ q3d::gl::Texture::Texture(const Image data, unsigned int width, unsigned int hei
     unbind();
 }
 
-void q3d::gl::Texture::bind() {
+void gl::Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
-void q3d::gl::Texture::unbind() {
+void gl::Texture::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void q3d::gl::Texture::use(Shader& shader, const unsigned int unit) {
+void gl::Texture::use(Shader& shader, const unsigned int unit) {
     glActiveTexture(GL_TEXTURE0 + unit);
     bind();
     shader.uniform("u_texture", 0);

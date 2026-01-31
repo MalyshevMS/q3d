@@ -1,7 +1,9 @@
 #include <q3d/gl/vbo.hpp>
 #include <glad/glad.h>
 
-unsigned int q3d::gl::buffer::getCount(DataType type) {
+using namespace q3d;
+
+unsigned int gl::buffer::getCount(DataType type) {
     switch(type) {
         case DataType::float1:
         case DataType::int1:
@@ -20,7 +22,7 @@ unsigned int q3d::gl::buffer::getCount(DataType type) {
     return 0;
 }
 
-unsigned int q3d::gl::buffer::getSize(DataType type) {
+unsigned int gl::buffer::getSize(DataType type) {
     switch(type) {
         case DataType::int1:
         case DataType::int2:
@@ -38,7 +40,7 @@ unsigned int q3d::gl::buffer::getSize(DataType type) {
     return 0;
 }
 
-unsigned int q3d::gl::buffer::getGlType(DataType type) {
+unsigned int gl::buffer::getGlType(DataType type) {
     switch(type) {
         case DataType::int1:
         case DataType::int2:
@@ -56,7 +58,7 @@ unsigned int q3d::gl::buffer::getGlType(DataType type) {
     return 0;
 }
 
-q3d::gl::buffer::Layout::Layout(std::initializer_list<Element> lst)
+gl::buffer::Layout::Layout(std::initializer_list<Element> lst)
  : elements(std::move(lst)) {
     unsigned int offset = 0;
     stride = 0;
@@ -68,11 +70,11 @@ q3d::gl::buffer::Layout::Layout(std::initializer_list<Element> lst)
     }
 }
 
-const std::vector<q3d::gl::buffer::Element> &q3d::gl::buffer::Layout::getElements() const {
+const std::vector<gl::buffer::Element> &gl::buffer::Layout::getElements() const {
     return elements;
 }
 
-unsigned int q3d::gl::Vbo::toGlMode(Mode mode) {
+unsigned int gl::Vbo::toGlMode(Mode mode) {
     switch (mode) {
         case Mode::Static:
             return GL_STATIC_DRAW;
@@ -85,7 +87,7 @@ unsigned int q3d::gl::Vbo::toGlMode(Mode mode) {
     }
 }
 
-q3d::gl::Vbo::Vbo(const void *data, const unsigned int size, buffer::Layout layout, Mode mode)
+gl::Vbo::Vbo(const void *data, const unsigned int size, buffer::Layout layout, Mode mode)
  : layout(layout) {
     glGenBuffers(1, &id);
     bind();
@@ -97,14 +99,14 @@ q3d::gl::Vbo::Vbo(const void *data, const unsigned int size, buffer::Layout layo
     }
 }
 
-q3d::gl::Vbo::~Vbo() {
+gl::Vbo::~Vbo() {
     glDeleteBuffers(1, &id);
 }
 
-void q3d::gl::Vbo::bind() {
+void gl::Vbo::bind() {
     glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void q3d::gl::Vbo::unbind() {
+void gl::Vbo::unbind() {
     glBindBuffer(GL_ARRAY_BUFFER, 0u);
 }

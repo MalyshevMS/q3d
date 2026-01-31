@@ -5,19 +5,21 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <q3d/res/stb_image.h>
 
-q3d::Resources* q3d::Resources::instance = nullptr;
+using namespace q3d;
 
-q3d::Resources::Resources(std::string_view exePath) {
+Resources* Resources::instance = nullptr;
+
+Resources::Resources(std::string_view exePath) {
     auto found = exePath.find_last_of("/\\");
     path = exePath.substr(0, ++found);
 }
 
-q3d::Resources *q3d::Resources::getInstance(std::string_view exePath) {
+Resources *Resources::getInstance(std::string_view exePath) {
     if (instance == nullptr) instance = new Resources { std::move(exePath) };
     return instance;
 }
 
-std::string q3d::Resources::readFile(std::string_view path) {
+std::string Resources::readFile(std::string_view path) {
     std::string fpath = this->path + std::string(path);
 
     std::ifstream ifs;
@@ -33,7 +35,7 @@ std::string q3d::Resources::readFile(std::string_view path) {
     return oss.str();
 }
 
-q3d::ptr<q3d::gl::Texture> q3d::Resources::loadTexture(std::string_view name, std::string_view path) {
+ptr<gl::Texture> Resources::loadTexture(std::string_view name, std::string_view path) {
     stbi_set_flip_vertically_on_load(true);
     int x, y, ch;
     unsigned char* data = stbi_load(
@@ -53,7 +55,7 @@ q3d::ptr<q3d::gl::Texture> q3d::Resources::loadTexture(std::string_view name, st
     return tex.first->second;
 }
 
-q3d::ptr<q3d::gl::Texture> q3d::Resources::getTexture(std::string_view name) {
+ptr<gl::Texture> Resources::getTexture(std::string_view name) {
     auto it = textures.find(name.data());
     if (it == textures.end()) return nullptr;
     return it->second;

@@ -2,13 +2,15 @@
 #include <q3d/window/window.hpp>
 #include <q3d/log/log.hpp>
 
+using namespace q3d;
+
 void __q3d_window_size_cb(GLFWwindow* w, int x, int y) {
-    auto* win = static_cast<q3d::Window*>(glfwGetWindowUserPointer(w));
+    auto* win = static_cast<Window*>(glfwGetWindowUserPointer(w));
     if (!win) return;
     win->setSize({static_cast<float>(x), static_cast<float>(y)});
 }
 
-q3d::Window::Window(std::string_view title, glm::vec2 size) {
+Window::Window(std::string_view title, glm::vec2 size) {
     if (!glfwInit()) {
         log::error("glfwInit failed");
         return;
@@ -52,21 +54,21 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
     glViewport(0, 0, fb_size.x, fb_size.y);
 }
 
-bool q3d::Window::isOpen() {
+bool Window::isOpen() {
     if (!handle) return false;
     return !glfwWindowShouldClose(handle);
 }
 
-void q3d::Window::close() {
+void Window::close() {
     if (!handle) return;
     glfwSetWindowShouldClose(handle, GLFW_TRUE);
 }
 
-void q3d::Window::terminate() {
+void Window::terminate() {
     glfwTerminate();
 }
 
-void q3d::Window::update() {
+void Window::update() {
     if (!handle) return;
 
     currentTime = glfwGetTime();
@@ -83,7 +85,7 @@ void q3d::Window::update() {
     glfwPollEvents();
 }
 
-void q3d::Window::setSize(glm::vec2 size) {
+void Window::setSize(glm::vec2 size) {
     if (!handle) return;
 
     glfwSetWindowSize(handle, size.x, size.y);
@@ -94,29 +96,29 @@ void q3d::Window::setSize(glm::vec2 size) {
     glViewport(0, 0, fb_size.x, fb_size.y);
 }
 
-void q3d::Window::setTitle(std::string_view title) {
+void Window::setTitle(std::string_view title) {
     this->title = title;
     glfwSetWindowTitle(handle, title.data());
 }
 
-glm::vec2 q3d::Window::getFBSize() {
+glm::vec2 Window::getFBSize() {
     int x, y;
     glfwGetFramebufferSize(handle, &x, &y);
     return {x, y};
 }
 
-bool q3d::Window::isKeyPressed(int key) {
+bool Window::isKeyPressed(int key) {
     return glfwGetKey(handle, key) == GLFW_PRESS;
 }
 
-bool q3d::Window::isMouseButtonPressed(int button) {
+bool Window::isMouseButtonPressed(int button) {
     return glfwGetMouseButton(handle, button) == GLFW_PRESS;
 }
 
-void q3d::Window::hideCursor() {
+void Window::hideCursor() {
     glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void q3d::Window::showCursor() {
+void Window::showCursor() {
     glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }

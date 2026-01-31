@@ -2,10 +2,12 @@
 #include <q3d/system/color.hpp>
 #include <glad/glad.h>
 
-void q3d::gl::clear() {
+using namespace q3d;
+
+void gl::clear() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void q3d::gl::clearColor(q3d::Color color) {
+void gl::clearColor(Color color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }

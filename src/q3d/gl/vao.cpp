@@ -1,7 +1,9 @@
 #include <q3d/gl/vao.hpp>
 #include <glad/glad.h>
 
-unsigned int q3d::gl::methodToGl(DrawMethod method) {
+using namespace q3d;
+
+unsigned int gl::methodToGl(DrawMethod method) {
     using enum DrawMethod;
 
     switch (method) {
@@ -18,23 +20,23 @@ unsigned int q3d::gl::methodToGl(DrawMethod method) {
     return GL_TRIANGLES;
 }
 
-q3d::gl::Vao::Vao() {
+gl::Vao::Vao() {
     glGenVertexArrays(1, &id);
 }
 
-q3d::gl::Vao::~Vao() {
+gl::Vao::~Vao() {
     glDeleteVertexArrays(1, &id);
 }
 
-void q3d::gl::Vao::bind() {
+void gl::Vao::bind() {
     glBindVertexArray(id);
 }
 
-void q3d::gl::Vao::unbind() {
+void gl::Vao::unbind() {
     glBindVertexArray(0);
 }
 
-void q3d::gl::Vao::addVbo(Vbo &vbo) {
+void gl::Vao::addVbo(Vbo &vbo) {
     bind();
     vbo.bind();
 
@@ -53,13 +55,13 @@ void q3d::gl::Vao::addVbo(Vbo &vbo) {
     vertexCount = vbo.getVertexCount();
 }
 
-void q3d::gl::Vao::setIbo(Ibo &ibo) {
+void gl::Vao::setIbo(Ibo &ibo) {
     bind();
     ibo.bind();
     indCount = ibo.getCount();
 }
 
-void q3d::gl::Vao::draw(DrawMethod method) {
+void gl::Vao::draw(DrawMethod method) {
     bind();
 
     if(indCount > 0) {
