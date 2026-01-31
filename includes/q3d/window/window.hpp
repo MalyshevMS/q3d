@@ -17,6 +17,10 @@ namespace q3d {
         float deltaTime;
         float currentTime;
         float lastTime;
+
+        glm::vec2 deltaMouse;
+        glm::vec2 currentMouse;
+        glm::vec2 lastMouse;
     public:
         Window(std::string_view title, glm::vec2 size);
 
@@ -36,9 +40,18 @@ namespace q3d {
         std::string getTitle() { return title; }
         void setTitle(std::string_view title);
 
-        float getAspectRatio() { return size.x / size.y; };
-        float getInversedAspectRatio() { return size.y / size.x; };
+        float getAspectRatio() { return size.x / size.y; }
+        float getInversedAspectRatio() { return size.y / size.x; }
 
         float getDeltaTime() { return deltaTime; };
+        glm::vec2 getDeltaMouse() { return deltaMouse; }
+
+        glm::vec2 getMousePos() { return currentMouse; }
+
+        bool isKeyPressed(int key); // TODO: encapsulate keys
+        bool isMouseButtonPressed(int button);
+
+        void hideCursor();
+        void showCursor();
     };
 }

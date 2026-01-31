@@ -34,6 +34,10 @@ q3d::Window::Window(std::string_view title, glm::vec2 size) {
     currentTime = lastTime;
     deltaTime = 0.f;
 
+    lastMouse = glm::vec2(0.f);
+    currentMouse = lastMouse;
+    deltaMouse = glm::vec2(0.f);
+
     glfwMakeContextCurrent(handle);
     glfwSetWindowUserPointer(handle, this);
     
@@ -69,6 +73,12 @@ void q3d::Window::update() {
     deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
+    double mx, my;
+    glfwGetCursorPos(handle, &mx, &my);
+    currentMouse = glm::vec2(mx, my);
+    deltaMouse = currentMouse - lastMouse;
+    lastMouse = currentMouse;
+
     glfwSwapBuffers(handle);
     glfwPollEvents();
 }
@@ -93,4 +103,20 @@ glm::vec2 q3d::Window::getFBSize() {
     int x, y;
     glfwGetFramebufferSize(handle, &x, &y);
     return {x, y};
+}
+
+bool q3d::Window::isKeyPressed(int key) {
+    return glfwGetKey(handle, key) == GLFW_PRESS;
+}
+
+bool q3d::Window::isMouseButtonPressed(int button) {
+    return glfwGetMouseButton(handle, button) == GLFW_PRESS;
+}
+
+void q3d::Window::hideCursor() {
+    glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void q3d::Window::showCursor() {
+    glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
