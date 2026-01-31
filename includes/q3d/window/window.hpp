@@ -1,5 +1,6 @@
 #pragma once
 
+#include <q3d/window/keys.hpp>
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
 #include <string>
@@ -48,8 +49,8 @@ namespace q3d {
 
         glm::vec2 getMousePos() { return currentMouse; }
 
-        bool isKeyPressed(int key); // TODO: encapsulate keys
-        bool isMouseButtonPressed(int button);
+        bool isKeyPressed(key k);
+        bool isMouseButtonPressed(button b);
 
         void hideCursor();
         void showCursor();

@@ -107,12 +107,12 @@ glm::vec2 Window::getFBSize() {
     return {x, y};
 }
 
-bool Window::isKeyPressed(int key) {
-    return glfwGetKey(handle, key) == GLFW_PRESS;
+bool Window::isKeyPressed(key k) {
+    return glfwGetKey(handle, static_cast<int>(k)) == GLFW_PRESS;
 }
 
-bool Window::isMouseButtonPressed(int button) {
-    return glfwGetMouseButton(handle, button) == GLFW_PRESS;
+bool Window::isMouseButtonPressed(button b) {
+    return glfwGetMouseButton(handle, static_cast<int>(b)) == GLFW_PRESS;
 }
 
 void Window::hideCursor() {
