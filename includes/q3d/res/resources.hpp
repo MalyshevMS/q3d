@@ -4,14 +4,9 @@
 #include <string_view>
 #include <unordered_map>
 #include <q3d/gl/texture.hpp>
-#include <memory>
+#include <q3d/res/ptr.hpp>
 
 namespace q3d {
-    /// @brief `std::shared_ptr`
-    /// @tparam _Tp typename to store
-    template<typename _Tp>
-    using ptr = std::shared_ptr<_Tp>;
-
     /// @warning SINGLETONE!!!
     class Resources {
     private:
