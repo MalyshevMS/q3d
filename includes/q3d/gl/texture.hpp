@@ -8,6 +8,23 @@ namespace q3d {
         private:
             unsigned int id;
         public:
+            enum class WrapMode {
+                ClampToEdge,
+                ClampToBorder,
+                MirroredRepeat,
+                Repeat,
+                MirrorClampToEdge
+            };
+
+            enum class Filter {
+                Nearest, Linear,
+
+                LinearMMLinear,
+                LinearMMNearest,
+                NearestMMLinear,
+                NearestMMNearest,
+            };
+
             Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
             
             void bind();
@@ -16,7 +33,8 @@ namespace q3d {
             /// @warning shader program must have `uniform sampler2D u_texture`
             void use(class Shader& shader, const unsigned int unit = 0);
 
-            // TODO: методы для настройки поведения текстуры
+            void wrapMode(WrapMode wrapS, WrapMode wrapT);
+            void setFilter(Filter min, Filter mag);
         };
     }
 }
