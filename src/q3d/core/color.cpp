@@ -1,4 +1,4 @@
-#include <q3d/system/color.hpp>
+#include <q3d/core/color.hpp>
 
 using namespace q3d;
 

@@ -1,4 +1,4 @@
-#include <q3d/system/camera.hpp>
+#include <q3d/core/camera.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/trigonometric.hpp>

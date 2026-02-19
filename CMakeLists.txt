@@ -10,8 +10,8 @@ set(Q3D_HEADERS
 
     includes/q3d/res/resources.hpp
 
-    includes/q3d/system/color.hpp
-    includes/q3d/system/camera.hpp
+    includes/q3d/core/color.hpp
+    includes/q3d/core/camera.hpp
 
     includes/q3d/gl/gl.hpp
     includes/q3d/gl/shader.hpp
@@ -29,8 +29,8 @@ set(Q3D_SOURCES
 
     src/q3d/res/resources.cpp
 
-    src/q3d/system/color.cpp
-    src/q3d/system/camera.cpp
+    src/q3d/core/color.cpp
+    src/q3d/core/camera.cpp
 
     src/q3d/gl/gl.cpp
     src/q3d/gl/shader.cpp

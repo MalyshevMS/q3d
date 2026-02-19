@@ -1,5 +1,5 @@
 #pragma once
-#include <q3d/system/color.hpp>
+#include <q3d/core/color.hpp>
 
 namespace q3d {
     namespace gl {
