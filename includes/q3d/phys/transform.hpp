@@ -12,7 +12,7 @@ namespace q3d {
             glm::vec3 rotation;
             glm::vec3 scale_fac;
 
-            Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale_fac)
+            Transform(glm::vec3 position = glm::vec3(0.f), glm::vec3 rotation = glm::vec3(0.f), glm::vec3 scale_fac = glm::vec3(1.f))
                     : position(position), rotation(rotation), scale_fac(scale_fac) {};
 
             AABB aabb() const; // TODO: Create similar with linked AABB (and linked AABB also)
