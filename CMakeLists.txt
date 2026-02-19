@@ -21,6 +21,7 @@ set(Q3D_HEADERS
     includes/q3d/gl/texture.hpp
 
     includes/q3d/phys/aabb.hpp
+    includes/q3d/phys/transform.hpp
 )
 
 set(Q3D_SOURCES
@@ -40,6 +41,7 @@ set(Q3D_SOURCES
     src/q3d/gl/texture.cpp
 
     src//q3d/phys/aabb.cpp
+    src//q3d/phys/transform.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})
