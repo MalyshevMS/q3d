@@ -1,6 +1,6 @@
 #include <q3d/core/active_camera.hpp>
 
-using namespace q3d;
+using namespace q3d::core;
 
 ActiveCamera* ActiveCamera::instance = nullptr;
 

@@ -8,6 +8,6 @@ void gl::clear() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void gl::clearColor(Color color) {
+void gl::clearColor(core::Color color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }

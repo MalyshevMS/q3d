@@ -4,6 +4,6 @@
 namespace q3d {
     namespace gl {
         void clear();
-        void clearColor(Color color);
+        void clearColor(core::Color color);
     }
 }

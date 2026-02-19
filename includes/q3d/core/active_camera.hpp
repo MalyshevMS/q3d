@@ -4,14 +4,16 @@
 #include <q3d/res/ptr.hpp>
 
 namespace q3d {
-    class ActiveCamera {
-    private:
-        ActiveCamera(uptr<Camera> camera);
-        uptr<Camera> camera;
+    namespace core {
+        class ActiveCamera {
+        private:
+            ActiveCamera(uptr<Camera> camera);
+            uptr<Camera> camera;
 
-        static ActiveCamera* instance;
-    public:
-        ActiveCamera* getInstance(uptr<Camera> camera = nullptr);
-        Camera& cam() { return *camera; }
-    };
+            static ActiveCamera* instance;
+        public:
+            ActiveCamera* getInstance(uptr<Camera> camera = nullptr);
+            Camera& cam() { return *camera; }
+        };
+    }
 }
