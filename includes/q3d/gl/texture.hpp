@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 namespace q3d {
     namespace gl {
         using Image = unsigned char*;
@@ -8,6 +10,8 @@ namespace q3d {
         private:
             unsigned int id;
         public:
+            glm::vec2 uv;
+
             enum class WrapMode {
                 ClampToEdge,
                 ClampToBorder,
