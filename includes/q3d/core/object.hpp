@@ -20,7 +20,7 @@ namespace q3d {
             phys::Transform transform;
             bool doDraw = true;
 
-            Object(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture = nullptr)
+            Object(ptr<gl::Shader> shader, phys::Transform transform = {}, ptr<gl::Texture> texture = nullptr)
                    : shader(shader), transform(transform), texture(texture) {}
 
             virtual void draw() const;
