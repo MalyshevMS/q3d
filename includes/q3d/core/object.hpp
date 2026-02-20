@@ -9,7 +9,7 @@
 namespace q3d {
     namespace core {
         class Object {
-        private:
+        protected:
             ptr<gl::Shader> shader;
             ptr<gl::Texture> texture = nullptr; // Remember to always check if texture is not `nullptr`!
 
