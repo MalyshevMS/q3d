@@ -12,7 +12,7 @@ namespace q3d {
 
             static ActiveCamera* instance;
         public:
-            ActiveCamera* getInstance(uptr<Camera> camera = nullptr);
+            static ActiveCamera* getInstance(uptr<Camera> camera = nullptr);
             Camera& cam() { return *camera; }
         };
     }
