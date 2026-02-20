@@ -18,11 +18,12 @@ namespace q3d {
             uptr<gl::Vao> vao;
         public:
             phys::Transform transform;
+            bool doDraw = true;
 
             Object(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture = nullptr)
                    : shader(shader), transform(transform), texture(texture) {}
 
-            virtual void draw() const = 0;
+            virtual void draw() const;
         };
     }
 } 
