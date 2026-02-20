@@ -4,11 +4,11 @@ using namespace q3d::core;
 
 ActiveCamera* ActiveCamera::instance = nullptr;
 
-ActiveCamera::ActiveCamera(uptr<Camera> camera) {
+ActiveCamera::ActiveCamera(ptr<Camera> camera) {
     this->camera = std::move(camera);
 }
 
-ActiveCamera* ActiveCamera::getInstance(uptr<Camera> camera) {
-    if (instance == nullptr) return new ActiveCamera(std::move(camera));
-    else return instance;
+ActiveCamera* ActiveCamera::getInstance(ptr<Camera> camera) {
+    if (instance == nullptr) instance = new ActiveCamera(std::move(camera));
+    return instance;
 }

@@ -7,12 +7,12 @@ namespace q3d {
     namespace core {
         class ActiveCamera {
         private:
-            ActiveCamera(uptr<Camera> camera);
-            uptr<Camera> camera;
+            ActiveCamera(ptr<Camera> camera);
+            ptr<Camera> camera;
 
             static ActiveCamera* instance;
         public:
-            static ActiveCamera* getInstance(uptr<Camera> camera = nullptr);
+            static ActiveCamera* getInstance(ptr<Camera> camera = nullptr);
             Camera& cam() { return *camera; }
         };
     }

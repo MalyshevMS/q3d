@@ -56,4 +56,6 @@ glm::mat4 Transform::getModelMatrix() const {
     mat = glm::rotate(mat, glm::radians(rotation.z), {0,0,1});
 
     mat = glm::scale(mat, scale_fac);
+
+	return mat;
 }
