@@ -10,6 +10,12 @@ void __q3d_window_size_cb(GLFWwindow* w, int x, int y) {
     win->setSize({static_cast<float>(x), static_cast<float>(y)});
 }
 
+void __q3d_fb_size_cb(GLFWwindow* w, int x, int y) {
+    auto* win = static_cast<Window*>(glfwGetWindowUserPointer(w));
+    if (!win) return;
+    win->setFBSize({static_cast<float>(x), static_cast<float>(y)});
+}
+
 Window::Window(std::string_view title, glm::vec2 size) {
     if (!glfwInit()) {
         log::error("glfwInit failed");
@@ -44,6 +50,7 @@ Window::Window(std::string_view title, glm::vec2 size) {
     glfwSetWindowUserPointer(handle, this);
     
     glfwSetWindowSizeCallback(handle, __q3d_window_size_cb); // TODO: сделать возможность добавлять свой callback
+    glfwSetFramebufferSizeCallback(handle, __q3d_fb_size_cb);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         log::error("gladLoadGLLoader failed");
@@ -93,6 +100,11 @@ void Window::setSize(glm::vec2 size) {
     this->size = size;
     this->fb_size = getFBSize();
 
+    glViewport(0, 0, fb_size.x, fb_size.y);
+}
+
+void Window::setFBSize(glm::vec2 fb_size) {
+    this->fb_size = fb_size;
     glViewport(0, 0, fb_size.x, fb_size.y);
 }
 

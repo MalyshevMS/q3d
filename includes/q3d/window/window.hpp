@@ -37,6 +37,7 @@ namespace q3d {
         void setSize(glm::vec2 size);
 
         glm::vec2 getFBSize();
+        void setFBSize(glm::vec2 fb_size);
 
         std::string getTitle() { return title; }
         void setTitle(std::string_view title);
