@@ -10,7 +10,7 @@ namespace q3d {
         private:
             unsigned int id;
         public:
-            glm::vec2 uv;
+            glm::vec2 uv = glm::vec2(1.f);
 
             enum class WrapMode {
                 ClampToEdge,
