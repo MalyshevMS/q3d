@@ -60,3 +60,24 @@ ptr<gl::Texture> Resources::getTexture(std::string_view name) {
     if (it == textures.end()) return nullptr;
     return it->second;
 }
+
+ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path) {
+    auto shader = std::make_shared<gl::Shader>();
+    shader->attach(readFile(vertex_path), gl::Shader::Type::Vertex);
+    shader->attach(readFile(fragment_path), gl::Shader::Type::Fragment);
+    shader->link();
+
+    const auto& shader_el = shaders.emplace<std::string, ptr<gl::Shader>>(
+        name.data(), std::move(shader)
+    );
+
+    if (!shader_el.second) return nullptr;
+
+    return shader_el.first->second;
+}
+
+ptr<gl::Shader> Resources::getShader(std::string_view name) {
+    auto it = shaders.find(name.data());
+    if (it == shaders.end()) return nullptr;
+    return it->second;
+}
