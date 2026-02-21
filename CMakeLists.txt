@@ -25,7 +25,8 @@ set(Q3D_HEADERS
     includes/q3d/phys/aabb.hpp
     includes/q3d/phys/transform.hpp
 
-    includes/q3d/2d/plane.hpp
+    includes/q3d/obj/2d/plane.hpp
+    includes/q3d/obj/3d/box.hpp
 )
 
 set(Q3D_SOURCES
@@ -45,14 +46,22 @@ set(Q3D_SOURCES
     src/q3d/gl/ibo.cpp
     src/q3d/gl/vao.cpp
     src/q3d/gl/texture.cpp
+    src/q3d/gl/layouts.cpp
 
     src//q3d/phys/aabb.cpp
     src//q3d/phys/transform.cpp
 
-    src/q3d/2d/plane.cpp
+    src/q3d/obj/2d/plane.cpp
+    src/q3d/obj/3d/box.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})
+option(Q3D_STATIC "ON = use static linking, OFF = build as a shared library" OFF)
+
+if (${Q3D_STATIC})
+    add_library(${PROJECT_NAME} STATIC ${Q3D_HEADERS} ${Q3D_SOURCES})
+else()
+    add_library(${PROJECT_NAME} SHARED ${Q3D_HEADERS} ${Q3D_SOURCES})
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC includes)
 
@@ -60,7 +69,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23)
 
 # Dependencies
 
-set(GLAD_STATIC OFF)
+set(GLAD_STATIC ${Q3D_STATIC})
 
 add_subdirectory(ext/glfw)
 

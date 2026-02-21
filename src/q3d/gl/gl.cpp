@@ -5,7 +5,7 @@
 using namespace q3d;
 
 void gl::clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void gl::clearColor(core::Color color) {
@@ -17,6 +17,7 @@ GLenum featureToGL(gl::feature feat) {
 
     switch (feat) {
         case cullFace: return GL_CULL_FACE;
+        case depthTest: return GL_DEPTH_TEST;
     }
 
     return 0;

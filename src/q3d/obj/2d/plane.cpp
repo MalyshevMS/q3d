@@ -1,6 +1,6 @@
-#include <q3d/2d/plane.hpp>
+#include <q3d/obj/2d/plane.hpp>
 
-using namespace q3d::q2d;
+using namespace q3d::object;
 
 Plane::Plane(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture)
  : core::Object(shader, transform, texture) {
@@ -17,12 +17,7 @@ Plane::Plane(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture>
         2, 3, 0,
     };
 
-    const gl::buffer::Layout l_xyz_uv = {
-        gl::buffer::DataType::float3,
-        gl::buffer::DataType::float2,
-    };
-
-    vbo = std::make_unique<gl::Vbo>(verticies, sizeof(verticies), l_xyz_uv);
+    vbo = std::make_unique<gl::Vbo>(verticies, sizeof(verticies), gl::buffer::Layout::l_xyz_uv);
     ibo = std::make_unique<gl::Ibo>(ind, 6);
     vao = std::make_unique<gl::Vao>();
 

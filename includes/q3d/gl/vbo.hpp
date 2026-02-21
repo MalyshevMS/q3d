@@ -42,6 +42,12 @@ namespace q3d {
 
                 const std::vector<Element>& getElements() const;
                 unsigned int getStride() const { return stride; }
+
+                static const Layout l_xyz_uv;
+                static const Layout l_xyz_rgb;
+                static const Layout l_xyz_rgb_uv;
+                static const Layout l_xyz_nnn_uv;
+                static const Layout l_xyz_rgb_nnn_uv;
             };
         }
 
