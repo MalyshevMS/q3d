@@ -5,6 +5,7 @@
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/texture.hpp>
 #include <q3d/gl/vao.hpp>
+#include <q3d/gl/gl.hpp>
 
 namespace q3d {
     namespace core {
@@ -16,6 +17,10 @@ namespace q3d {
             uptr<gl::Vbo> vbo; // Don't forget to init those!
             uptr<gl::Ibo> ibo;
             uptr<gl::Vao> vao;
+
+            std::vector<gl::feature> features = {
+                gl::feature::depthTest
+            }; // Define what features to use in you classes (default: depthTest)
         public:
             phys::Transform transform;
             bool doDraw = true;

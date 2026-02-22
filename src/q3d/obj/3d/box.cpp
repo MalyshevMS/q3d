@@ -69,4 +69,6 @@ Box::Box(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> tex
 
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
+
+    features.push_back(gl::feature::cullFace);
 }
