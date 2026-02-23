@@ -1,4 +1,5 @@
 #include <q3d/res/resources.hpp>
+#include <q3d/obj/3d/model.hpp>
 #include <q3d/log/log.hpp>
 #include <fstream>
 #include <sstream>
@@ -79,5 +80,37 @@ ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view ve
 ptr<gl::Shader> Resources::getShader(std::string_view name) {
     auto it = shaders.find(name.data());
     if (it == shaders.end()) return nullptr;
+    return it->second;
+}
+
+ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view path, ptr<gl::Shader> shader, ptr<gl::Texture> texture) {
+    if (!shader) {
+        log::error("Resources::loadModel: Shader is nullptr!");
+        return nullptr;
+    }
+
+    std::string fileContent = readFile(path);
+    if (fileContent.empty()) {
+        log::error("Resources::loadModel: Failed to read file '{}'!", path);
+        return nullptr;
+    }
+    
+    auto objData = parseObjFile(fileContent);
+    const auto& model_el = models.emplace<std::string, ptr<object::Model>>(
+        name.data(), std::make_shared<object::Model>(shader, objData, phys::Transform(), texture)
+    );
+
+    if (!model_el.second) {
+        log::error("Resources::loadModel: Failed to emplace model '{}'!", name);
+        return nullptr;
+    }
+
+    log::info("Loaded model '{}'", name);
+    return model_el.first->second;
+}
+
+ptr<object::Model> Resources::getModel(std::string_view name) {
+    auto it = models.find(name.data());
+    if (it == models.end()) return nullptr;
     return it->second;
 }
