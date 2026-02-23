@@ -53,12 +53,16 @@ void gl::Vao::addVbo(Vbo &vbo) {
     }
     
     vertexCount = vbo.getVertexCount();
+
+    unbind();
 }
 
 void gl::Vao::setIbo(Ibo &ibo) {
     bind();
     ibo.bind();
     indCount = ibo.getCount();
+
+    unbind();
 }
 
 void gl::Vao::draw(DrawMethod method) {
