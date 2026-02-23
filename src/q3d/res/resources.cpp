@@ -44,13 +44,21 @@ ptr<gl::Texture> Resources::loadTexture(std::string_view name, std::string_view 
         &x, &y, &ch, 0
     );
 
-    if (!data) return nullptr;
+    if (!data) {
+        log::error("Resources::loadTexture('{}'): stbi_load failed, data corrupted!", name, path);
+        return nullptr;
+    }
 
     const auto& tex = textures.emplace<std::string, ptr<gl::Texture>>(
         name.data(), std::make_shared<gl::Texture>(data, x, y, ch)
     );
 
-    if (!tex.second) return nullptr;
+    if (!tex.second) {
+        log::error("Resources::loadTexture('{}'): Failed to emplace texture!", name);
+        return nullptr;
+    }
+
+    log::info("Loaded texture '{}'", name);
 
     stbi_image_free(data);
     return tex.first->second;
@@ -64,16 +72,38 @@ ptr<gl::Texture> Resources::getTexture(std::string_view name) {
 
 ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path) {
     auto shader = std::make_shared<gl::Shader>();
-    shader->attach(readFile(vertex_path), gl::Shader::Type::Vertex);
-    shader->attach(readFile(fragment_path), gl::Shader::Type::Fragment);
+
+    auto vert_src = readFile(vertex_path);
+    auto frag_src = readFile(fragment_path);
+
+    if (vert_src.empty()) {
+        log::error("Resources::loadShader('{}'): Vertex shader is empty!", name);
+        return nullptr;
+    }
+
+    if (frag_src.empty()) {
+        log::error("Resources::loadShader('{}'): Fragment shader is empty!", name);
+        return nullptr;
+    }
+
+    shader->attach(vert_src, gl::Shader::Type::Vertex);
+    shader->attach(frag_src, gl::Shader::Type::Fragment);
     shader->link();
+
+    if (!shader->isLinked()) {
+        log::error("Resources::loadShader('{}'): Shader is not linked!", name);
+        return nullptr;
+    }
 
     const auto& shader_el = shaders.emplace<std::string, ptr<gl::Shader>>(
         name.data(), std::move(shader)
     );
 
-    if (!shader_el.second) return nullptr;
+    if (!shader_el.second) {
+        log::error("Resources::loadShader('{}'): Failed to emplace shader!", name);
+    }
 
+    log::info("Loaded shader '{}'", name);
     return shader_el.first->second;
 }
 
@@ -85,13 +115,13 @@ ptr<gl::Shader> Resources::getShader(std::string_view name) {
 
 ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view path, ptr<gl::Shader> shader, ptr<gl::Texture> texture) {
     if (!shader) {
-        log::error("Resources::loadModel: Shader is nullptr!");
+        log::error("Resources::loadModel('{}'): Shader is nullptr!", name);
         return nullptr;
     }
 
-    std::string fileContent = readFile(path);
+    auto fileContent = readFile(path);
     if (fileContent.empty()) {
-        log::error("Resources::loadModel: Failed to read file '{}'!", path);
+        log::error("Resources::loadModel('{}'): Failed to read file '{}'!", name, path);
         return nullptr;
     }
     
@@ -101,7 +131,7 @@ ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view 
     );
 
     if (!model_el.second) {
-        log::error("Resources::loadModel: Failed to emplace model '{}'!", name);
+        log::error("Resources::loadModel('{}'): Failed to emplace model!", name);
         return nullptr;
     }
 
