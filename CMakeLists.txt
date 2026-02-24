@@ -14,6 +14,7 @@ set(Q3D_HEADERS
     includes/q3d/core/camera.hpp
     includes/q3d/core/active_camera.hpp
     includes/q3d/core/object.hpp
+    includes/q3d/core/scene.hpp
 
     includes/q3d/gl/gl.hpp
     includes/q3d/gl/shader.hpp
@@ -40,6 +41,7 @@ set(Q3D_SOURCES
     src/q3d/core/camera.cpp
     src/q3d/core/active_camera.cpp
     src/q3d/core/object.cpp
+    src/q3d/core/scene.cpp
 
     src/q3d/gl/gl.cpp
     src/q3d/gl/shader.cpp

@@ -26,8 +26,16 @@ GLenum featureToGL(gl::feature feat) {
 
 void gl::enable(feature feat) {
     glEnable(featureToGL(feat));
+
+    if (feat == feature::blend) {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 }
 
 void gl::disable(feature feat) {
     glDisable(featureToGL(feat));
+
+    if (feat == feature::blend) {
+        glBlendFunc(GL_ONE, GL_ZERO);
+    }
 }
