@@ -18,6 +18,7 @@ GLenum featureToGL(gl::feature feat) {
     switch (feat) {
         case cullFace: return GL_CULL_FACE;
         case depthTest: return GL_DEPTH_TEST;
+        case blend: return GL_BLEND;
     }
 
     return 0;
