@@ -10,7 +10,7 @@ Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Tr
  : core::Object(shader, transform, texture) {
     
     if (objData.positions.empty() || objData.indices.empty()) {
-        q3d::log::error("Model: Cannot create buffers - no data!");
+        q3d::log::error("Model::Model: Cannot create buffers - no data");
         return;
     }
 
