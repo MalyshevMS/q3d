@@ -28,11 +28,9 @@ void Camera::updateProj() {
         } break;
 
         case Orthographic: {
-            proj = glm::ortho(
-                -aspect * near, aspect * near,  // left, right
-                -near, near,                    // top, bootom
-                near, far                       // near, far
-            );
+            float w = aspect * fov; // using FOV as size
+            float h = fov;
+            proj = glm::ortho(-w, w, -h, h, near, far);
         } break;
     }
 }

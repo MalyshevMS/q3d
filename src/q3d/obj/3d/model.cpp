@@ -1,14 +1,12 @@
 #include <q3d/obj/3d/model.hpp>
 #include <q3d/log/log.hpp>
-#include <sstream>
-#include <algorithm>
 
 using namespace q3d::object;
 
 
 Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Transform transform, ptr<gl::Texture> texture)
  : core::Object(shader, transform, texture) {
-    
+
     if (objData.positions.empty() || objData.indices.empty()) {
         q3d::log::error("Model::Model: Cannot create buffers - no data");
         return;

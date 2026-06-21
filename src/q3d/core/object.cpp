@@ -8,7 +8,7 @@ void Object::draw() const {
 
     for (const auto& f : features) gl::enable(f); // Enable all user's features
 
-    auto& camera = ActiveCamera::getInstance()->cam();
+    auto& camera = ActiveCamera::get();
 
     glm::mat4 mvp = camera.getMatrix() * transform.getModelMatrix();
 

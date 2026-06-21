@@ -7,13 +7,17 @@ namespace q3d {
     namespace core {
         class ActiveCamera {
         private:
-            ActiveCamera(ptr<Camera> camera);
-            ptr<Camera> camera;
+            ActiveCamera() = default;
+            ~ActiveCamera() = default;
+            ActiveCamera(const ActiveCamera&) = delete;
+            ActiveCamera& operator=(const ActiveCamera&) = delete;
 
-            static ActiveCamera* instance;
+            ptr<Camera> camera;
+            static ActiveCamera& getInstance();
         public:
-            static ActiveCamera* getInstance(ptr<Camera> camera = nullptr);
-            Camera& cam() { return *camera; }
+            static void set(ptr<Camera> cam);
+            static Camera& get();
+            static ptr<Camera> getPtr();
         };
     }
 }

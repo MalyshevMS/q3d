@@ -22,12 +22,12 @@ ptr<Object> Scene::get(std::string_view name) {
     return nullptr;
 }
 
-void q3d::core::Scene::render() {
+void q3d::core::Scene::render() const {
     using Order = std::map<float, ptr<Object>>;
     Order sorted;
     for (const auto& [_, obj] : objects) {
         float distance = glm::length(
-            ActiveCamera::getInstance()->cam().getPosition() - obj->transform.position
+            ActiveCamera::get().getPosition() - obj->transform.position
         );
         sorted[distance] = obj;
     }
