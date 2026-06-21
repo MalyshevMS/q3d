@@ -62,6 +62,21 @@ void Camera::setFov(float fov) {
     updateProj();
 }
 
+void Camera::setNear(float near) {
+    this->near = near;
+    updateProj();
+}
+
+void Camera::setFar(float far) {
+    this->far = far;
+    updateProj();
+}
+
+void Camera::setAspect(float aspect) {
+    this->aspect = aspect;
+    updateProj();
+}
+
 void Camera::moveForward(float delta) {
     position += dir * delta;
     updateView();

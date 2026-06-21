@@ -4,16 +4,21 @@
 
 using namespace q3d;
 
+namespace q3d {
+
 void __q3d_window_size_cb(GLFWwindow* w, int x, int y) {
     auto* win = static_cast<Window*>(glfwGetWindowUserPointer(w));
     if (!win) return;
     win->setSize({static_cast<float>(x), static_cast<float>(y)});
+    if (win->resizeCallback) win->resizeCallback(*win, glm::vec2(x, y));
 }
 
 void __q3d_fb_size_cb(GLFWwindow* w, int x, int y) {
     auto* win = static_cast<Window*>(glfwGetWindowUserPointer(w));
     if (!win) return;
     win->setFBSize({static_cast<float>(x), static_cast<float>(y)});
+}
+
 }
 
 Window::Window(std::string_view title, glm::vec2 size) {
@@ -48,7 +53,7 @@ Window::Window(std::string_view title, glm::vec2 size) {
 
     glfwMakeContextCurrent(handle);
     glfwSetWindowUserPointer(handle, this);
-    
+
     glfwSetWindowSizeCallback(handle, __q3d_window_size_cb); // TODO: сделать возможность добавлять свой callback
     glfwSetFramebufferSizeCallback(handle, __q3d_fb_size_cb);
 
@@ -117,6 +122,10 @@ glm::vec2 Window::getFBSize() {
     int x, y;
     glfwGetFramebufferSize(handle, &x, &y);
     return {x, y};
+}
+
+void Window::onResize(std::function<void(Window&, glm::vec2)> callback) {
+     this->resizeCallback = callback;
 }
 
 bool Window::isKeyPressed(key k) {

@@ -10,20 +10,28 @@ using namespace q3d::ui;
 Canvas::Canvas(glm::vec2 size) : size(size) {
     uiCamera = std::make_shared<core::Camera>(size.x / size.y, size.y / 2.f, core::Camera::Type::Orthographic);
     uiCamera->setPosition({ 0.f, 0.f, 1.f });
+    uiCamera->setNear(-100.f);
+    uiCamera->setFar(100.f);
+}
+
+void Canvas::updateSize(glm::vec2 size) {
+    this->size = size;
+    uiCamera->setAspect(size.x / size.y);
+    uiCamera->setFov(size.y / 2);
 }
 
 void Canvas::render() const {
     auto oldCamera = core::ActiveCamera::getPtr();
     core::ActiveCamera::set(uiCamera);
 
-    using Order = std::map<float, ptr<core::Object>>;
-    Order sorted;
+    std::multimap<float, ptr<core::Object>> sorted;
+
     for (const auto& [_, obj] : objects) {
-        sorted[obj->transform.position.z] = obj;
+        sorted.insert({obj->transform.position.z, obj});
     }
 
-    for (Order::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); it++) {
-        it->second->draw();
+    for (const auto& [z, obj] : sorted) {
+        obj->draw();
     }
 
     core::ActiveCamera::set(oldCamera);

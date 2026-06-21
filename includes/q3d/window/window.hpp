@@ -5,6 +5,7 @@
 #include <glm/vec2.hpp>
 #include <string>
 #include <string_view>
+#include <functional>
 
 namespace q3d {
     class Window {
@@ -22,7 +23,12 @@ namespace q3d {
         glm::vec2 deltaMouse;
         glm::vec2 currentMouse;
         glm::vec2 lastMouse;
+
+        std::function<void(Window&, glm::vec2)> resizeCallback;
     public:
+        friend void __q3d_window_size_cb(GLFWwindow* w, int x, int y);
+        friend void __q3d_fb_size_cb(GLFWwindow* w, int x, int y);
+
         Window(std::string_view title, glm::vec2 size);
 
         bool isOpen();
@@ -49,6 +55,8 @@ namespace q3d {
         glm::vec2 getDeltaMouse() { return deltaMouse; }
 
         glm::vec2 getMousePos() { return currentMouse; }
+
+        void onResize(std::function<void(Window&, glm::vec2)> callback);
 
         bool isKeyPressed(key k);
         bool isMouseButtonPressed(button b);

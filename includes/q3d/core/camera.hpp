@@ -50,6 +50,15 @@ namespace q3d {
             void setFov(float fov);
             float getFov() { return fov; }
 
+            void setNear(float near);
+            float getNear() { return near; }
+
+            void setFar(float far);
+            float getFar() { return far; }
+
+            void setAspect(float aspect);
+            float getAspect() { return aspect; };
+
             glm::mat4 getView() { return view; }
             glm::mat4 getProj() { return proj; }
             glm::mat4 getMatrix() { return proj * view; }

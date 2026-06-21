@@ -11,6 +11,7 @@ namespace q3d {
             glm::vec2 size;
         public:
             Canvas(glm::vec2 size);
+            void updateSize(glm::vec2 size);
             void render() const override;
         };
     }
