@@ -9,6 +9,7 @@ using namespace q3d::ui;
 
 Canvas::Canvas(glm::vec2 size) : size(size) {
     uiCamera = std::make_shared<core::Camera>(size.x / size.y, size.y / 2.f, core::Camera::Type::Orthographic);
+    uiCamera->setPosition({ 0.f, 0.f, 1.f });
 }
 
 void Canvas::render() const {
