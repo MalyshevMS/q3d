@@ -9,7 +9,7 @@ using namespace q3d::ui;
 
 Canvas::Canvas(glm::vec2 size) : size(size) {
     uiCamera = std::make_shared<core::Camera>(size.x / size.y, size.y / 2.f, core::Camera::Type::Orthographic);
-    uiCamera->setPosition({ 0.f, 0.f, 1.f });
+    uiCamera->setPosition({ size.x / 2.f, -size.y / 2.f, 1.f });
     uiCamera->setNear(-100.f);
     uiCamera->setFar(100.f);
 }
@@ -18,6 +18,7 @@ void Canvas::updateSize(glm::vec2 size) {
     this->size = size;
     uiCamera->setAspect(size.x / size.y);
     uiCamera->setFov(size.y / 2);
+    uiCamera->setPosition({ size.x / 2.f, -size.y / 2.f, 1.f });
 }
 
 void Canvas::render() const {
@@ -27,7 +28,13 @@ void Canvas::render() const {
     std::multimap<float, ptr<core::Object>> sorted;
 
     for (const auto& [_, obj] : objects) {
-        sorted.insert({obj->transform.position.z, obj});
+        auto& targetZ = obj->transform.position.z;
+
+        while (sorted.find(targetZ) != sorted.end()) {
+            targetZ += 0.000001f;
+        }
+
+        sorted.insert({targetZ, obj});
     }
 
     for (const auto& [z, obj] : sorted) {
