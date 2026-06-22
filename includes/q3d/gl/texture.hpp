@@ -30,7 +30,7 @@ namespace q3d {
             };
 
             Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
-            
+
             void bind();
             static void unbind();
 

@@ -9,14 +9,18 @@ gl::Texture::Texture(const Image data, unsigned int width, unsigned int height, 
 
     wrapMode(WrapMode::Repeat, WrapMode::Repeat);
     setFilter(Filter::LinearMMLinear, Filter::Linear);
-    
+
     GLenum fmt = GL_RGB;
     if (channels == 4) fmt = GL_RGBA;
+    else if (channels == 1) fmt = GL_RED;
 
     bind();
 
     glTexImage2D(GL_TEXTURE_2D, 0, fmt, width, height, 0, fmt, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+
+    if (channels >= 3) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
 
     unbind();
 }

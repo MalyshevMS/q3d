@@ -31,6 +31,8 @@ set(Q3D_HEADERS
     includes/q3d/obj/3d/model.hpp
 
     includes/q3d/ui/canvas.hpp
+    includes/q3d/ui/font.hpp
+    includes/q3d/ui/text.hpp
 )
 
 set(Q3D_SOURCES
@@ -62,9 +64,11 @@ set(Q3D_SOURCES
     src/q3d/obj/3d/model.cpp
 
     src/q3d/ui/canvas.cpp
+    src/q3d/ui/font.cpp
+    src/q3d/ui/text.cpp
 )
 
-option(Q3D_STATIC "ON = use static linking, OFF = build as a shared library" OFF)
+option(Q3D_STATIC "ON = use static linking, OFF = use dynamic linking" OFF)
 
 if(${Q3D_STATIC})
     add_library(${PROJECT_NAME} STATIC ${Q3D_HEADERS} ${Q3D_SOURCES})
@@ -86,10 +90,21 @@ add_subdirectory(ext/glad-core/glad)
 
 add_subdirectory(ext/glm)
 
+set(FT_DISABLE_ZLIB TRUE CACHE BOOL "Disable ZLib" FORCE)
+set(FT_DISABLE_BZIP2 TRUE CACHE BOOL "Disable Bzip2" FORCE)
+set(FT_DISABLE_PNG TRUE CACHE BOOL "Disable PNG" FORCE)
+set(FT_DISABLE_HARFBUZZ TRUE CACHE BOOL "Disable Harfbuzz" FORCE)
+set(FT_DISABLE_BROTLI TRUE CACHE BOOL "Disable Brotli" FORCE)
+
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+
+add_subdirectory(ext/freetype)
+
 # Linking
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC glfw
     PUBLIC glad
     PUBLIC glm
+    PUBLIC freetype
 )
