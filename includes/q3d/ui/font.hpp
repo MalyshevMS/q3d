@@ -3,8 +3,9 @@
 #include <q3d/res/ptr.hpp>
 #include <glm/vec2.hpp>
 #include <map>
-#include <string_view>
 #include <q3d/gl/texture.hpp>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 namespace q3d {
     namespace ui {
@@ -17,11 +18,13 @@ namespace q3d {
 
         class Font {
         private:
-            std::map<char, Character> charmap;
+            std::map<wchar_t, Character> charmap;
+
+            void loadGlyph(FT_Face& face, unsigned long c);
         public:
             Font(std::string_view path, unsigned int size);
 
-            const Character& getc(char c) const;
+            const Character& getc(wchar_t c) const;
         };
     }
 }

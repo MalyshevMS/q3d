@@ -6,13 +6,38 @@
 
 using namespace q3d::ui;
 
-const Character& Font::getc(char c) const {
+const Character& Font::getc(wchar_t c) const {
     auto it = charmap.find(c);
     if (it != charmap.end()) {
         return it->second;
     }
 
     return charmap.at(' ');
+}
+
+void Font::loadGlyph(FT_Face& face, unsigned long c) {
+    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+        log::error("FreeType: failed to load glyph '{}'", c);
+        return;
+    }
+
+    auto textTex = std::make_shared<gl::Texture>(
+        face->glyph->bitmap.buffer,
+        face->glyph->bitmap.width,
+        face->glyph->bitmap.rows,
+        1
+    );
+
+    textTex->setFilter(gl::Texture::Filter::Linear, gl::Texture::Filter::Linear);
+    textTex->wrapMode(gl::Texture::WrapMode::ClampToEdge, gl::Texture::WrapMode::ClampToEdge);
+
+    Character character = {
+        textTex,
+        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+        static_cast<unsigned int>(face->glyph->advance.x)
+    };
+    charmap.insert({c, character});
 }
 
 Font::Font(std::string_view path, unsigned int size) {
@@ -33,29 +58,13 @@ Font::Font(std::string_view path, unsigned int size) {
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    for (unsigned char c = 0; c < 128; c++) {
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-            log::error("FreeType: failed to load glyph '{}'", c);
-            continue;
-        }
+    for (unsigned long c = 0; c < 128; c++) {
+        loadGlyph(face, c);
+    }
 
-        auto textTex = std::make_shared<gl::Texture>(
-            face->glyph->bitmap.buffer,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            1
-        );
-
-        textTex->setFilter(gl::Texture::Filter::Linear, gl::Texture::Filter::Linear);
-        textTex->wrapMode(gl::Texture::WrapMode::ClampToEdge, gl::Texture::WrapMode::ClampToEdge);
-
-        Character character = {
-            textTex,
-            glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-            glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-            static_cast<unsigned int>(face->glyph->advance.x)
-        };
-        charmap.insert({c, character});
+    // Load Cyrilic
+    for (unsigned long c = 0x0400; c <= 0x04FF; c++) {
+        loadGlyph(face, c);
     }
 
     FT_Done_Face(face);
