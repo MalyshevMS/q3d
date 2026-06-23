@@ -9,18 +9,18 @@ Text::Text(ptr<gl::Shader> shader, ptr<Font> font, const std::string& text, phys
  : core::Object(shader, transform), text(text), font(font), color(color) {
     const float vertices[] = {
     //   X    Y          U    V
-        0.f, 1.f,       0.f, 1.f,
-        1.f, 0.f,       1.f, 0.f,
-        0.f, 0.f,       0.f, 0.f,
-        1.f, 1.f,       1.f, 1.f,
+        0.f, 0.f,       0.f, 1.f,
+        1.f, 0.f,       1.f, 1.f,
+        1.f, 1.f,       1.f, 0.f,
+        0.f, 1.f,       0.f, 0.f,
     };
 
     const unsigned int ind[] = {
-        0, 1, 2,
-        2, 3, 0,
+        0, 2, 1,
+        0, 3, 2,
     };
 
-    vbo = std::make_unique<gl::Vbo>(vertices, sizeof(vertices), gl::buffer::Layout::l_xyz_uv);
+    vbo = std::make_unique<gl::Vbo>(vertices, sizeof(vertices), gl::buffer::Layout::l_xyzw);
     ibo = std::make_unique<gl::Ibo>(ind, 6);
     vao = std::make_unique<gl::Vao>();
 
@@ -37,6 +37,7 @@ void Text::draw() const {
 
     shader->use();
 
+    shader->uniform("u_texture", 0);
     shader->uniform("u_color", glm::vec3(color.r, color.g, color.b));
 
     float xc = transform.position.x;

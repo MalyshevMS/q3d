@@ -8,6 +8,10 @@ const Layout Layout::l_xyz_uv = {
     DataType::float2
 };
 
+const Layout Layout::l_xyzw = {
+    DataType::float4
+};
+
 const Layout Layout::l_xyz_rgb = {
     DataType::float3,
     DataType::float3

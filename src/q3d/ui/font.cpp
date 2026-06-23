@@ -1,5 +1,3 @@
-#include "glm/ext/vector_int2.hpp"
-#include "q3d/gl/texture.hpp"
 #include <q3d/ui/font.hpp>
 #include <q3d/log/log.hpp>
 #include <glad/glad.h>
@@ -62,6 +60,8 @@ Font::Font(std::string_view path, unsigned int size) {
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+
+    log::info("FreeType: loaded font '{}'", path);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
