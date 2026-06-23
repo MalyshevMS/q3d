@@ -47,7 +47,7 @@ void Text::draw() const {
         auto ch = font->getc(c);
 
         float xPos = xc + ch.bearing.x;
-        float yPos = yc + (ch.size.y - ch.bearing.y);
+        float yPos = yc - (ch.size.y - ch.bearing.y);
 
         float w = ch.size.x;
         float h = ch.size.y;
