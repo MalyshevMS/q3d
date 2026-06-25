@@ -3,8 +3,9 @@
 #include <glad/glad.h>
 
 using namespace q3d;
+using namespace gl;
 
-gl::Texture::Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels) {
+Texture::Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels) {
     glGenTextures(1, &id);
 
     wrapMode(WrapMode::Repeat, WrapMode::Repeat);
@@ -25,22 +26,22 @@ gl::Texture::Texture(const Image data, unsigned int width, unsigned int height, 
     unbind();
 }
 
-void gl::Texture::bind() {
+void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
-void gl::Texture::unbind() {
+void Texture::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void gl::Texture::use(Shader& shader, const unsigned int unit) {
+void Texture::use(Shader& shader, const unsigned int unit) {
     glActiveTexture(GL_TEXTURE0 + unit);
     bind();
     shader.uniform("u_texture", 0);
 }
 
-static GLenum wrapToGL(gl::Texture::WrapMode wrap) {
-    using enum gl::Texture::WrapMode;
+static GLenum wrapToGL(Texture::WrapMode wrap) {
+    using enum Texture::WrapMode;
     
     switch (wrap) {
         case ClampToEdge:       return GL_CLAMP_TO_EDGE;
@@ -53,7 +54,7 @@ static GLenum wrapToGL(gl::Texture::WrapMode wrap) {
     return 0;
 }
 
-void gl::Texture::wrapMode(WrapMode wrapS, WrapMode wrapT) {
+void Texture::wrapMode(WrapMode wrapS, WrapMode wrapT) {
     bind();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapToGL(wrapS));
@@ -62,8 +63,8 @@ void gl::Texture::wrapMode(WrapMode wrapS, WrapMode wrapT) {
     unbind();
 }
 
-static GLenum filterToGL(gl::Texture::Filter filter) {
-    using enum gl::Texture::Filter;
+static GLenum filterToGL(Texture::Filter filter) {
+    using enum Texture::Filter;
 
     switch (filter) {
         case Nearest:           return GL_NEAREST;
@@ -77,7 +78,7 @@ static GLenum filterToGL(gl::Texture::Filter filter) {
     return 0;
 }
 
-void gl::Texture::setFilter(Filter min, Filter mag) {
+void Texture::setFilter(Filter min, Filter mag) {
     bind();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterToGL(min));

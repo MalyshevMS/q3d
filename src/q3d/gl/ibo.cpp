@@ -2,22 +2,23 @@
 #include <glad/glad.h>
 
 using namespace q3d;
+using namespace gl;
 
-gl::Ibo::Ibo(const void *data, const unsigned int count, const Vbo::Mode mode)
+Ibo::Ibo(const void *data, const unsigned int count, const Vbo::Mode mode)
  : count(count) {
     glGenBuffers(1, &id);
     bind();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLuint), data, Vbo::toGlMode(mode));
 }
 
-gl::Ibo::~Ibo() {
+Ibo::~Ibo() {
     glDeleteBuffers(1, &id);
 }
 
-void gl::Ibo::bind() {
+void Ibo::bind() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 }
 
-void gl::Ibo::unbind() {
+void Ibo::unbind() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

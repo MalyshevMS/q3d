@@ -33,12 +33,12 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
             std::string vertexStr;
             while (lineStream >> vertexStr) {
                 unsigned int posIdx = 0, texIdx = 0;
-                
+
                 size_t firstSlash = vertexStr.find('/');
-                
+
                 if (firstSlash != std::string::npos) {
                     posIdx = std::stoul(vertexStr.substr(0, firstSlash)) - 1;
-                    
+
                     size_t secondSlash = vertexStr.find('/', firstSlash + 1);
                     if (secondSlash != std::string::npos) {
                         std::string texIdxStr = vertexStr.substr(firstSlash + 1, secondSlash - firstSlash - 1);
@@ -57,13 +57,13 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
 
                 if (posIdx < tempPositions.size()) {
                     data.positions.push_back(tempPositions[posIdx]);
-                    
+
                     if (texIdx < tempTexCoords.size()) {
                         data.texCoords.push_back(tempTexCoords[texIdx]);
                     } else {
-                        data.texCoords.emplace_back(0.0f, 0.0f);
+                        data.texCoords.emplace_back(0.f, 0.f);
                     }
-                    
+
                     data.indices.push_back(data.positions.size() - 1);
                 }
             }

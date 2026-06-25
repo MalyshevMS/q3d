@@ -1,6 +1,5 @@
 #include <q3d/gl/vbo.hpp>
 
-using namespace q3d::gl;
 using namespace q3d::gl::buffer;
 
 const Layout Layout::l_xyz_uv = {

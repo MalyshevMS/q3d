@@ -19,7 +19,7 @@ void __q3d_fb_size_cb(GLFWwindow* w, int x, int y) {
     win->setFBSize({static_cast<float>(x), static_cast<float>(y)});
 }
 
-}
+} // namespace q3d
 
 Window::Window(std::string_view title, glm::vec2 size) {
     if (!glfwInit()) {

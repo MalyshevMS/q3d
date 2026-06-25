@@ -2,8 +2,9 @@
 #include <glad/glad.h>
 
 using namespace q3d;
+using namespace gl;
 
-unsigned int gl::buffer::getCount(DataType type) {
+unsigned int buffer::getCount(DataType type) {
     switch(type) {
         case DataType::float1:
         case DataType::int1:
@@ -22,7 +23,7 @@ unsigned int gl::buffer::getCount(DataType type) {
     return 0;
 }
 
-unsigned int gl::buffer::getSize(DataType type) {
+unsigned int buffer::getSize(DataType type) {
     switch(type) {
         case DataType::int1:
         case DataType::int2:
@@ -40,7 +41,7 @@ unsigned int gl::buffer::getSize(DataType type) {
     return 0;
 }
 
-unsigned int gl::buffer::getGlType(DataType type) {
+unsigned int buffer::getGlType(DataType type) {
     switch(type) {
         case DataType::int1:
         case DataType::int2:
@@ -58,7 +59,7 @@ unsigned int gl::buffer::getGlType(DataType type) {
     return 0;
 }
 
-gl::buffer::Layout::Layout(std::initializer_list<Element> lst)
+buffer::Layout::Layout(std::initializer_list<Element> lst)
  : elements(std::move(lst)) {
     unsigned int offset = 0;
     stride = 0;
@@ -70,11 +71,11 @@ gl::buffer::Layout::Layout(std::initializer_list<Element> lst)
     }
 }
 
-const std::vector<gl::buffer::Element> &gl::buffer::Layout::getElements() const {
+const std::vector<buffer::Element> &buffer::Layout::getElements() const {
     return elements;
 }
 
-unsigned int gl::Vbo::toGlMode(Mode mode) {
+unsigned int Vbo::toGlMode(Mode mode) {
     switch (mode) {
         case Mode::Static:
             return GL_STATIC_DRAW;
@@ -87,26 +88,26 @@ unsigned int gl::Vbo::toGlMode(Mode mode) {
     }
 }
 
-gl::Vbo::Vbo(const void *data, const unsigned int size, buffer::Layout layout, Mode mode)
+Vbo::Vbo(const void *data, const unsigned int size, buffer::Layout layout, Mode mode)
  : layout(layout) {
     glGenBuffers(1, &id);
     bind();
     glBufferData(GL_ARRAY_BUFFER, size, data, toGlMode(mode));
-    
+
     auto stride = layout.getStride();
     if (stride > 0) {
         vertexCount = size / stride;
     }
 }
 
-gl::Vbo::~Vbo() {
+Vbo::~Vbo() {
     glDeleteBuffers(1, &id);
 }
 
-void gl::Vbo::bind() {
+void Vbo::bind() {
     glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void gl::Vbo::unbind() {
+void Vbo::unbind() {
     glBindBuffer(GL_ARRAY_BUFFER, 0u);
 }

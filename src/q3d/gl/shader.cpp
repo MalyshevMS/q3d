@@ -3,8 +3,9 @@
 #include <glad/glad.h>
 
 using namespace q3d;
+using namespace gl;
 
-unsigned int gl::Shader::typeToGl(Type type) {
+unsigned int Shader::typeToGl(Type type) {
     switch(type) {
         case Type::Vertex: return GL_VERTEX_SHADER;
         case Type::Fragment: return GL_FRAGMENT_SHADER;
@@ -12,7 +13,7 @@ unsigned int gl::Shader::typeToGl(Type type) {
     return 0;
 }
 
-bool gl::Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
+bool Shader::compileShader(std::string_view src, const Type type, unsigned int &id) {
     id = glCreateShader(typeToGl(type));
 
     const char* code = src.data();
@@ -34,11 +35,11 @@ bool gl::Shader::compileShader(std::string_view src, const Type type, unsigned i
     return true;
 }
 
-void gl::Shader::init() {
+void Shader::init() {
     id = glCreateProgram();
 }
 
-gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
+Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
     GLuint vs_id = attach(vert_src, Type::Vertex);
     GLuint fs_id = attach(frag_src, Type::Fragment);
     init();
@@ -47,7 +48,7 @@ gl::Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
     glDeleteShader(fs_id);
 }
 
-unsigned int gl::Shader::attach(std::string_view src, const Type type) {
+unsigned int Shader::attach(std::string_view src, const Type type) {
     GLuint shader_id;
     if (!compileShader(src, type, shader_id)) {
         glDeleteShader(shader_id);
@@ -64,7 +65,7 @@ unsigned int gl::Shader::attach(std::string_view src, const Type type) {
     return shader_id;
 }
 
-void gl::Shader::link() {
+void Shader::link() {
     if (!(attachedVS && attachedFS)) {
         log::error("gl::Shader::link failed: not all shaders are attached");
         return;
@@ -83,13 +84,14 @@ void gl::Shader::link() {
     } else _isLinked = true;
 }
 
-void gl::Shader::use() {
+void Shader::use() {
     glUseProgram(id);
 }
 
-void gl::Shader::unuse() {
+void Shader::unuse() {
     glUseProgram(0u);
 }
-gl::Shader::~Shader() {
+
+Shader::~Shader() {
     glDeleteProgram(id);
 }

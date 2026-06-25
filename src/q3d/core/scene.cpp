@@ -5,7 +5,7 @@
 #include <map>
 
 using namespace q3d;
-using namespace q3d::core;
+using namespace core;
 
 void Scene::add(std::string_view name, ptr<Object> obj) {
     objects[name.data()] = obj;
