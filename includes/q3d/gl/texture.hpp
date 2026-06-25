@@ -2,43 +2,43 @@
 
 #include <glm/vec2.hpp>
 
-namespace q3d {
-    namespace gl {
-        using Image = unsigned char*;
+namespace q3d::gl {
 
-        class Texture {
-        private:
-            unsigned int id;
-        public:
-            glm::vec2 uv = glm::vec2(1.f);
+using Image = unsigned char*;
 
-            enum class WrapMode {
-                ClampToEdge,
-                ClampToBorder,
-                MirroredRepeat,
-                Repeat,
-                MirrorClampToEdge
-            };
+class Texture {
+private:
+    unsigned int id;
+public:
+    glm::vec2 uv = glm::vec2(1.f);
 
-            enum class Filter {
-                Nearest, Linear,
+    enum class WrapMode {
+        ClampToEdge,
+        ClampToBorder,
+        MirroredRepeat,
+        Repeat,
+        MirrorClampToEdge
+    };
 
-                LinearMMLinear,
-                LinearMMNearest,
-                NearestMMLinear,
-                NearestMMNearest,
-            };
+    enum class Filter {
+        Nearest, Linear,
 
-            Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
+        LinearMMLinear,
+        LinearMMNearest,
+        NearestMMLinear,
+        NearestMMNearest,
+    };
 
-            void bind();
-            static void unbind();
+    Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
 
-            /// @warning shader program must have `uniform sampler2D u_texture`
-            void use(class Shader& shader, const unsigned int unit = 0);
+    void bind();
+    static void unbind();
 
-            void wrapMode(WrapMode wrapS, WrapMode wrapT);
-            void setFilter(Filter min, Filter mag);
-        };
-    }
-}
+    /// @warning shader program must have `uniform sampler2D u_texture`
+    void use(class Shader& shader, const unsigned int unit = 0);
+
+    void wrapMode(WrapMode wrapS, WrapMode wrapT);
+    void setFilter(Filter min, Filter mag);
+};
+
+}// namespace q3d::core

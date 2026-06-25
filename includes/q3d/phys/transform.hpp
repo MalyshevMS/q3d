@@ -4,24 +4,24 @@
 #include <glm/mat4x4.hpp>
 #include <q3d/phys/aabb.hpp>
 
-namespace q3d {
-    namespace phys {
-        class Transform {
-        public:
-            glm::vec3 position;
-            glm::vec3 rotation;
-            glm::vec3 scale_fac;
+namespace q3d::phys {
 
-            Transform(glm::vec3 position = glm::vec3(0.f), glm::vec3 rotation = glm::vec3(0.f), glm::vec3 scale_fac = glm::vec3(1.f))
-                    : position(position), rotation(rotation), scale_fac(scale_fac) {};
+class Transform {
+public:
+    glm::vec3 position;
+    glm::vec3 rotation;
+    glm::vec3 scale_fac;
 
-            AABB aabb() const; // TODO: Create similar with linked AABB (and linked AABB also)
+    Transform(glm::vec3 position = glm::vec3(0.f), glm::vec3 rotation = glm::vec3(0.f), glm::vec3 scale_fac = glm::vec3(1.f))
+            : position(position), rotation(rotation), scale_fac(scale_fac) {};
 
-            void translate(glm::vec3 delta);
-            void rotate(glm::vec3 delta);
-            void scale(glm::vec3 delta);
+    AABB aabb() const; // TODO: Create similar with linked AABB (and linked AABB also)
 
-            glm::mat4 getModelMatrix() const;
-        };
-    }
-}
+    void translate(glm::vec3 delta);
+    void rotate(glm::vec3 delta);
+    void scale(glm::vec3 delta);
+
+    glm::mat4 getModelMatrix() const;
+};
+
+} // namespace q3d::phys

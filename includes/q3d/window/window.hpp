@@ -8,60 +8,62 @@
 #include <functional>
 
 namespace q3d {
-    class Window {
-    private:
-        GLFWwindow* handle;
 
-        glm::vec2 size;
-        glm::vec2 fb_size;
-        std::string title;
+class Window {
+private:
+GLFWwindow* handle;
 
-        float deltaTime;
-        float currentTime;
-        float lastTime;
+glm::vec2 size;
+glm::vec2 fb_size;
+std::string title;
 
-        glm::vec2 deltaMouse;
-        glm::vec2 currentMouse;
-        glm::vec2 lastMouse;
+float deltaTime;
+float currentTime;
+float lastTime;
 
-        std::function<void(Window&, glm::vec2)> resizeCallback;
-    public:
-        friend void __q3d_window_size_cb(GLFWwindow* w, int x, int y);
-        friend void __q3d_fb_size_cb(GLFWwindow* w, int x, int y);
+glm::vec2 deltaMouse;
+glm::vec2 currentMouse;
+glm::vec2 lastMouse;
 
-        Window(std::string_view title, glm::vec2 size);
+std::function<void(Window&, glm::vec2)> resizeCallback;
+public:
+friend void __q3d_window_size_cb(GLFWwindow* w, int x, int y);
+friend void __q3d_fb_size_cb(GLFWwindow* w, int x, int y);
 
-        bool isOpen();
-        void close();
-        static void terminate();
+Window(std::string_view title, glm::vec2 size);
 
-        void update();
+bool isOpen();
+void close();
+static void terminate();
 
-        /// getters / setters
+void update();
 
-        glm::vec2 getSize() { return size; }
-        void setSize(glm::vec2 size);
+/// getters / setters
 
-        glm::vec2 getFBSize();
-        void setFBSize(glm::vec2 fb_size);
+glm::vec2 getSize() { return size; }
+void setSize(glm::vec2 size);
 
-        std::string getTitle() { return title; }
-        void setTitle(std::string_view title);
+glm::vec2 getFBSize();
+void setFBSize(glm::vec2 fb_size);
 
-        float getAspectRatio() { return size.x / size.y; }
-        float getInversedAspectRatio() { return size.y / size.x; }
+std::string getTitle() { return title; }
+void setTitle(std::string_view title);
 
-        float getDeltaTime() { return deltaTime; };
-        glm::vec2 getDeltaMouse() { return deltaMouse; }
+float getAspectRatio() { return size.x / size.y; }
+float getInversedAspectRatio() { return size.y / size.x; }
 
-        glm::vec2 getMousePos() { return currentMouse; }
+float getDeltaTime() { return deltaTime; };
+glm::vec2 getDeltaMouse() { return deltaMouse; }
 
-        void onResize(std::function<void(Window&, glm::vec2)> callback);
+glm::vec2 getMousePos() { return currentMouse; }
 
-        bool isKeyPressed(key k);
-        bool isMouseButtonPressed(button b);
+void onResize(std::function<void(Window&, glm::vec2)> callback);
 
-        void hideCursor();
-        void showCursor();
-    };
-}
+bool isKeyPressed(key k);
+bool isMouseButtonPressed(button b);
+
+void hideCursor();
+void showCursor();
+};
+
+} // namespace q3d

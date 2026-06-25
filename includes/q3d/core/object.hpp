@@ -7,28 +7,28 @@
 #include <q3d/gl/vao.hpp>
 #include <q3d/gl/gl.hpp>
 
-namespace q3d {
-    namespace core {
-        class Object {
-        protected:
-            ptr<gl::Shader> shader;
-            ptr<gl::Texture> texture = nullptr; // Remember to always check if texture is not `nullptr`!
+namespace q3d::core {
 
-            uptr<gl::Vbo> vbo; // Don't forget to init those!
-            uptr<gl::Ibo> ibo;
-            uptr<gl::Vao> vao;
+class Object {
+protected:
+    ptr<gl::Shader> shader;
+    ptr<gl::Texture> texture = nullptr; // Remember to always check if texture is not `nullptr`!
 
-            std::vector<gl::feature> features = {
-                gl::feature::depthTest
-            }; // Define what features to use in you classes (default: depthTest)
-        public:
-            phys::Transform transform;
-            bool doDraw = true;
+    uptr<gl::Vbo> vbo; // Don't forget to init those!
+    uptr<gl::Ibo> ibo;
+    uptr<gl::Vao> vao;
 
-            Object(ptr<gl::Shader> shader, phys::Transform transform = {}, ptr<gl::Texture> texture = nullptr)
-                   : shader(shader), transform(transform), texture(texture) {}
+    std::vector<gl::feature> features = {
+        gl::feature::depthTest
+    }; // Define what features to use in you classes (default: depthTest)
+public:
+    phys::Transform transform;
+    bool doDraw = true;
 
-            virtual void draw() const;
-        };
-    }
-} 
+    Object(ptr<gl::Shader> shader, phys::Transform transform = {}, ptr<gl::Texture> texture = nullptr)
+            : shader(shader), transform(transform), texture(texture) {}
+
+    virtual void draw() const;
+};
+
+} // namespace q3d::core

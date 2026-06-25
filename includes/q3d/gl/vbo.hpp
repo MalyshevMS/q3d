@@ -2,76 +2,78 @@
 
 #include <vector>
 
-namespace q3d {
-    namespace gl {
-        namespace buffer {
-            enum class DataType {
-                float1,   int1,
-                float2,   int2,
-                float3,   int3,
-                float4,   int4,
-            };
+namespace q3d::gl {
 
-            unsigned int getCount(DataType type);
-            unsigned int getSize(DataType type);
-            unsigned int getGlType(DataType type);
+namespace buffer {
 
-            struct Element {
-                DataType type;
+enum class DataType {
+    float1,   int1,
+    float2,   int2,
+    float3,   int3,
+    float4,   int4,
+};
 
-                unsigned int glType;
-                unsigned int count;
-                unsigned int size;
-                unsigned int offset;
+unsigned int getCount(DataType type);
+unsigned int getSize(DataType type);
+unsigned int getGlType(DataType type);
 
-                Element(DataType type)
-                 : type(type),
-                   glType(getGlType(type)),
-                   count(getCount(type)),
-                   size(getSize(type)),
-                   offset(0u)
-                {}
-            };
+struct Element {
+    DataType type;
 
-            class Layout {
-            private:
-                std::vector<Element> elements;
-                unsigned int stride;
-            public:
-                Layout(std::initializer_list<Element> lst);
+    unsigned int glType;
+    unsigned int count;
+    unsigned int size;
+    unsigned int offset;
 
-                const std::vector<Element>& getElements() const;
-                unsigned int getStride() const { return stride; }
+    Element(DataType type)
+        : type(type),
+        glType(getGlType(type)),
+        count(getCount(type)),
+        size(getSize(type)),
+        offset(0u)
+    {}
+};
 
-                static const Layout l_xyz_uv;
-                static const Layout l_xyzw;
-                static const Layout l_xyz_rgb;
-                static const Layout l_xyz_rgb_uv;
-                static const Layout l_xyz_nnn_uv;
-                static const Layout l_xyz_rgb_nnn_uv;
-            };
-        }
+class Layout {
+private:
+    std::vector<Element> elements;
+    unsigned int stride;
+public:
+    Layout(std::initializer_list<Element> lst);
 
-        class Vbo {
-        private:
-            unsigned int id;
-            buffer::Layout layout;
-            unsigned int vertexCount = 0;
-        public:
-            enum class Mode {
-                Static, Dynamic, Stream
-            };
-            
-            static unsigned int toGlMode(Mode mode);
+    const std::vector<Element>& getElements() const;
+    unsigned int getStride() const { return stride; }
 
-            Vbo(const void* data, const unsigned int size, buffer::Layout layout, Mode mode = Mode::Static);
-            ~Vbo();
+    static const Layout l_xyz_uv;
+    static const Layout l_xyzw;
+    static const Layout l_xyz_rgb;
+    static const Layout l_xyz_rgb_uv;
+    static const Layout l_xyz_nnn_uv;
+    static const Layout l_xyz_rgb_nnn_uv;
+};
 
-            void bind();
-            static void unbind();
+} // namespace buffer
 
-            buffer::Layout getLayout() { return layout; }
-            unsigned int getVertexCount() const { return vertexCount; }
-        };
-    }
-}
+class Vbo {
+private:
+    unsigned int id;
+    buffer::Layout layout;
+    unsigned int vertexCount = 0;
+public:
+    enum class Mode {
+        Static, Dynamic, Stream
+    };
+    
+    static unsigned int toGlMode(Mode mode);
+
+    Vbo(const void* data, const unsigned int size, buffer::Layout layout, Mode mode = Mode::Static);
+    ~Vbo();
+
+    void bind();
+    static void unbind();
+
+    buffer::Layout getLayout() { return layout; }
+    unsigned int getVertexCount() const { return vertexCount; }
+};
+
+} // namespace q3d::gl

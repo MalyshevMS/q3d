@@ -3,33 +3,33 @@
 #include <glm/vec3.hpp>
 #include <glm/common.hpp>
 
-namespace q3d {
-    namespace phys {
-        /// @note This is a constant AABB
-        class AABB {
-        public:
-            const glm::vec3 min;
-            const glm::vec3 max;
+namespace q3d::phys {
 
-            AABB()
-                : min(std::numeric_limits<float>::max()),
-                  max(std::numeric_limits<float>::lowest()) {}
+/// @note This is a constant AABB
+class AABB {
+public:
+    const glm::vec3 min;
+    const glm::vec3 max;
 
-            AABB(const glm::vec3& min_, const glm::vec3& max_)
-                : min(glm::min(min_, max_)),
-                  max(glm::max(min_, max_)) {}
+    AABB()
+        : min(std::numeric_limits<float>::max()),
+          max(std::numeric_limits<float>::lowest()) {}
 
-            bool isValid() const;
+    AABB(const glm::vec3& min_, const glm::vec3& max_)
+        : min(glm::min(min_, max_)),
+          max(glm::max(min_, max_)) {}
 
-            glm::vec3 size() const;
+    bool isValid() const;
 
-            glm::vec3 center() const;
+    glm::vec3 size() const;
 
-            bool intersects(const AABB& other) const;
+    glm::vec3 center() const;
 
-            bool contains(const glm::vec3& point) const;
+    bool intersects(const AABB& other) const;
 
-            float volume() const;
-        };
-    }
-}
+    bool contains(const glm::vec3& point) const;
+
+    float volume() const;
+};
+
+} // namespace q3d::phys

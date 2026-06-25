@@ -7,24 +7,23 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-namespace q3d {
-    namespace ui {
-        struct Character {
-            ptr<gl::Texture> texture;
-            glm::ivec2 size;
-            glm::ivec2 bearing;
-            unsigned int advance;
-        };
+namespace q3d::ui {
+struct Character {
+    ptr<gl::Texture> texture;
+    glm::ivec2 size;
+    glm::ivec2 bearing;
+    unsigned int advance;
+};
 
-        class Font {
-        private:
-            std::map<wchar_t, Character> charmap;
+class Font {
+private:
+    std::map<wchar_t, Character> charmap;
 
-            void loadGlyph(FT_Face& face, unsigned long c);
-        public:
-            Font(std::string_view path, unsigned int size);
+    void loadGlyph(FT_Face& face, unsigned long c);
+public:
+    Font(std::string_view path, unsigned int size);
 
-            const Character& getc(wchar_t c) const;
-        };
-    }
-}
+    const Character& getc(wchar_t c) const;
+};
+
+} // namespace q3d::ui

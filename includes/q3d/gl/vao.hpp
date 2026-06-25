@@ -3,40 +3,40 @@
 #include <q3d/gl/vbo.hpp>
 #include <q3d/gl/ibo.hpp>
 
-namespace q3d {
-    namespace gl {
-        enum class DrawMethod {
-            Points,
-            Lines,
-            LineStrip,
-            LineLoop,
-            Triangles,
-            TriangleStrip,
-            TriangleFan,
-            Patches
-        };
+namespace q3d::gl {
 
-        unsigned int methodToGl(DrawMethod method);
+enum class DrawMethod {
+    Points,
+    Lines,
+    LineStrip,
+    LineLoop,
+    Triangles,
+    TriangleStrip,
+    TriangleFan,
+    Patches
+};
 
-        class Vao {
-        private:
-            unsigned int id;
-            unsigned int elCount = 0;
-            unsigned int vertexCount = 0;
-            unsigned int indCount = 0;
-        public:
-            Vao();
-            ~Vao();
+unsigned int methodToGl(DrawMethod method);
 
-            void bind();
-            static void unbind();
+class Vao {
+private:
+    unsigned int id;
+    unsigned int elCount = 0;
+    unsigned int vertexCount = 0;
+    unsigned int indCount = 0;
+public:
+    Vao();
+    ~Vao();
 
-            void addVbo(Vbo& vbo);
-            void setIbo(Ibo& ibo);
+    void bind();
+    static void unbind();
 
-            unsigned int getIndeciesCount() const { return indCount; }
+    void addVbo(Vbo& vbo);
+    void setIbo(Ibo& ibo);
 
-            void draw(DrawMethod method = DrawMethod::Triangles);
-        };
-    }
-}
+    unsigned int getIndeciesCount() const { return indCount; }
+
+    void draw(DrawMethod method = DrawMethod::Triangles);
+};
+
+} // namespace q3d::core
