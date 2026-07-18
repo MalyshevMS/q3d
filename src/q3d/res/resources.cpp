@@ -1,10 +1,18 @@
+#include "glm/ext/vector_int2.hpp"
+#include "q3d/gl/texture.hpp"
+#include "q3d/ui/font.hpp"
+#include <glad/glad.h>
+#include <memory>
 #include <q3d/res/resources.hpp>
 #include <q3d/obj/3d/model.hpp>
 #include <q3d/log/log.hpp>
 #include <fstream>
 #include <sstream>
+#include <string_view>
 #define STB_IMAGE_IMPLEMENTATION
 #include <q3d/res/stb_image.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 using namespace q3d;
 
@@ -26,7 +34,7 @@ std::string Resources::readFile(std::string_view path) {
     std::ifstream ifs;
     ifs.open(fpath, std::ios::in | std::ios::binary);
     if (!ifs.is_open()) {
-        log::warn("Failed to open file '{}'!", fpath);
+        log::warn("Resources::readFile('{}'): Failed to open file '{}'!", path, fpath);
         return {};
     }
 
@@ -49,7 +57,7 @@ ptr<gl::Texture> Resources::loadTexture(std::string_view name, std::string_view 
         return nullptr;
     }
 
-    const auto& tex = textures.emplace<std::string, ptr<gl::Texture>>(
+    const auto& tex = textures.emplace(
         name.data(), std::make_shared<gl::Texture>(data, x, y, ch)
     );
 
@@ -95,7 +103,7 @@ ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view ve
         return nullptr;
     }
 
-    const auto& shader_el = shaders.emplace<std::string, ptr<gl::Shader>>(
+    const auto& shader_el = shaders.emplace(
         name.data(), std::move(shader)
     );
 
@@ -124,9 +132,9 @@ ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view 
         log::error("Resources::loadModel('{}'): Failed to read file '{}'!", name, path);
         return nullptr;
     }
-    
+
     auto objData = parseObjFile(fileContent);
-    const auto& model_el = models.emplace<std::string, ptr<object::Model>>(
+    const auto& model_el = models.emplace(
         name.data(), std::make_shared<object::Model>(shader, objData, phys::Transform(), texture)
     );
 
@@ -143,4 +151,74 @@ ptr<object::Model> Resources::getModel(std::string_view name) {
     auto it = models.find(name.data());
     if (it == models.end()) return nullptr;
     return it->second;
+}
+
+void loadGlyph(FT_Face& face, ui::CharMap& charmap, unsigned long c) {
+    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+        log::error("loadGlyph('{}'): failed to load glyph!", c);
+        return;
+    }
+
+    auto tex = std::make_shared<gl::Texture>(
+        face->glyph->bitmap.buffer,
+        face->glyph->bitmap.width,
+        face->glyph->bitmap.rows,
+        1
+    );
+
+    tex->setFilter(gl::Texture::Filter::Linear, gl::Texture::Filter::Linear);
+    tex->wrapMode(gl::Texture::WrapMode::ClampToEdge, gl::Texture::WrapMode::ClampToEdge);
+
+    ui::Character ch = {
+        tex,
+        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+        static_cast<unsigned int>(face->glyph->advance.x)
+    };
+
+    charmap.insert({c, ch});
+}
+
+ptr<ui::Font> Resources::loadFont(std::string_view name, std::string_view path, unsigned int size) {
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft)) {
+        log::error("Resources::loadFont('{}'): FreeType failed to init!", name);
+        return nullptr;
+    }
+
+    FT_Face face;
+    if (FT_New_Face(ft, path.data(), 0, &face)) {
+        log::error("Resources::loadFont('{}'): failed to load font at '{}'!", name, path);
+        return nullptr;
+    }
+
+    ui::CharMap charmap;
+
+    FT_Set_Pixel_Sizes(face, 0, size);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    for (unsigned long c = 0; c < 128; c++) loadGlyph(face, charmap, c);
+
+    // Cyrilic
+    for (unsigned long c = 0x400; c <= 0x04FF; c++) loadGlyph(face, charmap, c);
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(ft);
+
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+    const auto& font_el = fonts.emplace(
+        name, std::make_shared<ui::Font>(charmap)
+    );
+
+    if (!font_el.second) {
+        log::error("Resources::loadFont('{}'): failed to emplace font!", name);
+        return nullptr;
+    }
+
+    log::info("Loaded font '{}'", name);
+
+    return font_el.first->second;
 }

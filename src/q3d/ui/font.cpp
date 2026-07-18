@@ -41,37 +41,38 @@ void Font::loadGlyph(FT_Face& face, unsigned long c) {
     charmap.insert({c, character});
 }
 
-Font::Font(std::string_view path, unsigned int size) {
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft)) {
-        log::error("FreeType: failed to init");
-        return;
-    }
-
-    FT_Face face;
-    if (FT_New_Face(ft, path.data(), 0, &face)) {
-        log::error("FreeType: failed to load font at '{}'", path);
-        FT_Done_FreeType(ft);
-        return;
-    }
-
-    FT_Set_Pixel_Sizes(face, 0, size);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    for (unsigned long c = 0; c < 128; c++) {
-        loadGlyph(face, c);
-    }
-
-    // Load Cyrilic
-    for (unsigned long c = 0x0400; c <= 0x04FF; c++) {
-        loadGlyph(face, c);
-    }
-
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
-
-    log::info("FreeType: loaded font '{}'", path);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+Font::Font(std::map<wchar_t, Character> charmap)
+: charmap(charmap) {
+    // FT_Library ft;
+    // if (FT_Init_FreeType(&ft)) {
+    //     log::error("FreeType: failed to init");
+    //     return;
+    // }
+    //
+    // FT_Face face;
+    // if (FT_New_Face(ft, path.data(), 0, &face)) {
+    //     log::error("FreeType: failed to load font at '{}'", path);
+    //     FT_Done_FreeType(ft);
+    //     return;
+    // }
+    //
+    // FT_Set_Pixel_Sizes(face, 0, size);
+    //
+    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //
+    // for (unsigned long c = 0; c < 128; c++) {
+    //     loadGlyph(face, c);
+    // }
+    //
+    // // Load Cyrilic
+    // for (unsigned long c = 0x0400; c <= 0x04FF; c++) {
+    //     loadGlyph(face, c);
+    // }
+    //
+    // FT_Done_Face(face);
+    // FT_Done_FreeType(ft);
+    //
+    // log::info("FreeType: loaded font '{}'", path);
+    //
+    // glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }

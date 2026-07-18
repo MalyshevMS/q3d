@@ -16,13 +16,15 @@ struct Character {
     unsigned int advance;
 };
 
+using CharMap = std::map<wchar_t, Character>;
+
 class Font {
 private:
-    std::map<wchar_t, Character> charmap;
+    CharMap charmap;
 
     void loadGlyph(FT_Face& face, unsigned long c);
 public:
-    Font(std::string_view path, unsigned int size);
+    Font(CharMap charmap);
 
     const Character& getc(wchar_t c) const;
 };
