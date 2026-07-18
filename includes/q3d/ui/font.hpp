@@ -8,6 +8,7 @@
 #include FT_FREETYPE_H
 
 namespace q3d::ui {
+
 struct Character {
     ptr<gl::Texture> texture;
     glm::ivec2 size;

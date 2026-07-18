@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <q3d/window/window.hpp>
 #include <q3d/log/log.hpp>
 

@@ -1,8 +1,8 @@
 #include <q3d/obj/3d/model.hpp>
 #include <q3d/log/log.hpp>
 
-using namespace q3d::object;
-
+using namespace q3d;
+using namespace object;
 
 Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Transform transform, ptr<gl::Texture> texture)
  : core::Object(shader, transform, texture) {

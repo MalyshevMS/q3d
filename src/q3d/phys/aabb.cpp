@@ -1,6 +1,7 @@
 #include <q3d/phys/aabb.hpp>
 
-using namespace q3d::phys;
+using namespace q3d;
+using namespace phys;
 
 bool AABB::isValid() const {
     return min.x <= max.x &&

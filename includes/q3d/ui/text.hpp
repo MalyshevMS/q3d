@@ -6,6 +6,7 @@
 #include <string>
 
 namespace q3d::ui {
+
 class Text : public core::Object {
 private:
     std::string text;

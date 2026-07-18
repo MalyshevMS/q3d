@@ -5,7 +5,8 @@
 #include <memory>
 #include <map>
 
-using namespace q3d::ui;
+using namespace q3d;
+using namespace ui;
 
 Canvas::Canvas(glm::vec2 size) : size(size) {
     uiCamera = std::make_shared<core::Camera>(size.x / size.y, size.y / 2.f, core::Camera::Type::Orthographic);

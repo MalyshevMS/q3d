@@ -1,6 +1,7 @@
 #include <q3d/obj/3d/box.hpp>
 
-using namespace q3d::object;
+using namespace q3d;
+using namespace object;
 
 Box::Box(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture)
  : core::Object(shader, transform, texture) {

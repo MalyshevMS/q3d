@@ -1,6 +1,7 @@
 #include <q3d/core/color.hpp>
 
-using namespace q3d::core;
+using namespace q3d;
+using namespace core;
 
 inline const Color Color::Red =             {1.f, 0.f, 0.f, 1.f};
 inline const Color Color::Green =           {0.f, 1.f, 0.f, 1.f};

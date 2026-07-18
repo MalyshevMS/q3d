@@ -1,8 +1,8 @@
 #include <q3d/phys/transform.hpp>
-
 #include <glm/gtc/matrix_transform.hpp>
 
-using namespace q3d::phys;
+using namespace q3d;
+using namespace phys;
 
 AABB Transform::aabb() const {
 	glm::vec3 half = scale_fac * 0.5f;

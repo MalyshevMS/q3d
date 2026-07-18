@@ -1,6 +1,7 @@
 #include <q3d/obj/2d/plane.hpp>
 
-using namespace q3d::object;
+using namespace q3d;
+using namespace object;
 
 Plane::Plane(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture)
  : core::Object(shader, transform, texture) {

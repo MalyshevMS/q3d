@@ -4,7 +4,8 @@
 #include <glad/glad.h>
 #include <string>
 
-using namespace q3d::ui;
+using namespace q3d;
+using namespace ui;
 
 Text::Text(ptr<gl::Shader> shader, ptr<Font> font, const std::string& text, phys::Transform transform, core::Color color)
  : core::Object(shader, transform), text(text), font(font), color(color) {

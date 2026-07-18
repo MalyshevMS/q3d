@@ -4,7 +4,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-using namespace q3d::ui;
+using namespace q3d;
+using namespace ui;
 
 const Character& Font::getc(wchar_t c) const {
     auto it = charmap.find(c);

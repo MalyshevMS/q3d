@@ -1,7 +1,8 @@
 #include <q3d/core/object.hpp>
 #include <q3d/core/active_camera.hpp>
 
-using namespace q3d::core;
+using namespace q3d;
+using namespace core;
 
 void Object::draw() const {
     if (!doDraw) [[unlikely]] return;

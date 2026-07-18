@@ -3,7 +3,8 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/trigonometric.hpp>
 
-using namespace q3d::core;
+using namespace q3d;
+using namespace core;
 
 void Camera::updateView() {
     float pitch = glm::radians(rotation.x);

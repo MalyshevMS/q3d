@@ -1,6 +1,8 @@
 #include <q3d/gl/vbo.hpp>
 
-using namespace q3d::gl::buffer;
+using namespace q3d;
+using namespace gl;
+using namespace buffer;
 
 const Layout Layout::l_xyz_uv = {
     DataType::float3,
