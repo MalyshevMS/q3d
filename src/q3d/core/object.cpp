@@ -7,7 +7,10 @@ using namespace core;
 void Object::draw() const {
     if (!doDraw) [[unlikely]] return;
 
-    for (const auto& f : features) gl::enable(f); // Enable all user's features
+    for (const auto& [f, b] : features) {
+        if (b) gl::enable(f);
+        else gl::disable(f);
+    }
 
     auto& camera = ActiveCamera::get();
 
@@ -21,6 +24,4 @@ void Object::draw() const {
     vao->draw();
 
     shader->unuse();
-
-    for (const auto& f : features) gl::disable(f); // Disable for future drawings
 }

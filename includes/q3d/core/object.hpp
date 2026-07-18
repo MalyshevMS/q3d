@@ -1,5 +1,6 @@
 #pragma once
 
+#include "q3d/gl/features.hpp"
 #include <q3d/res/ptr.hpp>
 #include <q3d/phys/transform.hpp>
 #include <q3d/gl/shader.hpp>
@@ -18,10 +19,12 @@ protected:
     uptr<gl::Ibo> ibo;
     uptr<gl::Vao> vao;
 
-    std::vector<gl::feature> features = {
-        gl::feature::depthTest
-    }; // Define what features to use in you classes (default: depthTest)
 public:
+    std::unordered_map<gl::feature, bool> features = {
+        { gl::feature::depthTest, true },
+        { gl::feature::blend, true },
+    };
+
     phys::Transform transform;
     bool doDraw = true;
 

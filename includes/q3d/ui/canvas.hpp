@@ -13,6 +13,7 @@ public:
     Canvas(glm::vec2 size);
     void updateSize(glm::vec2 size);
     void render() const override;
+    void add(std::string_view name, ptr<core::Object> obj) override;
 };
 
 } // namespace q3d::ui

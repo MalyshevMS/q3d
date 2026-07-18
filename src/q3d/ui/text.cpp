@@ -1,3 +1,4 @@
+#include "q3d/gl/features.hpp"
 #include <q3d/ui/text.hpp>
 #include <q3d/core/active_camera.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,12 +29,17 @@ Text::Text(ptr<gl::Shader> shader, ptr<Font> font, const std::string& text, phys
 
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
+
+    features[gl::feature::cullFace] = false;
 }
 
 void Text::draw() const {
     if (!doDraw) [[unlikely]] return;
 
-    for (const auto& f : features) gl::enable(f);
+    for (const auto& [f, b] : features) {
+        if (b) gl::enable(f);
+        else gl::disable(f);
+    }
 
     auto camera = core::ActiveCamera::get();
     shader->use();
@@ -99,6 +105,4 @@ void Text::draw() const {
     vao->unbind();
     gl::Texture::unbind();
     shader->unuse();
-
-    for (const auto& f : features) gl::disable(f);
 }

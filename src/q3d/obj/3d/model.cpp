@@ -30,5 +30,5 @@ Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Tr
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
 
-    features.push_back(gl::feature::cullFace);
+    features[gl::feature::cullFace] = true;
 }
