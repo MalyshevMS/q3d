@@ -5,10 +5,11 @@
 using namespace q3d;
 using namespace gl;
 
-unsigned int Shader::typeToGl(Type type) {
+unsigned int typeToGl(Shader::Type type) {
+    using enum Shader::Type;
     switch(type) {
-        case Type::Vertex: return GL_VERTEX_SHADER;
-        case Type::Fragment: return GL_FRAGMENT_SHADER;
+        case Vertex: return GL_VERTEX_SHADER;
+        case Fragment: return GL_FRAGMENT_SHADER;
     }
     return 0;
 }

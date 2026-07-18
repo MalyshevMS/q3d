@@ -63,7 +63,7 @@ public:
     enum class Mode {
         Static, Dynamic, Stream
     };
-    
+
     static unsigned int toGlMode(Mode mode);
 
     Vbo(const void* data, const unsigned int size, buffer::Layout layout, Mode mode = Mode::Static);

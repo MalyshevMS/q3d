@@ -16,8 +16,6 @@ enum class DrawMethod {
     Patches
 };
 
-unsigned int methodToGl(DrawMethod method);
-
 class Vao {
 private:
     unsigned int id;

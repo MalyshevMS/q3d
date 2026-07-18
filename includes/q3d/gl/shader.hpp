@@ -20,8 +20,6 @@ private:
     bool attachedVS = false;
     unsigned int id;
 public:
-    static unsigned int typeToGl(Type type);
-
     void init();
 
     Shader() { init(); }
@@ -44,7 +42,7 @@ public:
     void uniform(std::string_view name, glm::vec2 val);
     void uniform(std::string_view name, glm::vec3 val);
     void uniform(std::string_view name, glm::mat4 val);
-    
+
     // TODO: сделать uniform array
 };
 
