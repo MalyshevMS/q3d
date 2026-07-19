@@ -1,7 +1,9 @@
+#include <chrono>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <q3d/window/window.hpp>
 #include <q3d/log/log.hpp>
+#include <thread>
 
 using namespace q3d;
 
@@ -58,6 +60,12 @@ Window::Window(std::string_view title, glm::vec2 size) {
     glfwSetWindowSizeCallback(handle, __q3d_window_size_cb); // TODO: сделать возможность добавлять свой callback
     glfwSetFramebufferSizeCallback(handle, __q3d_fb_size_cb);
 
+    if (!glfwRawMouseMotionSupported()) {
+        log::warn("Window::Window(): raw mouse input is not supported in your system, you might feel lags in mouse motion");
+    }
+
+    glfwSetInputMode(handle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         log::error("gladLoadGLLoader failed");
         terminate();
@@ -65,6 +73,8 @@ Window::Window(std::string_view title, glm::vec2 size) {
     }
 
     glViewport(0, 0, fb_size.x, fb_size.y);
+
+    frameStartTime = std::chrono::high_resolution_clock::now();
 }
 
 bool Window::isOpen() {
@@ -84,6 +94,32 @@ void Window::terminate() {
 void Window::update() {
     if (!handle) return;
 
+    glfwSwapBuffers(handle);
+
+    if (targetFPS > 0.0) {
+        const std::chrono::duration<double> target(1.0 / targetFPS);
+
+        auto frameEndTime = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = frameEndTime - frameStartTime;
+
+        if (elapsed < target) {
+            auto sleepDuration = target - elapsed;
+
+            if (sleepDuration > std::chrono::microseconds(100)) {
+                std::this_thread::sleep_for(sleepDuration - std::chrono::microseconds(100));
+            }
+
+            while (std::chrono::high_resolution_clock::now() - frameStartTime < target) {
+                #if defined(__x86_64__) || defined(_M_X64)
+                __builtin_ia32_pause();
+                #endif
+            }
+        }
+    }
+    frameStartTime = std::chrono::high_resolution_clock::now();
+
+    glfwPollEvents();
+
     currentTime = glfwGetTime();
     deltaTime = currentTime - lastTime;
     lastTime = currentTime;
@@ -93,9 +129,6 @@ void Window::update() {
     currentMouse = glm::vec2(mx, my);
     deltaMouse = currentMouse - lastMouse;
     lastMouse = currentMouse;
-
-    glfwSwapBuffers(handle);
-    glfwPollEvents();
 }
 
 void Window::setSize(glm::vec2 size) {
@@ -143,4 +176,8 @@ void Window::hideCursor() {
 
 void Window::showCursor() {
     glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void Window::setVSync(bool enabled) {
+    glfwSwapInterval(enabled);
 }

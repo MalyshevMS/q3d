@@ -6,6 +6,7 @@
 #include <string>
 #include <string_view>
 #include <functional>
+#include <chrono>
 
 namespace q3d {
 
@@ -24,6 +25,9 @@ private:
     glm::vec2 deltaMouse;
     glm::vec2 currentMouse;
     glm::vec2 lastMouse;
+
+    double targetFPS = 0.0;
+    std::chrono::time_point<std::chrono::high_resolution_clock> frameStartTime;
 
     std::function<void(Window&, glm::vec2)> resizeCallback;
 public:
@@ -64,6 +68,9 @@ public:
 
     void hideCursor();
     void showCursor();
+
+    void setVSync(bool enabled);
+    void fpsMax(double fps) { targetFPS = fps; }
 };
 
 } // namespace q3d
