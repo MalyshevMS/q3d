@@ -46,11 +46,11 @@ void Text::draw() const {
 
     shader->uniform("u_color", glm::vec3(color.r, color.g, color.b));
 
+    float lineHeight = font->getc('H').size.y * 1.2f;
+
     const float startX = transform.position.x;
     float xc = startX;
-    float yc = transform.position.y;
-
-    float lineHeight = font->getc('H').size.y * 1.2f; 
+    float yc = transform.position.y - lineHeight;
 
     for (size_t i = 0; i < text.length(); ) {
         unsigned char cp = text[i];
