@@ -9,7 +9,7 @@ namespace q3d::object {
 
 class Model : public core::Object {
 public:
-    Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Transform transform = {}, ptr<gl::Texture> texture = nullptr);
+    Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, ptr<gl::Texture> texture = nullptr, phys::Transform transform = {});
 };
 
 } // namespace q3d::object

@@ -6,7 +6,7 @@ namespace q3d::object {
 
 class Plane : public core::Object {
 public:
-    Plane(ptr<gl::Shader> shader, phys::Transform transform = {}, ptr<gl::Texture> texture = nullptr);
+    Plane(ptr<gl::Shader> shader, ptr<gl::Texture> texture = nullptr, phys::Transform transform = {});
 };
 
 } // namespace q3d::object

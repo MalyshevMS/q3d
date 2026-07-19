@@ -22,7 +22,7 @@ private:
 
     glm::vec3 position;
     glm::vec3 rotation;
-    
+
     glm::vec3 dir;
     glm::vec3 right;
     glm::vec3 up;
@@ -66,6 +66,8 @@ public:
     void moveForward(float delta);
     void moveRight(float delta);
     void moveUp(float delta);
+
+    void move(glm::vec3 delta);
     void rotate(glm::vec3 delta);
 
     void moveRotate(glm::vec3 deltaMove, glm::vec3 deltaRotate);

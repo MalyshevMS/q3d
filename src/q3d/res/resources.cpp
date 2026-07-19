@@ -1,6 +1,6 @@
-#include "glm/ext/vector_int2.hpp"
-#include "q3d/gl/texture.hpp"
-#include "q3d/ui/font.hpp"
+#include <glm/ext/vector_int2.hpp>
+#include <q3d/gl/texture.hpp>
+#include <q3d/ui/font.hpp>
 #include <glad/glad.h>
 #include <memory>
 #include <q3d/res/resources.hpp>
@@ -135,7 +135,7 @@ ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view 
 
     auto objData = parseObjFile(fileContent);
     const auto& model_el = models.emplace(
-        name.data(), std::make_shared<object::Model>(shader, objData, phys::Transform(), texture)
+        name.data(), std::make_shared<object::Model>(shader, objData, texture, phys::Transform())
     );
 
     if (!model_el.second) {
@@ -221,4 +221,10 @@ ptr<ui::Font> Resources::loadFont(std::string_view name, std::string_view path, 
     log::info("Loaded font '{}'", name);
 
     return font_el.first->second;
+}
+
+ptr<ui::Font> Resources::getFont(std::string_view name) {
+    auto it = fonts.find(name.data());
+    if (it == fonts.end()) return nullptr;
+    return it->second;
 }

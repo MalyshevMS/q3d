@@ -98,6 +98,13 @@ void Camera::rotate(glm::vec3 delta) {
     updateView();
 }
 
+void Camera::move(glm::vec3 delta) {
+    position += right * delta.x;
+    position += up    * delta.y;
+    position += dir   * delta.z;
+    updateView();
+}
+
 void Camera::moveRotate(glm::vec3 deltaMove, glm::vec3 deltaRotate) {
     position += right   * deltaMove.x;
     position += up      * deltaMove.y;

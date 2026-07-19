@@ -4,8 +4,8 @@
 using namespace q3d;
 using namespace object;
 
-Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, phys::Transform transform, ptr<gl::Texture> texture)
- : core::Object(shader, transform, texture) {
+Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, ptr<gl::Texture> texture, phys::Transform transform)
+ : core::Object(shader, texture, transform) {
 
     if (objData.positions.empty() || objData.indices.empty()) {
         q3d::log::error("Model::Model: Cannot create buffers - no data");

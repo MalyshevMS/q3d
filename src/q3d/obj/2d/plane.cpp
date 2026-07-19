@@ -3,8 +3,8 @@
 using namespace q3d;
 using namespace object;
 
-Plane::Plane(ptr<gl::Shader> shader, phys::Transform transform, ptr<gl::Texture> texture)
- : core::Object(shader, transform, texture) {
+Plane::Plane(ptr<gl::Shader> shader, ptr<gl::Texture> texture, phys::Transform transform)
+ : core::Object(shader, texture, transform) {
     const float verticies[] = {
     //   X      Y      Z             U              V
        -1.f,  -1.f,   0.f,          0.f,           0.f,
