@@ -21,6 +21,7 @@ set(Q3D_HEADERS
     includes/q3d/gl/vbo.hpp
     includes/q3d/gl/ibo.hpp
     includes/q3d/gl/vao.hpp
+    includes/q3d/gl/fbo.hpp
     includes/q3d/gl/texture.hpp
 
     includes/q3d/phys/aabb.hpp
@@ -53,6 +54,7 @@ set(Q3D_SOURCES
     src/q3d/gl/vbo.cpp
     src/q3d/gl/ibo.cpp
     src/q3d/gl/vao.cpp
+    src/q3d/gl/fbo.cpp
     src/q3d/gl/texture.cpp
     src/q3d/gl/layouts.cpp
 

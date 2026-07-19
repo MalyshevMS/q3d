@@ -1,5 +1,6 @@
 #include <q3d/gl/texture.hpp>
 #include <q3d/gl/shader.hpp>
+#include <q3d/gl/fbo.hpp>
 #include <glad/glad.h>
 
 using namespace q3d;
@@ -34,10 +35,16 @@ void Texture::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Texture::bindFbo(const Fbo& fbo) {
+    fbo.bind();
+    bind();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
+}
+
 void Texture::use(Shader& shader, const unsigned int unit) {
     glActiveTexture(GL_TEXTURE0 + unit);
     bind();
-    shader.uniform("u_texture", 0);
+    shader.uniform("u_texture", (int)unit);
 }
 
 static GLenum wrapToGL(Texture::WrapMode wrap) {

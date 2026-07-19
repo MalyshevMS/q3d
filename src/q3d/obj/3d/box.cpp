@@ -71,5 +71,5 @@ Box::Box(ptr<gl::Shader> shader, ptr<gl::Texture> texture, phys::Transform trans
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
 
-    features[gl::feature::cullFace] = true;
+    features[gl::feature::cullFace] = false;
 }

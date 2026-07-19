@@ -34,6 +34,8 @@ public:
     void bind();
     static void unbind();
 
+    void bindFbo(const class Fbo& fbo);
+
     /// @warning shader program must have `uniform sampler2D u_texture`
     void use(class Shader& shader, const unsigned int unit = 0);
 
