@@ -42,7 +42,7 @@ void Texture::use(Shader& shader, const unsigned int unit) {
 
 static GLenum wrapToGL(Texture::WrapMode wrap) {
     using enum Texture::WrapMode;
-    
+
     switch (wrap) {
         case ClampToEdge:       return GL_CLAMP_TO_EDGE;
         case ClampToBorder:     return GL_CLAMP_TO_BORDER;

@@ -1,8 +1,7 @@
+#include <q3d/ui/canvas.hpp>
 #include <glad/glad.h>
-#include <q3d/core/camera.hpp>
 #include <q3d/core/active_camera.hpp>
 #include <q3d/core/object.hpp>
-#include <q3d/ui/canvas.hpp>
 #include <memory>
 #include <map>
 
@@ -37,11 +36,7 @@ void Canvas::render() const {
     for (const auto& [_, obj] : objects) sorted.insert({obj->transform.position.z, obj});
 
     for (const auto& [z, obj] : sorted) {
-        // bool depthTest = obj->features[gl::feature::depthTest];
-
-        // obj->features[gl::feature::depthTest] = false;
         obj->draw();
-        // obj->features[gl::feature::depthTest] = depthTest;
     }
 
     core::ActiveCamera::set(oldCamera);

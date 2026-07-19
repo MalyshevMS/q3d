@@ -1,4 +1,3 @@
-#include "q3d/gl/features.hpp"
 #include <q3d/ui/text.hpp>
 #include <q3d/core/active_camera.hpp>
 #include <glm/gtc/matrix_transform.hpp>

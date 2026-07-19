@@ -2,8 +2,8 @@
 
 #include <q3d/res/ptr.hpp>
 #include <glm/vec2.hpp>
-#include <map>
 #include <q3d/gl/texture.hpp>
+#include <map>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 

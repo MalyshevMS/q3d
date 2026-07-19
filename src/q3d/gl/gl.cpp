@@ -1,5 +1,4 @@
 #include <q3d/gl/gl.hpp>
-#include <q3d/core/color.hpp>
 #include <glad/glad.h>
 
 using namespace q3d;

@@ -29,7 +29,7 @@ bool Shader::compileShader(std::string_view src, const Type type, unsigned int &
         GLchar infolog[1024];
         glGetShaderInfoLog(id, 1024, nullptr, infolog);
 
-        log::error("gl::Shader::compileShader failed:\n{}", infolog);
+        log::error("gl::Shader::compileShader() failed:\n{}", infolog);
         return false;
     }
 
@@ -68,7 +68,7 @@ unsigned int Shader::attach(std::string_view src, const Type type) {
 
 void Shader::link() {
     if (!(attachedVS && attachedFS)) {
-        log::error("gl::Shader::link failed: not all shaders are attached");
+        log::error("gl::Shader::link() failed: not all shaders are attached");
         return;
     }
 
@@ -81,7 +81,7 @@ void Shader::link() {
         GLchar infolog[1024];
         glGetShaderInfoLog(id, 1024, nullptr, infolog);
 
-        log::error("gl::Shader::link failed:\n{}", infolog);
+        log::error("gl::Shader::link() failed:\n{}", infolog);
     } else _isLinked = true;
 }
 

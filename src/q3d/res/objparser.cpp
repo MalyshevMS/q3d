@@ -71,10 +71,10 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
     }
 
     if (data.positions.empty()) {
-        q3d::log::warn("Model: No vertices found in OBJ file!");
+        q3d::log::warn("Resources::parseObjFile(): No vertices found in OBJ file!");
     }
     if (data.indices.empty()) {
-        q3d::log::warn("Model: No faces found in OBJ file!");
+        q3d::log::warn("Resources::parseObjFile(): No faces found in OBJ file!");
     }
 
     return data;

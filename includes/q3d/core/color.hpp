@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace q3d::core {
 
@@ -14,7 +14,7 @@ public:
     float& g = color[1];
     float& b = color[2];
     float& a = color[3];
-    
+
     Color();
     Color(byte r, byte g, byte b, byte a = (byte)255);
     Color(float r, float g, float b, float a = 1.f);
@@ -30,6 +30,7 @@ public:
 
     static const Color Black;
     static const Color White;
+    static const Color Gray;
     static const Color Transparent;
 };
 

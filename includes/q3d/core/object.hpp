@@ -1,6 +1,5 @@
 #pragma once
 
-#include "q3d/gl/features.hpp"
 #include <q3d/res/ptr.hpp>
 #include <q3d/phys/transform.hpp>
 #include <q3d/gl/shader.hpp>

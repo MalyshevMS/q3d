@@ -1,7 +1,6 @@
 #include <q3d/core/scene.hpp>
 #include <q3d/core/object.hpp>
 #include <q3d/core/active_camera.hpp>
-#include <glm/common.hpp>
 #include <map>
 
 using namespace q3d;
