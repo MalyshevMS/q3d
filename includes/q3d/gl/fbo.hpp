@@ -7,6 +7,7 @@
 #include <q3d/gl/ibo.hpp>
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/texture.hpp>
+#include <q3d/window/screen.hpp>
 
 namespace q3d::gl {
 
@@ -16,17 +17,13 @@ private:
     unsigned int rbo;
     glm::vec2 size;
 
-    uptr<gl::Vbo> vbo;
-    uptr<gl::Ibo> ibo;
-    uptr<gl::Vao> vao;
-    ptr<gl::Shader> post_shader;
     ptr<gl::Texture> texture;
 public:
-    Fbo(glm::vec2 size, ptr<gl::Shader> postEffectShader);
+    Fbo(glm::vec2 size);
     void updateSize(glm::vec2 newSize);
     void bind() const;
     static void unbind();
-    void draw() const;
+    ptr<gl::Texture> getTexture() const { return texture; }
 };
 
 }

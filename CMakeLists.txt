@@ -6,6 +6,7 @@ project(${PROJECT_NAME})
 
 set(Q3D_HEADERS
     includes/q3d/window/window.hpp
+    includes/q3d/window/screen.hpp
     includes/q3d/log/log.hpp
 
     includes/q3d/res/resources.hpp
@@ -38,6 +39,7 @@ set(Q3D_HEADERS
 
 set(Q3D_SOURCES
     src/q3d/window/window.cpp
+    src/q3d/window/screen.cpp
 
     src/q3d/res/resources.cpp
     src/q3d/res/objparser.cpp

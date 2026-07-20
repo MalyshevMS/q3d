@@ -4,6 +4,11 @@ using namespace q3d;
 using namespace gl;
 using namespace buffer;
 
+const Layout Layout::l_xy_uv = {
+    DataType::float2,
+    DataType::float2
+};
+
 const Layout Layout::l_xyz_uv = {
     DataType::float3,
     DataType::float2

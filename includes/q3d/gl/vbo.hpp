@@ -44,6 +44,7 @@ public:
     const std::vector<Element>& getElements() const;
     unsigned int getStride() const { return stride; }
 
+    static const Layout l_xy_uv;
     static const Layout l_xyz_uv;
     static const Layout l_xyzw;
     static const Layout l_xyz_rgb;

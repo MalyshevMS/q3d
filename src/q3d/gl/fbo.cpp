@@ -9,8 +9,8 @@
 using namespace q3d;
 using namespace gl;
 
-Fbo::Fbo(glm::vec2 size, ptr<gl::Shader> postEffectShader)
-: size(size), post_shader(postEffectShader) {
+Fbo::Fbo(glm::vec2 size)
+: size(size) {
     glGenFramebuffers(1, &id);
 
     texture = std::make_shared<Texture>(nullptr, size.x, size.y, 3);
@@ -28,25 +28,6 @@ Fbo::Fbo(glm::vec2 size, ptr<gl::Shader> postEffectShader)
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         log::error("Fbo::Fbo(): Framebuffer isn't complete!");
     }
-
-    const float vert[] = {
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-        1.0f, -1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f,  1.0f, 1.0f
-    };
-
-    const unsigned int ind[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    vbo = std::make_unique<gl::Vbo>(vert, sizeof(vert), gl::buffer::Layout::l_xyzw);
-    ibo = std::make_unique<gl::Ibo>(ind, 6);
-    vao = std::make_unique<gl::Vao>();
-
-    vao->addVbo(*vbo);
-    vao->setIbo(*ibo);
 
     unbind();
 }
@@ -72,12 +53,4 @@ void Fbo::bind() const {
 
 void Fbo::unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void Fbo::draw() const {
-    disable(feature::depthTest);
-    glClear(GL_COLOR_BUFFER_BIT);
-    post_shader->use();
-    texture->use(*post_shader);
-    vao->draw();
 }
