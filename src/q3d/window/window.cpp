@@ -20,6 +20,7 @@ void __q3d_fb_size_cb(GLFWwindow* w, int x, int y) {
     auto* win = static_cast<Window*>(glfwGetWindowUserPointer(w));
     if (!win) return;
     win->setFBSize({static_cast<float>(x), static_cast<float>(y)});
+    if (win->fbResizeCallback) win->fbResizeCallback(*win, glm::vec2(x, y));
 }
 
 } // namespace q3d
@@ -160,6 +161,10 @@ glm::vec2 Window::getFBSize() {
 
 void Window::onResize(std::function<void(Window&, glm::vec2)> callback) {
      this->resizeCallback = callback;
+}
+
+void Window::onFBResize(std::function<void(Window&, glm::vec2)> callback) {
+    this->fbResizeCallback = callback;
 }
 
 bool Window::isKeyPressed(key k) {

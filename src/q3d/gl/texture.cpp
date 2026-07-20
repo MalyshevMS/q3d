@@ -27,6 +27,10 @@ Texture::Texture(const Image data, unsigned int width, unsigned int height, unsi
     unbind();
 }
 
+Texture::~Texture() {
+    glDeleteTextures(1, &id);
+}
+
 void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, id);
 }
@@ -90,6 +94,18 @@ void Texture::setFilter(Filter min, Filter mag) {
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterToGL(min));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterToGL(mag));
+
+    unbind();
+}
+
+void Texture::update(const Image data, unsigned int width, unsigned int height, unsigned int channels) {
+    bind();
+
+    GLenum fmt = GL_RGB;
+    if (channels == 4) fmt = GL_RGBA;
+    else if (channels == 1) fmt = GL_RED;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, fmt, width, height, 0, fmt, GL_UNSIGNED_BYTE, data);
 
     unbind();
 }

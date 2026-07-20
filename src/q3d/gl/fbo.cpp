@@ -13,9 +13,9 @@ Fbo::Fbo(glm::vec2 size, ptr<gl::Shader> postEffectShader)
 : size(size), post_shader(postEffectShader) {
     glGenFramebuffers(1, &id);
 
-    auto tex = std::make_shared<Texture>(nullptr, size.x, size.y, 3);
-    tex->setFilter(Texture::Filter::Linear, Texture::Filter::Linear);
-    tex->bindFbo(*this);
+    texture = std::make_shared<Texture>(nullptr, size.x, size.y, 3);
+    texture->setFilter(Texture::Filter::Linear, Texture::Filter::Linear);
+    texture->bindFbo(*this);
 
     bind();
 
@@ -47,6 +47,23 @@ Fbo::Fbo(glm::vec2 size, ptr<gl::Shader> postEffectShader)
 
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
+
+    unbind();
+}
+
+void Fbo::updateSize(glm::vec2 newSize) {
+    size = newSize;
+
+    texture->update(nullptr, size.x, size.y, 3);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
+
+    bind();
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        log::error("Fbo::updateSize(): Framebuffer isn't complete!");
+    }
+    unbind();
 }
 
 void Fbo::bind() const {
@@ -61,5 +78,6 @@ void Fbo::draw() const {
     disable(feature::depthTest);
     glClear(GL_COLOR_BUFFER_BIT);
     post_shader->use();
+    texture->use(*post_shader);
     vao->draw();
 }

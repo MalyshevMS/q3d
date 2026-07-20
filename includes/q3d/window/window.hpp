@@ -30,6 +30,7 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> frameStartTime;
 
     std::function<void(Window&, glm::vec2)> resizeCallback;
+    std::function<void(Window&, glm::vec2)> fbResizeCallback;
 public:
     friend void __q3d_window_size_cb(GLFWwindow* w, int x, int y);
     friend void __q3d_fb_size_cb(GLFWwindow* w, int x, int y);
@@ -62,6 +63,7 @@ public:
     glm::vec2 getMousePos() { return currentMouse; }
 
     void onResize(std::function<void(Window&, glm::vec2)> callback);
+    void onFBResize(std::function<void(Window&, glm::vec2)> callback);
 
     bool isKeyPressed(key k);
     bool isMouseButtonPressed(button b);

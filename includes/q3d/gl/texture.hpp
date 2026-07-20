@@ -30,6 +30,7 @@ public:
     };
 
     Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
+    ~Texture();
 
     void bind();
     static void unbind();
@@ -41,6 +42,8 @@ public:
 
     void wrapMode(WrapMode wrapS, WrapMode wrapT);
     void setFilter(Filter min, Filter mag);
+
+    void update(const Image data, unsigned int width, unsigned int height, unsigned int channels);
 };
 
-}// namespace q3d::core
+} // namespace q3d::gl
