@@ -44,24 +44,24 @@ public:
     void setRotation(glm::vec3 rot);
     void set(glm::vec3 pos, glm::vec3 rot);
 
-    glm::vec3 getPosition() { return position; };
-    glm::vec3 getRotation() { return rotation; };
+    glm::vec3 getPosition() const { return position; };
+    glm::vec3 getRotation() const { return rotation; };
 
     void setFov(float fov);
-    float getFov() { return fov; }
+    float getFov() const { return fov; }
 
     void setNear(float near);
-    float getNear() { return near; }
+    float getNear() const { return near; }
 
     void setFar(float far);
-    float getFar() { return far; }
+    float getFar() const { return far; }
 
     void setAspect(float aspect);
-    float getAspect() { return aspect; };
+    float getAspect() const { return aspect; };
 
-    glm::mat4 getView() { return view; }
-    glm::mat4 getProj() { return proj; }
-    glm::mat4 getMatrix() { return proj * view; }
+    glm::mat4 getView() const { return view; }
+    glm::mat4 getProj() const { return proj; }
+    glm::mat4 getMatrix() const { return proj * view; }
 
     void moveForward(float delta);
     void moveRight(float delta);

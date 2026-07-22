@@ -35,6 +35,12 @@ const Layout Layout::l_xyz_nnn_uv = {
     DataType::float2
 };
 
+const Layout Layout::l_xyz_uv_nnn = {
+    DataType::float3,
+    DataType::float2,
+    DataType::float3,
+};
+
 const Layout Layout::l_xyz_rgb_nnn_uv = {
     DataType::float3,
     DataType::float3,

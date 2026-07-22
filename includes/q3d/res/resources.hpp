@@ -3,6 +3,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <q3d/core/material.hpp>
 #include <q3d/gl/texture.hpp>
 #include <q3d/gl/shader.hpp>
 #include <q3d/ui/font.hpp>
@@ -28,6 +29,7 @@ private:
     using ShaderMap = std::unordered_map<std::string, ptr<gl::Shader>>;
     using ModelMap = std::unordered_map<std::string, ptr<object::Model>>;
     using FontMap = std::unordered_map<std::string, ptr<ui::Font>>;
+    using MaterialMap = std::unordered_map<std::string, ptr<core::Material>>;
 
     // Maps
 
@@ -35,10 +37,12 @@ private:
     ShaderMap shaders;
     ModelMap models;
     FontMap fonts;
+    MaterialMap materials;
 public:
     struct ObjData {
         std::vector<glm::vec3> positions;
         std::vector<glm::vec2> texCoords;
+        std::vector<glm::vec3> normals;
         std::vector<unsigned int> indices;
     };
 
@@ -64,6 +68,9 @@ public:
 
     ptr<ui::Font> loadFont(std::string_view name, std::string_view path, unsigned int size);
     ptr<ui::Font> getFont(std::string_view name);
+
+    ptr<core::Material> loadMaterial(std::string_view name, std::string_view path);
+    ptr<core::Material> getMaterial(std::string_view name);
 };
 
 } // namespace q3d

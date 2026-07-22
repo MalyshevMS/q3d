@@ -41,6 +41,7 @@ public:
     void uniform(std::string_view name, float val);
     void uniform(std::string_view name, glm::vec2 val);
     void uniform(std::string_view name, glm::vec3 val);
+    void uniform(std::string_view name, glm::mat3 val);
     void uniform(std::string_view name, glm::mat4 val);
 
     // TODO: сделать uniform array

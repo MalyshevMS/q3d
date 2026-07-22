@@ -41,16 +41,18 @@ void Vao::addVbo(Vbo &vbo) {
     bind();
     vbo.bind();
 
+    unsigned int index = 0;
+
     for (auto& el : vbo.getLayout().getElements()) {
         glVertexAttribPointer(
-            elCount,
+            index,
             el.count,
             el.glType,
             GL_FALSE,
             vbo.getLayout().getStride(),
             reinterpret_cast<void*>(el.offset) // Dear Khronos group, what a fuck is that syntax?
         );
-        glEnableVertexAttribArray(elCount++);
+        glEnableVertexAttribArray(index++);
     }
 
     vertexCount = vbo.getVertexCount();

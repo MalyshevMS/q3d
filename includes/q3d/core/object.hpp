@@ -1,5 +1,6 @@
 #pragma once
 
+#include <q3d/core/material.hpp>
 #include <q3d/res/ptr.hpp>
 #include <q3d/phys/transform.hpp>
 #include <q3d/gl/shader.hpp>
@@ -25,6 +26,7 @@ public:
     };
 
     phys::Transform transform;
+    ptr<core::Material> material;
     bool doDraw = true;
 
     Object(ptr<gl::Shader> shader, ptr<gl::Texture> texture = nullptr, phys::Transform transform = {})

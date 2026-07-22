@@ -19,7 +19,6 @@ enum class DrawMethod {
 class Vao {
 private:
     unsigned int id;
-    unsigned int elCount = 0;
     unsigned int vertexCount = 0;
     unsigned int indCount = 0;
 public:

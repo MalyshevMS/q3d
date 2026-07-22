@@ -13,14 +13,19 @@ Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, ptr<gl::
     }
 
     std::vector<float> vertexData;
-    vertexData.reserve(objData.positions.size() * 5);
+    vertexData.reserve(objData.positions.size() * 8);
 
     for (size_t i = 0; i < objData.positions.size(); i++) {
         vertexData.push_back(objData.positions[i].x);
         vertexData.push_back(objData.positions[i].y);
         vertexData.push_back(objData.positions[i].z);
+
         vertexData.push_back(objData.texCoords[i].x);
         vertexData.push_back(objData.texCoords[i].y);
+
+        vertexData.push_back(objData.normals[i].x);
+        vertexData.push_back(objData.normals[i].y);
+        vertexData.push_back(objData.normals[i].z);
     }
 
     vbo = std::make_unique<gl::Vbo>(vertexData.data(), vertexData.size() * sizeof(float), gl::buffer::Layout::l_xyz_uv);

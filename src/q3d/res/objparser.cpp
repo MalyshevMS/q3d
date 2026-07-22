@@ -11,6 +11,7 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
 
     std::vector<glm::vec3> tempPositions;
     std::vector<glm::vec2> tempTexCoords;
+    std::vector<glm::vec3> tempNormals;
 
     while (std::getline(iss, line)) {
         if (line.empty() || line[0] == '#') continue;
@@ -29,10 +30,16 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
             lineStream >> u >> v;
             tempTexCoords.emplace_back(u, v);
         }
+        else if (prefix == "vn") {
+            float nx, ny, nz;
+            lineStream >> nx >> ny >> nz;
+            tempNormals.emplace_back(nx, ny, nz);
+        }
         else if (prefix == "f") {
             std::string vertexStr;
             while (lineStream >> vertexStr) {
-                unsigned int posIdx = 0, texIdx = 0;
+                unsigned int posIdx = 0, texIdx = 0, normIdx;
+                bool hasTex = false, hasNorm = false;
 
                 size_t firstSlash = vertexStr.find('/');
 
@@ -44,11 +51,19 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
                         std::string texIdxStr = vertexStr.substr(firstSlash + 1, secondSlash - firstSlash - 1);
                         if (!texIdxStr.empty()) {
                             texIdx = std::stoul(texIdxStr) - 1;
+                            hasTex = true;
+                        }
+
+                        std::string normIdxStr = vertexStr.substr(secondSlash + 1);
+                        if (!normIdxStr.empty()) {
+                            normIdx = std::stoul(normIdxStr) - 1;
+                            hasNorm = true;
                         }
                     } else {
                         std::string texIdxStr = vertexStr.substr(firstSlash + 1);
                         if (!texIdxStr.empty()) {
                             texIdx = std::stoul(texIdxStr) - 1;
+                            hasTex = true;
                         }
                     }
                 } else {
@@ -58,10 +73,16 @@ Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
                 if (posIdx < tempPositions.size()) {
                     data.positions.push_back(tempPositions[posIdx]);
 
-                    if (texIdx < tempTexCoords.size()) {
+                    if (hasTex && texIdx < tempTexCoords.size()) {
                         data.texCoords.push_back(tempTexCoords[texIdx]);
                     } else {
                         data.texCoords.emplace_back(0.f, 0.f);
+                    }
+
+                    if (hasNorm && normIdx < tempNormals.size()) {
+                        data.normals.push_back(tempNormals[normIdx]);
+                    } else {
+                        data.normals.emplace_back(0.f, 1.f, 0.f);
                     }
 
                     data.indices.push_back(data.positions.size() - 1);

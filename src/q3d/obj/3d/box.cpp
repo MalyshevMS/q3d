@@ -6,42 +6,42 @@ using namespace object;
 Box::Box(ptr<gl::Shader> shader, ptr<gl::Texture> texture, phys::Transform transform)
  : core::Object(shader, texture, transform) {
     const float verticies[] = {
-    //    X     Y     Z             U               V
+    //    X     Y     Z             U               V                     NX   NY   NZ
         // Front (+Z)
-        -1.f, -1.f,  1.f,          0.0f,           0.0f,
-         1.f, -1.f,  1.f,          texture->uv.x,  0.0f,
-         1.f,  1.f,  1.f,          texture->uv.x,  texture->uv.x,
-        -1.f,  1.f,  1.f,          0.0f,           texture->uv.x,
+        -1.f, -1.f,  1.f,          0.0f,           0.0f,                  0.f,  0.f,  1.f,
+         1.f, -1.f,  1.f,          texture->uv.x,  0.0f,                  0.f,  0.f,  1.f,
+         1.f,  1.f,  1.f,          texture->uv.x,  texture->uv.x,         0.f,  0.f,  1.f,
+        -1.f,  1.f,  1.f,          0.0f,           texture->uv.x,         0.f,  0.f,  1.f,
 
         // Back (-Z)
-         1.f, -1.f, -1.f,          0.0f,           0.0f,
-        -1.f, -1.f, -1.f,          texture->uv.x,  0.0f,
-        -1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,
-         1.f,  1.f, -1.f,          0.0f,           texture->uv.x,
+         1.f, -1.f, -1.f,          0.0f,           0.0f,                  0.f,  0.f, -1.f,
+        -1.f, -1.f, -1.f,          texture->uv.x,  0.0f,                  0.f,  0.f, -1.f,
+        -1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,         0.f,  0.f, -1.f,
+         1.f,  1.f, -1.f,          0.0f,           texture->uv.x,         0.f,  0.f, -1.f,
 
         // Left (-X)
-        -1.f, -1.f, -1.f,          0.0f,           0.0f,
-        -1.f, -1.f,  1.f,          texture->uv.x,  0.0f,
-        -1.f,  1.f,  1.f,          texture->uv.x,  texture->uv.x,
-        -1.f,  1.f, -1.f,          0.0f,           texture->uv.x,
+        -1.f, -1.f, -1.f,          0.0f,           0.0f,                 -1.f,  0.f,  0.f,
+        -1.f, -1.f,  1.f,          texture->uv.x,  0.0f,                 -1.f,  0.f,  0.f,
+        -1.f,  1.f,  1.f,          texture->uv.x,  texture->uv.x,        -1.f,  0.f,  0.f,
+        -1.f,  1.f, -1.f,          0.0f,           texture->uv.x,        -1.f,  0.f,  0.f,
 
         // Right (+X)
-         1.f, -1.f,  1.f,          0.0f,           0.0f,
-         1.f, -1.f, -1.f,          texture->uv.x,  0.0f,
-         1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,
-         1.f,  1.f,  1.f,          0.0f,           texture->uv.x,
+         1.f, -1.f,  1.f,          0.0f,           0.0f,                  1.f,  0.f,  0.f,
+         1.f, -1.f, -1.f,          texture->uv.x,  0.0f,                  1.f,  0.f,  0.f,
+         1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,         1.f,  0.f,  0.f,
+         1.f,  1.f,  1.f,          0.0f,           texture->uv.x,         1.f,  0.f,  0.f,
 
         // Top (+Y)
-        -1.f,  1.f,  1.f,          0.0f,           0.0f,
-         1.f,  1.f,  1.f,          texture->uv.x,  0.0f,
-         1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,
-        -1.f,  1.f, -1.f,          0.0f,           texture->uv.x,
+        -1.f,  1.f,  1.f,          0.0f,           0.0f,                  0.f,  1.f,  0.f,
+         1.f,  1.f,  1.f,          texture->uv.x,  0.0f,                  0.f,  1.f,  0.f,
+         1.f,  1.f, -1.f,          texture->uv.x,  texture->uv.x,         0.f,  1.f,  0.f,
+        -1.f,  1.f, -1.f,          0.0f,           texture->uv.x,         0.f,  1.f,  0.f,
 
         // Bottom (-Y)
-        -1.f, -1.f, -1.f,          0.0f,           0.0f,
-         1.f, -1.f, -1.f,          texture->uv.x,  0.0f,
-         1.f, -1.f,  1.f,          texture->uv.x,  texture->uv.x,
-        -1.f, -1.f,  1.f,          0.0f,           texture->uv.x,
+        -1.f, -1.f, -1.f,          0.0f,           0.0f,                  0.f, -1.f,  0.f,
+         1.f, -1.f, -1.f,          texture->uv.x,  0.0f,                  0.f, -1.f,  0.f,
+         1.f, -1.f,  1.f,          texture->uv.x,  texture->uv.x,         0.f, -1.f,  0.f,
+        -1.f, -1.f,  1.f,          0.0f,           texture->uv.x,         0.f, -1.f,  0.f,
     };
 
     const unsigned int ind[] = {
@@ -64,7 +64,7 @@ Box::Box(ptr<gl::Shader> shader, ptr<gl::Texture> texture, phys::Transform trans
         22,23,20
     };
 
-    vbo = std::make_unique<gl::Vbo>(verticies, sizeof(verticies), gl::buffer::Layout::l_xyz_uv);
+    vbo = std::make_unique<gl::Vbo>(verticies, sizeof(verticies), gl::buffer::Layout::l_xyz_uv_nnn);
     ibo = std::make_unique<gl::Ibo>(ind, 36);
     vao = std::make_unique<gl::Vao>();
 

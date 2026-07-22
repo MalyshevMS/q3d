@@ -50,6 +50,7 @@ public:
     static const Layout l_xyz_rgb;
     static const Layout l_xyz_rgb_uv;
     static const Layout l_xyz_nnn_uv;
+    static const Layout l_xyz_uv_nnn;
     static const Layout l_xyz_rgb_nnn_uv;
 };
 

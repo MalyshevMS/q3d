@@ -2,19 +2,22 @@
 #include <q3d/gl/texture.hpp>
 #include <q3d/ui/font.hpp>
 #include <glad/glad.h>
-#include <memory>
 #include <q3d/res/resources.hpp>
 #include <q3d/obj/3d/model.hpp>
 #include <q3d/log/log.hpp>
+#include <memory>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string_view>
 #define STB_IMAGE_IMPLEMENTATION
 #include <q3d/res/stb_image.h>
+#include <nlohmann/json.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 using namespace q3d;
+using json = nlohmann::json;
 
 Resources* Resources::instance = nullptr;
 
@@ -226,5 +229,45 @@ ptr<ui::Font> Resources::loadFont(std::string_view name, std::string_view path, 
 ptr<ui::Font> Resources::getFont(std::string_view name) {
     auto it = fonts.find(name.data());
     if (it == fonts.end()) return nullptr;
+    return it->second;
+}
+
+ptr<core::Material> Resources::loadMaterial(std::string_view name, std::string_view path) {
+    auto content = readFile(path);
+    json j = json::parse(content);
+
+    auto mat = std::make_shared<core::Material>();
+
+    mat->ambient.r = j["ambient"][0];
+    mat->ambient.g = j["ambient"][1];
+    mat->ambient.b = j["ambient"][2];
+
+    mat->diffuse.r = j["diffuse"][0];
+    mat->diffuse.g = j["diffuse"][1];
+    mat->diffuse.b = j["diffuse"][2];
+
+    mat->specular.r = j["specular"][0];
+    mat->specular.g = j["specular"][1];
+    mat->specular.b = j["specular"][2];
+
+    mat->shininess = j["shininess"];
+
+    const auto& mat_el = materials.emplace(
+        name, mat
+    );
+
+    if (!mat_el.second) {
+        log::error("Resources::loadMaterial('{}'): failed to emplace material", name);
+        return nullptr;
+    }
+
+    log::info("Loaded material '{}'", name);
+
+    return mat_el.first->second;
+}
+
+ptr<core::Material> Resources::getMaterial(std::string_view name) {
+    auto it = materials.find(name.data());
+    if (it == materials.end()) return nullptr;
     return it->second;
 }

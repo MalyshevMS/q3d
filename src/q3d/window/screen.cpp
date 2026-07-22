@@ -33,7 +33,7 @@ void Screen::draw() const {
     disable(feature::depthTest);
     glClear(GL_COLOR_BUFFER_BIT);
     shader->use();
-    texture->use(*shader);
+    if (texture) texture->use(*shader);
     vao->draw();
 }
 

@@ -104,6 +104,8 @@ set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
 
 add_subdirectory(ext/freetype)
 
+add_subdirectory(ext/nlohmann_json)
+
 # Linking
 
 target_link_libraries(${PROJECT_NAME}
@@ -111,4 +113,5 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC glad
     PUBLIC glm
     PUBLIC freetype
+    PUBLIC nlohmann_json::nlohmann_json
 )
