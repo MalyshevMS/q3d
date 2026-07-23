@@ -1,7 +1,6 @@
 #pragma once
 
 #include <q3d/core/material.hpp>
-#include <q3d/core/light_manager.hpp>
 #include <q3d/res/ptr.hpp>
 #include <q3d/phys/transform.hpp>
 #include <q3d/gl/shader.hpp>
@@ -33,7 +32,7 @@ public:
     Object(ptr<gl::Shader> shader, ptr<gl::Texture> texture = nullptr, phys::Transform transform = {})
             : shader(shader), transform(transform), texture(texture) {}
 
-    virtual void draw(LightManager& lm) const;
+    virtual void draw() const;
 };
 
 } // namespace q3d::core

@@ -30,7 +30,7 @@ void Ssbo::unbind() {
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-void Ssbo::updateData(void* data, unsigned int size) {
+void Ssbo::updateData(const void* data, unsigned int size) {
     bind();
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_DRAW);
     bindBase();

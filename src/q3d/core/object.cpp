@@ -1,15 +1,19 @@
 #include <q3d/core/object.hpp>
+#include <q3d/gl/ssbo.hpp>
+#include <q3d/obj/light/light.hpp>
 #include <q3d/core/active_camera.hpp>
 
 using namespace q3d;
 using namespace core;
+using namespace object;
+using namespace gl;
 
-void Object::draw(LightManager& lm) const {
+void Object::draw() const {
     if (!doDraw) [[unlikely]] return;
 
     for (const auto& [f, b] : features) {
-        if (b) gl::enable(f);
-        else gl::disable(f);
+        if (b) enable(f);
+        else disable(f);
     }
 
     const auto& camera = ActiveCamera::get();
@@ -25,14 +29,6 @@ void Object::draw(LightManager& lm) const {
     shader->uniform("u_viewProjection", camera.getMatrix());
     shader->uniform("u_normalMatrix", normalMatrix);
     shader->uniform("u_viewPos", camera.getPosition());
-
-    // You should get it from scene, but it's ok for the first time
-    // shader->uniform("u_dirLight.direction", glm::vec3(-1.f));
-    // shader->uniform("u_dirLight.ambient", glm::vec3(0.9f));
-    // shader->uniform("u_dirLight.diffuse", glm::vec3(0.8f));
-    // shader->uniform("u_dirLight.specular", glm::vec3(1.f));
-
-    lm.updateBuffers(*shader);
 
     vao->draw();
 

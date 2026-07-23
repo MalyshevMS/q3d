@@ -27,7 +27,7 @@ void Canvas::add(std::string_view name, ptr<core::Object> obj) {
     core::Scene::add(name, obj);
 }
 
-void Canvas::render() const {
+void Canvas::render() {
     auto oldCamera = core::ActiveCamera::getPtr();
     core::ActiveCamera::set(uiCamera);
 

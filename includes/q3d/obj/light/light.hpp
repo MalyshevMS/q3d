@@ -37,6 +37,10 @@ struct alignas(16) PointLight {
     float pad4 = 0.f;
 };
 
-using Light = std::variant<DirLight, PointLight>;
+struct alignas(16) SpotLight {
+
+};
+
+using Light = std::variant<DirLight, PointLight, SpotLight>;
 
 }

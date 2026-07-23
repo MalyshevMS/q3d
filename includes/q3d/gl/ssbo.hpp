@@ -1,12 +1,13 @@
 #pragma once
 
+#include <span>
+
 namespace q3d::gl {
 
 class Ssbo {
 private:
     unsigned int id = 0;
     unsigned int binding = 0;
-
 public:
     explicit Ssbo(unsigned int binding);
 
@@ -21,7 +22,12 @@ public:
     static void unbind();
     void bindBase() const;
 
-    void updateData(void* data, unsigned int size);
+    void updateData(const void* data, unsigned int size);
+
+    template<class T>
+    void updateData(const std::span<T> data) {
+        updateData(data.data(), data.size_bytes());
+    }
 };
 
 } // namespace q3d::gl
