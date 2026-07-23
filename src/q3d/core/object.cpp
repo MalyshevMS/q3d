@@ -4,7 +4,7 @@
 using namespace q3d;
 using namespace core;
 
-void Object::draw() const {
+void Object::draw(LightManager& lm) const {
     if (!doDraw) [[unlikely]] return;
 
     for (const auto& [f, b] : features) {
@@ -27,10 +27,12 @@ void Object::draw() const {
     shader->uniform("u_viewPos", camera.getPosition());
 
     // You should get it from scene, but it's ok for the first time
-    shader->uniform("u_dirLight.direction", glm::vec3(-1.f, -1.f, -1.f));
-    shader->uniform("u_dirLight.ambient", glm::vec3(0.2f));
-    shader->uniform("u_dirLight.diffuse", glm::vec3(0.8f));
-    shader->uniform("u_dirLight.specular", glm::vec3(1.f));
+    // shader->uniform("u_dirLight.direction", glm::vec3(-1.f));
+    // shader->uniform("u_dirLight.ambient", glm::vec3(0.9f));
+    // shader->uniform("u_dirLight.diffuse", glm::vec3(0.8f));
+    // shader->uniform("u_dirLight.specular", glm::vec3(1.f));
+
+    lm.updateBuffers(*shader);
 
     vao->draw();
 
