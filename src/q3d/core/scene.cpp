@@ -100,38 +100,47 @@ void q3d::core::Scene::render() {
 
     // PASS 1 - Shadows
 
-    glm::mat4 lightSpaceMatrix(1.f);
+    std::vector<glm::mat4> lightSpaceMatrices;
+    lightSpaceMatrices.reserve(dirLights.size());
 
-    if (shadowMap && shadowShader && !dirLights.empty()) {
+    if (shadowMap && shadowShader) {
         int prevFbo = 0;
         int viewport[4];
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
         glGetIntegerv(GL_VIEWPORT, viewport);
 
-        disable(feature::cullFace);
-
-        auto mainSun = dirLights.begin()->second;
-
-        glm::vec3 lightPos = -mainSun->direction * 25.f;
-        glm::mat4 lightProj = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 100.f);
-        glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.f), world::up);
-
-        lightSpaceMatrix = lightProj * lightView;
-
-        shadowMap->bindWrite();
-
         enable(feature::depthTest);
 
-        shadowShader->use();
-        shadowShader->uniform("u_lightSpaceMatrix", lightSpaceMatrix);
+        if (!dirLights.empty()) {
+            unsigned int index = 0;
 
-        for (const auto& [_, obj] : objects) {
-            shadowShader->uniform("u_model", obj->transform.getModelMatrix());
-            obj->drawGeometryOnly();
+            for (const auto& [_, light] : dirLights) {
+                if (index >= shadowMap->getMaxLayers()) break;
+
+                glm::vec3 pos  = -light->direction * 3.f;
+                glm::mat4 proj = glm::ortho(-15.f, 15.f, -15.f, 15.f, 0.1f, 100.f);
+                glm::mat4 view = glm::lookAt(pos, glm::vec3(0.f), world::up);
+
+                auto mat = proj * view;
+                lightSpaceMatrices.push_back(mat);
+
+                shadowMap->bindWrite(index);
+                shadowShader->use();
+                shadowShader->uniform("u_lightSpaceMatrix", mat);
+
+                for (const auto& [_, obj] : objects) {
+                    if (!obj->castShadows) continue;
+
+                    shadowShader->uniform("u_model", obj->transform.getModelMatrix());
+                    obj->drawGeometryOnly();
+                }
+
+                index++;
+            }
         }
 
+        lightSpaceMatricesSsbo.updateData(std::span(lightSpaceMatrices));
         shadowShader->unuse();
-
         glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
         glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     }
@@ -151,12 +160,6 @@ void q3d::core::Scene::render() {
 
     for(auto it = sorted.rbegin(); it != sorted.rend(); it++) {
         if (it->second) {
-            if (auto objShader = it->second->getShader()) {
-                objShader->use();
-                objShader->uniform("u_lightSpaceMatrix", lightSpaceMatrix);
-                objShader->uniform("u_shadowMap", 1);
-            }
-
             it->second->draw();
         }
     }

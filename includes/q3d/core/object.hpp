@@ -28,14 +28,13 @@ public:
     phys::Transform transform;
     ptr<core::Material> material;
     bool doDraw = true;
+    bool castShadows = true;
 
     Object(ptr<gl::Shader> shader, ptr<gl::Texture> texture = nullptr, phys::Transform transform = {})
             : shader(shader), transform(transform), texture(texture) {}
 
     virtual void draw() const;
     virtual void drawGeometryOnly() const;
-
-    ptr<gl::Shader> getShader() const { return shader; }
 };
 
 } // namespace q3d::core

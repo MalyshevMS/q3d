@@ -79,7 +79,7 @@ void Shader::link() {
 
     if (!status) {
         GLchar infolog[1024];
-        glGetShaderInfoLog(id, 1024, nullptr, infolog);
+        glGetProgramInfoLog(id, 1024, nullptr, infolog);
 
         log::error("gl::Shader::link() failed:\n{}", infolog);
     } else _isLinked = true;

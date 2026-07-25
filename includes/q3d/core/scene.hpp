@@ -25,6 +25,8 @@ protected:
     gl::Ssbo pointLightSsbo = gl::Ssbo(1);
     gl::Ssbo spotLightSsbo = gl::Ssbo(2);
 
+    gl::Ssbo lightSpaceMatricesSsbo = gl::Ssbo(3);
+
     ptr<gl::Shader> shadowShader = nullptr;
     uptr<gl::ShadowMap> shadowMap = nullptr;
 public:

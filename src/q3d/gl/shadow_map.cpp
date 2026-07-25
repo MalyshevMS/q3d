@@ -4,25 +4,30 @@
 using namespace q3d;
 using namespace gl;
 
-ShadowMap::ShadowMap(unsigned int res)
- : width(res), height(res) {
+ShadowMap::ShadowMap(unsigned int res, unsigned int maxLights)
+ : width(res), height(res), maxLayers(maxLights) {
     glGenFramebuffers(1, &fbo);
 
     glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, depthMap);
+    glTexImage3D(
+        GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT,
+        width, height, maxLayers, 0,
+        GL_DEPTH_COMPONENT, GL_FLOAT, nullptr
+    );
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
     float borderColor[] = { 1.f, 1.f, 1.f, 1.f };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+    // glFramebufferTexture3D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D_ARRAY, depthMap, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
 
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
@@ -35,13 +40,16 @@ ShadowMap::~ShadowMap() {
     if (depthMap) glDeleteTextures(1, &depthMap);
 }
 
-void ShadowMap::bindWrite() const {
-    glViewport(0, 0, width, height);
+void ShadowMap::bindWrite(unsigned int layer) const {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0, layer);
+
+    glViewport(0, 0, width, height);
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void ShadowMap::bindRead(unsigned int unit) const {
     glActiveTexture(GL_TEXTURE0 + unit);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, depthMap);
 }
