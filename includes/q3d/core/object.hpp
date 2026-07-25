@@ -35,6 +35,8 @@ public:
 
     virtual void draw() const;
     virtual void drawGeometryOnly() const;
+
+    ptr<gl::Shader> getShader() { return shader; }
 };
 
 } // namespace q3d::core

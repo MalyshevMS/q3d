@@ -4,17 +4,13 @@
 using namespace q3d;
 using namespace gl;
 
-ShadowMap::ShadowMap(unsigned int res, unsigned int maxLights)
- : width(res), height(res), maxLayers(maxLights) {
+ShadowMap::ShadowMap(unsigned int res, unsigned int layers)
+ : width(res), height(res) {
     glGenFramebuffers(1, &fbo);
 
     glGenTextures(1, &depthMap);
     glBindTexture(GL_TEXTURE_2D_ARRAY, depthMap);
-    glTexImage3D(
-        GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT,
-        width, height, maxLayers, 0,
-        GL_DEPTH_COMPONENT, GL_FLOAT, nullptr
-    );
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layers, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -24,8 +20,6 @@ ShadowMap::ShadowMap(unsigned int res, unsigned int maxLights)
 
     float borderColor[] = { 1.f, 1.f, 1.f, 1.f };
     glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-    // glFramebufferTexture3D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D_ARRAY, depthMap, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
@@ -41,11 +35,9 @@ ShadowMap::~ShadowMap() {
 }
 
 void ShadowMap::bindWrite(unsigned int layer) const {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0, layer);
-
     glViewport(0, 0, width, height);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0, layer);
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
