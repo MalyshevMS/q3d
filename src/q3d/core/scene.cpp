@@ -119,6 +119,9 @@ void q3d::core::Scene::render() {
         lightSpaceMatrix = lightProj * lightView;
 
         shadowMap->bindWrite();
+
+        enable(feature::depthTest);
+
         shadowShader->use();
         shadowShader->uniform("u_lightSpaceMatrix", lightSpaceMatrix);
 
