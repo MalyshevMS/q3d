@@ -6,6 +6,8 @@
 #include <q3d/res/ptr.hpp>
 #include <q3d/obj/light/light.hpp>
 #include <q3d/gl/ssbo.hpp>
+#include <q3d/gl/shader.hpp>
+#include <q3d/gl/shadow_map.hpp>
 
 namespace q3d::core {
 
@@ -22,7 +24,12 @@ protected:
     gl::Ssbo dirLightSsbo = gl::Ssbo(0);
     gl::Ssbo pointLightSsbo = gl::Ssbo(1);
     gl::Ssbo spotLightSsbo = gl::Ssbo(2);
+
+    ptr<gl::Shader> shadowShader = nullptr;
+    uptr<gl::ShadowMap> shadowMap = nullptr;
 public:
+    void initShadows(ptr<gl::Shader> depthShader, unsigned int resolution = 2048);
+
     virtual void add(std::string_view name, ptr<Object> obj);
     void remove(std::string_view name);
     ptr<Object> get(std::string_view name);

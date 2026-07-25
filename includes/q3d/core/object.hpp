@@ -33,6 +33,9 @@ public:
             : shader(shader), transform(transform), texture(texture) {}
 
     virtual void draw() const;
+    virtual void drawGeometryOnly() const;
+
+    ptr<gl::Shader> getShader() const { return shader; }
 };
 
 } // namespace q3d::core

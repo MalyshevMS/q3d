@@ -1,11 +1,20 @@
 #include <q3d/core/scene.hpp>
 #include <q3d/core/object.hpp>
 #include <q3d/core/active_camera.hpp>
+#include <q3d/gl/fbo.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glad/glad.h>
 #include <map>
 
 using namespace q3d;
+using namespace gl;
 using namespace core;
 using namespace object;
+
+void Scene::initShadows(ptr<Shader> depthShader, unsigned int resolution) {
+    shadowShader = depthShader;
+    shadowMap = std::make_unique<ShadowMap>(resolution);
+}
 
 void Scene::add(std::string_view name, ptr<Object> obj) {
     objects[name.data()] = obj;
@@ -89,6 +98,44 @@ void q3d::core::Scene::render() {
         spotLightSsbo.updateData(std::span(raw));
     }
 
+    // PASS 1 - Shadows
+
+    glm::mat4 lightSpaceMatrix(1.f);
+
+    if (shadowMap && shadowShader && !dirLights.empty()) {
+        int prevFbo = 0;
+        int viewport[4];
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+
+        disable(feature::cullFace);
+
+        auto mainSun = dirLights.begin()->second;
+
+        glm::vec3 lightPos = -mainSun->direction * 25.f;
+        glm::mat4 lightProj = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 100.f);
+        glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.f), world::up);
+
+        lightSpaceMatrix = lightProj * lightView;
+
+        shadowMap->bindWrite();
+        shadowShader->use();
+        shadowShader->uniform("u_lightSpaceMatrix", lightSpaceMatrix);
+
+        for (const auto& [_, obj] : objects) {
+            shadowShader->uniform("u_model", obj->transform.getModelMatrix());
+            obj->drawGeometryOnly();
+        }
+
+        shadowShader->unuse();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
+        glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+    }
+
+    // PASS 2 - Main render
+
+    if (shadowMap) shadowMap->bindRead();
 
     using Order = std::map<float, ptr<Object>>;
     Order sorted;
@@ -99,7 +146,15 @@ void q3d::core::Scene::render() {
         sorted[distance] = obj;
     }
 
-    for(Order::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); it++) {
-        it->second->draw();
+    for(auto it = sorted.rbegin(); it != sorted.rend(); it++) {
+        if (it->second) {
+            if (auto objShader = it->second->getShader()) {
+                objShader->use();
+                objShader->uniform("u_lightSpaceMatrix", lightSpaceMatrix);
+                objShader->uniform("u_shadowMap", 1);
+            }
+
+            it->second->draw();
+        }
     }
 }

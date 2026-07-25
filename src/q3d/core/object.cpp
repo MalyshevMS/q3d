@@ -29,8 +29,14 @@ void Object::draw() const {
     shader->uniform("u_viewProjection", camera.getMatrix());
     shader->uniform("u_normalMatrix", normalMatrix);
     shader->uniform("u_viewPos", camera.getPosition());
+    shader->uniform("u_shadowMap", 1);
 
     vao->draw();
 
     shader->unuse();
+}
+
+void Object::drawGeometryOnly() const {
+    if (!doDraw) [[unlikely]] return;
+    if (vao) vao->draw();
 }
