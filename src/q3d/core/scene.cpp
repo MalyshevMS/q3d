@@ -113,6 +113,8 @@ void q3d::core::Scene::render() {
         enable(feature::depthTest);
         size_t index = 0;
 
+        shadowShader->use();
+
         if (!dirLights.empty()) {
             for (const auto& [_, l] : dirLights) {
                 glm::vec3 pos  = -l->direction * 25.f;
@@ -125,16 +127,39 @@ void q3d::core::Scene::render() {
 
                 shadowMap->bindWrite(index);
 
-
-                shadowShader->use();
                 shadowShader->uniform("u_lightSpaceMatrix", mat);
 
                 for (const auto& [_, o] : objects) {
+                    if (!o->castShadows) continue;
                     shadowShader->uniform("u_model", o->transform.getModelMatrix());
                     o->drawGeometryOnly();
                 }
 
-                shadowShader->unuse();
+                index++;
+            }
+        }
+
+        if (!spotLights.empty()) {
+            for (const auto& [_, l] : spotLights) {
+                glm::vec3 pos  = l->position;
+                float fov = 2.f * std::acos(l->outerCutOff);
+                glm::mat4 proj = glm::perspective(fov, 1.f, 0.1f, 100.f);
+                glm::mat4 view = glm::lookAt(pos, pos + l->direction, world::up);
+
+                auto mat = proj * view;
+
+                lightSpaceMatrices.push_back(mat);
+
+                shadowMap->bindWrite(index);
+
+                shadowShader->uniform("u_lightSpaceMatrix", mat);
+
+                for (const auto& [_, o] : objects) {
+                    if (!o->castShadows) continue;
+                    shadowShader->uniform("u_model", o->transform.getModelMatrix());
+                    o->drawGeometryOnly();
+                }
+
                 index++;
             }
         }
