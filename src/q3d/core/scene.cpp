@@ -109,9 +109,10 @@ void q3d::core::Scene::render() {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
         glGetIntegerv(GL_VIEWPORT, viewport);
 
-        disable(feature::cullFace);
+        enable(feature::cullFace);
         enable(feature::depthTest);
         size_t index = 0;
+        glCullFace(GL_FRONT);
 
         shadowShader->use();
 
@@ -144,7 +145,9 @@ void q3d::core::Scene::render() {
                 glm::vec3 pos  = l->position;
                 float fov = 2.f * std::acos(l->outerCutOff);
                 glm::mat4 proj = glm::perspective(fov, 1.f, 0.1f, 100.f);
-                glm::mat4 view = glm::lookAt(pos, pos + l->direction, world::up);
+                glm::vec3 up = world::up;
+                if (glm::abs(glm::dot(l->direction, up)) > 0.99f) up = world::forward;
+                glm::mat4 view = glm::lookAt(pos, pos + l->direction, up);
 
                 auto mat = proj * view;
 
@@ -172,6 +175,7 @@ void q3d::core::Scene::render() {
 
     // PASS 2 - Main render
 
+    glCullFace(GL_BACK);
     if (shadowMap) shadowMap->bindRead();
 
     using Order = std::map<float, ptr<Object>>;
