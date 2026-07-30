@@ -70,7 +70,7 @@ ptr<SpotLight> Scene::getSpotLight(std::string_view name) {
     return nullptr;
 }
 
-void q3d::core::Scene::render() {
+void Scene::render() {
     if (!dirLights.empty()) {
         std::vector<DirLight> raw;
         raw.reserve(dirLights.size());
