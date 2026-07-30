@@ -10,7 +10,7 @@ namespace q3d::gl {
 class Shader {
 public:
     enum class Type {
-        Vertex, Fragment
+        Vertex, Fragment, Geometry
     };
 private:
     static bool compileShader(std::string_view src, const Type type, unsigned int& id);
@@ -22,8 +22,9 @@ private:
 public:
     void init();
 
-    Shader() { init(); }
+    Shader();
     Shader(std::string_view vert_src, std::string_view frag_src);
+    Shader(std::string_view vert_src, std::string_view frag_src, std::string_view geom_src);
     ~Shader();
 
     bool isLinked() { return this->_isLinked; }

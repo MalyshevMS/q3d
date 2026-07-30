@@ -10,6 +10,7 @@ unsigned int typeToGl(Shader::Type type) {
     switch(type) {
         case Vertex: return GL_VERTEX_SHADER;
         case Fragment: return GL_FRAGMENT_SHADER;
+        case Geometry: return GL_GEOMETRY_SHADER;
     }
     return 0;
 }
@@ -40,19 +41,35 @@ void Shader::init() {
     id = glCreateProgram();
 }
 
+Shader::Shader() {
+    init();
+}
+
 Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
+    init();
     GLuint vs_id = attach(vert_src, Type::Vertex);
     GLuint fs_id = attach(frag_src, Type::Fragment);
-    init();
     link();
-    glDeleteShader(vs_id);
-    glDeleteShader(fs_id);
+    if (vs_id) glDeleteShader(vs_id);
+    if (fs_id) glDeleteShader(fs_id);
+}
+
+Shader::Shader(std::string_view vert_src, std::string_view frag_src, std::string_view geom_src) {
+    init();
+    GLuint vs_id = attach(vert_src, Type::Vertex);
+    GLuint fs_id = attach(frag_src, Type::Fragment);
+    GLuint gs_id = attach(geom_src, Type::Geometry);
+    link();
+    if (vs_id) glDeleteShader(vs_id);
+    if (fs_id) glDeleteShader(fs_id);
+    if (gs_id) glDeleteShader(gs_id);
 }
 
 unsigned int Shader::attach(std::string_view src, const Type type) {
     GLuint shader_id;
     if (!compileShader(src, type, shader_id)) {
         glDeleteShader(shader_id);
+        return 0;
     }
 
     glAttachShader(id, shader_id);
@@ -68,7 +85,7 @@ unsigned int Shader::attach(std::string_view src, const Type type) {
 
 void Shader::link() {
     if (!(attachedVS && attachedFS)) {
-        log::error("gl::Shader::link() failed: not all shaders are attached");
+        log::error("gl::Shader::link() failed: not all required shaders are attached");
         return;
     }
 
