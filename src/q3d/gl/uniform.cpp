@@ -36,3 +36,7 @@ void Shader::uniform(std::string_view name, glm::mat3 val) {
 void Shader::uniform(std::string_view name, glm::mat4 val) {
     glUniformMatrix4fv(locate(name), 1, GL_FALSE, glm::value_ptr(val));
 }
+
+void Shader::uniform(std::string_view name, std::span<const glm::mat4> values) {
+    glUniformMatrix4fv(locate(name), static_cast<GLsizei>(values.size()), GL_FALSE, glm::value_ptr(values[0]));
+}

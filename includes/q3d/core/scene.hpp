@@ -8,6 +8,7 @@
 #include <q3d/gl/ssbo.hpp>
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/shadow_map.hpp>
+#include <q3d/gl/cubemap.hpp>
 
 namespace q3d::core {
 
@@ -18,19 +19,25 @@ protected:
     std::unordered_map<std::string, ptr<Object>> objects = {};
 
     std::unordered_map<std::string, ptr<object::DirLight>> dirLights = {};
-    std::unordered_map<std::string, ptr<object::PointLight>> pointLights = {}; // for future
     std::unordered_map<std::string, ptr<object::SpotLight>> spotLights = {};
+    std::unordered_map<std::string, ptr<object::PointLight>> pointLights = {};
 
     gl::Ssbo dirLightSsbo = gl::Ssbo(0);
-    gl::Ssbo pointLightSsbo = gl::Ssbo(1);
-    gl::Ssbo spotLightSsbo = gl::Ssbo(2);
+    gl::Ssbo spotLightSsbo = gl::Ssbo(1);
+    gl::Ssbo pointLightSsbo = gl::Ssbo(2);
 
     gl::Ssbo lightSpaceMatricesSsbo = gl::Ssbo(3);
 
     ptr<gl::Shader> shadowShader = nullptr;
+    ptr<gl::Shader> pointShadowShader = nullptr;
+
     uptr<gl::ShadowMap> shadowMap = nullptr;
+    uptr<gl::CubeMap> cubeMap = nullptr;
+
+    float pointShadowFarPlane = 100.f;
 public:
-    void initShadows(ptr<gl::Shader> depthShader, unsigned int resolution = 2048);
+    void initShadows(ptr<gl::Shader> depthShader, unsigned int resolution = 2048, unsigned int maxLights = 8);
+    void initPointShadows(ptr<gl::Shader> pointDepthShader, unsigned int resolution = 2048, unsigned int maxLights = 8, float farPlane = 100.f);
 
     virtual void add(std::string_view name, ptr<Object> obj);
     void remove(std::string_view name);
@@ -46,12 +53,12 @@ public:
     }
 
     void addDirLight(std::string_view name, const object::DirLight& light);
-    void addPointLight(std::string_view name, const object::PointLight& light);
     void addSpotLight(std::string_view name, const object::SpotLight& light);
+    void addPointLight(std::string_view name, const object::PointLight& light);
 
     ptr<object::DirLight>   getDirLight(std::string_view name);
-    ptr<object::PointLight> getPointLight(std::string_view name);
     ptr<object::SpotLight>  getSpotLight(std::string_view name);
+    ptr<object::PointLight> getPointLight(std::string_view name);
 
     void removeDirLight(std::string_view name);
 

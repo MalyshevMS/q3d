@@ -58,7 +58,7 @@ public:
     ptr<gl::Texture> loadTexture(std::string_view name, std::string_view path);
     ptr<gl::Texture> getTexture(std::string_view name);
 
-    ptr<gl::Shader> loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path);
+    ptr<gl::Shader> loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path, std::string_view geometry_path = "");
     ptr<gl::Shader> getShader(std::string_view name);
 
     static ObjData parseObjFile(std::string_view fileContent);

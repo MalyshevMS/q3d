@@ -26,6 +26,7 @@ set(Q3D_HEADERS
     includes/q3d/gl/ssbo.hpp
     includes/q3d/gl/texture.hpp
     includes/q3d/gl/shadow_map.hpp
+    includes/q3d/gl/cubemap.hpp
 
     includes/q3d/phys/aabb.hpp
     includes/q3d/phys/transform.hpp
@@ -63,6 +64,7 @@ set(Q3D_SOURCES
     src/q3d/gl/texture.cpp
     src/q3d/gl/layouts.cpp
     src/q3d/gl/shadow_map.cpp
+    src/q3d/gl/cubemap.cpp
 
     src/q3d/phys/aabb.cpp
     src/q3d/phys/transform.cpp

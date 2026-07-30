@@ -11,9 +11,15 @@ using namespace gl;
 using namespace core;
 using namespace object;
 
-void Scene::initShadows(ptr<Shader> depthShader, unsigned int resolution) {
+void Scene::initShadows(ptr<Shader> depthShader, unsigned int resolution, unsigned int maxLights) {
     shadowShader = depthShader;
-    shadowMap = std::make_unique<ShadowMap>(resolution);
+    shadowMap = std::make_unique<ShadowMap>(resolution, maxLights);
+}
+
+void Scene::initPointShadows(ptr<Shader> pointDepthShader, unsigned int resolution, unsigned int maxLights, float farPlane) {
+    pointShadowShader = pointDepthShader;
+    cubeMap = std::make_unique<CubeMap>(resolution, maxLights);
+    pointShadowFarPlane = farPlane;
 }
 
 void Scene::add(std::string_view name, ptr<Object> obj) {
@@ -103,16 +109,19 @@ void q3d::core::Scene::render() {
     std::vector<glm::mat4> lightSpaceMatrices;
     lightSpaceMatrices.reserve(dirLights.size());
 
-    if (shadowMap && shadowShader) {
-        int prevFbo = 0;
-        int viewport[4];
-        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
-        glGetIntegerv(GL_VIEWPORT, viewport);
+    int prevFbo = 0;
+    int viewport[4];
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
+    glGetIntegerv(GL_VIEWPORT, viewport);
 
-        enable(feature::cullFace);
-        enable(feature::depthTest);
+    enable(feature::cullFace);
+    enable(feature::depthTest);
+    glCullFace(GL_FRONT);
+
+    // A) Directional lights and spot lights
+
+    if (shadowMap && shadowShader) {
         size_t index = 0;
-        glCullFace(GL_FRONT);
 
         shadowShader->use();
 
@@ -168,15 +177,54 @@ void q3d::core::Scene::render() {
         }
 
         lightSpaceMatricesSsbo.updateData(std::span(lightSpaceMatrices));
-
-        glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
-        glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     }
+
+    // B) Point lights
+
+    if (cubeMap && pointShadowShader && !pointLights.empty()) {
+        pointShadowShader->use();
+
+        glm::mat4 proj = glm::perspective(glm::radians(90.f), 1.f, 0.1f, pointShadowFarPlane);
+
+        size_t index = 0;
+
+        for (const auto& [_, l] : pointLights) {
+            glm::vec3 pos = l->position;
+
+            std::array<glm::mat4, 6> shadowTransforms = {
+                proj * glm::lookAt(pos, pos + world::right, -world::up),
+                proj * glm::lookAt(pos, pos - world::right, -world::up),
+                proj * glm::lookAt(pos, pos + world::up, -world::forward),
+                proj * glm::lookAt(pos, pos - world::up, world::forward),
+                proj * glm::lookAt(pos, pos - world::forward, -world::up),
+                proj * glm::lookAt(pos, pos + world::forward, -world::up),
+            };
+
+            cubeMap->bindWrite(index);
+
+            pointShadowShader->uniform("u_lightSpaceMatrices", std::span(shadowTransforms));
+            pointShadowShader->uniform("u_lightIndex", static_cast<int>(index));
+            pointShadowShader->uniform("u_lightPos", pos);
+            pointShadowShader->uniform("u_farPlane", pointShadowFarPlane);
+
+            for (const auto& [_, o] : objects) {
+                if (!o->castShadows) continue;
+                pointShadowShader->uniform("u_model", o->transform.getModelMatrix());
+                o->drawGeometryOnly();
+            }
+
+            index++;
+        }
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
+    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 
     // PASS 2 - Main render
 
     glCullFace(GL_BACK);
     if (shadowMap) shadowMap->bindRead();
+    if (cubeMap) cubeMap->bindRead();
 
     using Order = std::map<float, ptr<Object>>;
     Order sorted;

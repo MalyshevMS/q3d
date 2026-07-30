@@ -81,7 +81,7 @@ ptr<gl::Texture> Resources::getTexture(std::string_view name) {
     return it->second;
 }
 
-ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path) {
+ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path, std::string_view geometry_path) {
     auto shader = std::make_shared<gl::Shader>();
 
     auto vert_src = readFile(vertex_path);
@@ -99,6 +99,18 @@ ptr<gl::Shader> Resources::loadShader(std::string_view name, std::string_view ve
 
     shader->attach(vert_src, gl::Shader::Type::Vertex);
     shader->attach(frag_src, gl::Shader::Type::Fragment);
+
+    if (!geometry_path.empty()) {
+        auto geom_src = readFile(geometry_path);
+
+        if (geom_src.empty()) {
+            log::error("Resources::loadShader('{}'): Geometry shader is empty!", name);
+            return nullptr;
+        }
+
+        shader->attach(geom_src, gl::Shader::Type::Geometry);
+    }
+
     shader->link();
 
     if (!shader->isLinked()) {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <span>
 #include <string_view>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -44,6 +45,8 @@ public:
     void uniform(std::string_view name, glm::vec3 val);
     void uniform(std::string_view name, glm::mat3 val);
     void uniform(std::string_view name, glm::mat4 val);
+
+    void uniform(std::string_view name, std::span<const glm::mat4> values);
 
     // TODO: сделать uniform array
 };

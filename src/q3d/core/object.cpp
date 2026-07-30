@@ -30,6 +30,7 @@ void Object::draw() const {
     shader->uniform("u_normalMatrix", normalMatrix);
     shader->uniform("u_viewPos", camera.getPosition());
     shader->uniform("u_shadowMap", 1);
+    shader->uniform("u_cubeMap", 2);
 
     vao->draw();
 
