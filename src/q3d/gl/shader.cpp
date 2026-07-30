@@ -19,8 +19,9 @@ bool Shader::compileShader(std::string_view src, const Type type, unsigned int &
     id = glCreateShader(typeToGl(type));
 
     const char* code = src.data();
+    GLint size = static_cast<GLint>(src.size());
 
-    glShaderSource(id, 1, &code, nullptr);
+    glShaderSource(id, 1, &code, &size);
     glCompileShader(id);
 
     GLint status;
