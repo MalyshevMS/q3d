@@ -64,6 +64,11 @@ void CubeMap::bindWrite(unsigned int layer) const {
     glViewport(0, 0, width, height);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubemap, 0);
+}
+
+void CubeMap::clear() const {
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubemap, 0);
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 

@@ -183,8 +183,10 @@ void Scene::render() {
 
     if (cubeMap && pointShadowShader && !pointLights.empty()) {
         pointShadowShader->use();
+        cubeMap->clear();
 
         glm::mat4 proj = glm::perspective(glm::radians(90.f), 1.f, 0.1f, pointShadowFarPlane);
+
 
         size_t index = 0;
 
