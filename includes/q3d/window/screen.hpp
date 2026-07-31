@@ -22,4 +22,4 @@ public:
     void draw() const;
 };
 
-}
+} // namespace q3d

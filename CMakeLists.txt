@@ -31,9 +31,9 @@ set(Q3D_HEADERS
     includes/q3d/phys/aabb.hpp
     includes/q3d/phys/transform.hpp
 
-    includes/q3d/obj/2d/plane.hpp
-    includes/q3d/obj/3d/box.hpp
-    includes/q3d/obj/3d/model.hpp
+    includes/q3d/obj/plane.hpp
+    includes/q3d/obj/box.hpp
+    includes/q3d/obj/model.hpp
 
     includes/q3d/ui/canvas.hpp
     includes/q3d/ui/font.hpp
@@ -69,9 +69,9 @@ set(Q3D_SOURCES
     src/q3d/phys/aabb.cpp
     src/q3d/phys/transform.cpp
 
-    src/q3d/obj/2d/plane.cpp
-    src/q3d/obj/3d/box.cpp
-    src/q3d/obj/3d/model.cpp
+    src/q3d/obj/plane.cpp
+    src/q3d/obj/box.cpp
+    src/q3d/obj/model.cpp
 
     src/q3d/ui/canvas.cpp
     src/q3d/ui/font.cpp

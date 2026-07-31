@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <concepts>
 #include <q3d/res/ptr.hpp>
-#include <q3d/obj/light/light.hpp>
+#include <q3d/obj/light.hpp>
 #include <q3d/gl/ssbo.hpp>
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/shadow_map.hpp>

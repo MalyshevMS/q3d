@@ -9,7 +9,7 @@ private:
     unsigned int id = 0;
     unsigned int binding = 0;
 public:
-    explicit Ssbo(unsigned int binding);
+    Ssbo(unsigned int binding);
 
     ~Ssbo();
 

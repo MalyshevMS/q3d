@@ -24,10 +24,6 @@ public:
     void bindRead(unsigned int unit = 2) const;
 
     void clear() const;
-
-    [[nodiscard]] unsigned int getResolution() const { return width; }
-    [[nodiscard]] unsigned int getCount() const { return count; }
-    [[nodiscard]] unsigned int getTextureId() const { return cubemap; }
 };
 
-}
+} // namespace q3d::gl

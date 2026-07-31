@@ -1,11 +1,9 @@
 #include <q3d/core/object.hpp>
 #include <q3d/gl/ssbo.hpp>
-#include <q3d/obj/light/light.hpp>
 #include <q3d/core/active_camera.hpp>
 
 using namespace q3d;
 using namespace core;
-using namespace object;
 using namespace gl;
 
 void Object::draw() const {

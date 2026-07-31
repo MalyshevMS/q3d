@@ -143,4 +143,4 @@ enum class button {
     MIDDLE =    BUTTON_3,
 };
 
-}
+} // namespace q3d

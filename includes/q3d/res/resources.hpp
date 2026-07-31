@@ -3,6 +3,8 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 #include <q3d/core/material.hpp>
 #include <q3d/gl/texture.hpp>
 #include <q3d/gl/shader.hpp>
@@ -14,6 +16,18 @@ namespace q3d {
 namespace object {
 class Model;
 } // namespace object
+
+struct Vertex {
+    glm::vec3 position;
+    glm::vec2 texCoord;
+    glm::vec3 normal;
+
+    bool operator==(const Vertex& other) const {
+        return position == other.position &&
+               texCoord == other.texCoord &&
+               normal   == other.normal;
+    }
+};
 
 /// @warning SINGLETONE!!!
 class Resources {
@@ -40,9 +54,7 @@ private:
     MaterialMap materials;
 public:
     struct ObjData {
-        std::vector<glm::vec3> positions;
-        std::vector<glm::vec2> texCoords;
-        std::vector<glm::vec3> normals;
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
     };
 
@@ -61,7 +73,7 @@ public:
     ptr<gl::Shader> loadShader(std::string_view name, std::string_view vertex_path, std::string_view fragment_path, std::string_view geometry_path = "");
     ptr<gl::Shader> getShader(std::string_view name);
 
-    static ObjData parseObjFile(std::string_view fileContent);
+    static ObjData parseObjFile(std::string_view path);
 
     ptr<object::Model> loadModel(std::string_view name, std::string_view path, ptr<gl::Shader> shader, ptr<gl::Texture> texture = nullptr);
     ptr<object::Model> getModel(std::string_view name);
@@ -74,3 +86,17 @@ public:
 };
 
 } // namespace q3d
+
+namespace std {
+
+template<> struct hash<q3d::Vertex> {
+    size_t operator()(q3d::Vertex const& vertex) const {
+        size_t h1 = hash<glm::vec3>()(vertex.position);
+        size_t h2 = hash<glm::vec2>()(vertex.texCoord);
+        size_t h3 = hash<glm::vec3>()(vertex.normal);
+
+        return h1 ^ (h2 << 1) ^ (h3 << 2);
+    }
+};
+
+}

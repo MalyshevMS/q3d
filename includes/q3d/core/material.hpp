@@ -19,4 +19,4 @@ struct Material {
     }
 };
 
-}
+} // namespace q3d::core

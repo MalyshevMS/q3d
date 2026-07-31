@@ -1,4 +1,4 @@
-#include <q3d/obj/3d/box.hpp>
+#include <q3d/obj/box.hpp>
 
 using namespace q3d;
 using namespace object;

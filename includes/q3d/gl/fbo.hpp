@@ -26,4 +26,4 @@ public:
     ptr<gl::Texture> getTexture() const { return texture; }
 };
 
-}
+} // namespace q3d::gl

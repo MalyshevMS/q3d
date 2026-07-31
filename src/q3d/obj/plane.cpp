@@ -1,4 +1,4 @@
-#include <q3d/obj/2d/plane.hpp>
+#include <q3d/obj/plane.hpp>
 
 using namespace q3d;
 using namespace object;

@@ -56,4 +56,4 @@ struct alignas(16) SpotLight {
 
 using Light = std::variant<DirLight, PointLight, SpotLight>;
 
-}
+} // namespace q3d::object

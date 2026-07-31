@@ -1,101 +1,70 @@
 #include <q3d/res/resources.hpp>
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <q3d/res/tiny_obj_loader.h>
 #include <q3d/log/log.hpp>
-#include <sstream>
 
 using namespace q3d;
 
-Resources::ObjData Resources::parseObjFile(std::string_view fileContent) {
+Resources::ObjData Resources::parseObjFile(std::string_view path) {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.data());
+
+    if (!warn.empty()) {
+        log::warn("Resources::parseObjFile('{}'): warning from loader: {}", path, warn);
+    }
+
+    if (!err.empty()) {
+        log::warn("Resources::parseObjFile('{}'): error from loader: {}", path, err);
+    }
+
+    if (!ret) return {};
+
     ObjData data;
-    std::istringstream iss(fileContent.data());
-    std::string line;
+    std::unordered_map<Vertex, unsigned int> uniqueVert;
 
-    std::vector<glm::vec3> tempPositions;
-    std::vector<glm::vec2> tempTexCoords;
-    std::vector<glm::vec3> tempNormals;
+    for (const auto& shape : shapes) {
+        for (const auto& index : shape.mesh.indices) {
+            Vertex vert;
 
-    while (std::getline(iss, line)) {
-        if (line.empty() || line[0] == '#') continue;
-
-        std::istringstream lineStream(line);
-        std::string prefix;
-        lineStream >> prefix;
-
-        if (prefix == "v") {
-            float x, y, z;
-            lineStream >> x >> y >> z;
-            tempPositions.emplace_back(x, y, z);
-        }
-        else if (prefix == "vt") {
-            float u, v;
-            lineStream >> u >> v;
-            tempTexCoords.emplace_back(u, v);
-        }
-        else if (prefix == "vn") {
-            float nx, ny, nz;
-            lineStream >> nx >> ny >> nz;
-            tempNormals.emplace_back(nx, ny, nz);
-        }
-        else if (prefix == "f") {
-            std::string vertexStr;
-            while (lineStream >> vertexStr) {
-                unsigned int posIdx = 0, texIdx = 0, normIdx;
-                bool hasTex = false, hasNorm = false;
-
-                size_t firstSlash = vertexStr.find('/');
-
-                if (firstSlash != std::string::npos) {
-                    posIdx = std::stoul(vertexStr.substr(0, firstSlash)) - 1;
-
-                    size_t secondSlash = vertexStr.find('/', firstSlash + 1);
-                    if (secondSlash != std::string::npos) {
-                        std::string texIdxStr = vertexStr.substr(firstSlash + 1, secondSlash - firstSlash - 1);
-                        if (!texIdxStr.empty()) {
-                            texIdx = std::stoul(texIdxStr) - 1;
-                            hasTex = true;
-                        }
-
-                        std::string normIdxStr = vertexStr.substr(secondSlash + 1);
-                        if (!normIdxStr.empty()) {
-                            normIdx = std::stoul(normIdxStr) - 1;
-                            hasNorm = true;
-                        }
-                    } else {
-                        std::string texIdxStr = vertexStr.substr(firstSlash + 1);
-                        if (!texIdxStr.empty()) {
-                            texIdx = std::stoul(texIdxStr) - 1;
-                            hasTex = true;
-                        }
-                    }
-                } else {
-                    posIdx = std::stoul(vertexStr) - 1;
-                }
-
-                if (posIdx < tempPositions.size()) {
-                    data.positions.push_back(tempPositions[posIdx]);
-
-                    if (hasTex && texIdx < tempTexCoords.size()) {
-                        data.texCoords.push_back(tempTexCoords[texIdx]);
-                    } else {
-                        data.texCoords.emplace_back(0.f, 0.f);
-                    }
-
-                    if (hasNorm && normIdx < tempNormals.size()) {
-                        data.normals.push_back(tempNormals[normIdx]);
-                    } else {
-                        data.normals.emplace_back(0.f, 1.f, 0.f);
-                    }
-
-                    data.indices.push_back(data.positions.size() - 1);
-                }
+            // Position (x, y, z)
+            if (index.vertex_index >= 0) {
+                vert.position = {
+                    attrib.vertices[3 * index.vertex_index + 0],
+                    attrib.vertices[3 * index.vertex_index + 1],
+                    attrib.vertices[3 * index.vertex_index + 2],
+                };
             }
-        }
-    }
 
-    if (data.positions.empty()) {
-        q3d::log::warn("Resources::parseObjFile(): No vertices found in OBJ file!");
-    }
-    if (data.indices.empty()) {
-        q3d::log::warn("Resources::parseObjFile(): No faces found in OBJ file!");
+            // TexCoord (u, v)
+            if (index.texcoord_index >= 0) {
+                vert.texCoord = {
+                    attrib.texcoords[2 * index.texcoord_index + 0],
+                    1.f - attrib.texcoords[2 * index.texcoord_index + 1],
+                };
+            }
+
+            // Normals (nx, ny, nz)
+            if (index.normal_index >= 0) {
+                vert.normal = {
+                    attrib.normals[3 * index.normal_index + 0],
+                    attrib.normals[3 * index.normal_index + 1],
+                    attrib.normals[3 * index.normal_index + 2],
+                };
+            }
+
+
+            // Deduplication
+            if (uniqueVert.count(vert) == 0) {
+                uniqueVert[vert] = static_cast<unsigned int>(data.vertices.size());
+                data.vertices.push_back(vert);
+            }
+
+            data.indices.push_back(uniqueVert[vert]);
+        }
     }
 
     return data;

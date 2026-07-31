@@ -8,21 +8,21 @@ namespace q3d::log {
 
 template <typename... Args>
 void info(std::string_view fmt, Args&&... message_args) {
-    std::println("q3d INFO: {}", 
+    std::println("q3d INFO: {}",
         std::vformat(fmt, std::make_format_args(message_args...))
     );
 }
 
 template <typename... Args>
 void warn(std::string_view fmt, Args&&... message_args) {
-    std::println("q3d WARNING: {}", 
+    std::println("q3d WARNING: {}",
         std::vformat(fmt, std::make_format_args(message_args...))
     );
 }
 
 template <typename... Args>
 void error(std::string_view fmt, Args&&... message_args) {
-    std::println("q3d ERROR: {}!", 
+    std::println("q3d ERROR: {}!",
         std::vformat(fmt, std::make_format_args(message_args...))
     );
 }

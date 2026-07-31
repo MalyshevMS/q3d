@@ -3,7 +3,7 @@
 #include <q3d/ui/font.hpp>
 #include <glad/glad.h>
 #include <q3d/res/resources.hpp>
-#include <q3d/obj/3d/model.hpp>
+#include <q3d/obj/model.hpp>
 #include <q3d/log/log.hpp>
 #include <memory>
 #include <iostream>
@@ -142,13 +142,7 @@ ptr<object::Model> Resources::loadModel(std::string_view name, std::string_view 
         return nullptr;
     }
 
-    auto fileContent = readFile(path);
-    if (fileContent.empty()) {
-        log::error("Resources::loadModel('{}'): Failed to read file '{}'!", name, path);
-        return nullptr;
-    }
-
-    auto objData = parseObjFile(fileContent);
+    auto objData = parseObjFile(path);
     const auto& model_el = models.emplace(
         name.data(), std::make_shared<object::Model>(shader, objData, texture, phys::Transform())
     );
