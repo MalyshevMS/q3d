@@ -37,33 +37,33 @@ ptr<Object> Scene::get(std::string_view name) {
     return nullptr;
 }
 
-void Scene::addDirLight(std::string_view name, const DirLight& light) {
-    dirLights[name.data()] = std::make_shared<DirLight>(light);
+void Scene::addDirLight(std::string_view name, const DirLightInternal& light) {
+    dirLights[name.data()] = std::make_shared<DirLightInternal>(light);
 }
 
-void Scene::addPointLight(std::string_view name, const PointLight& light) {
-    pointLights[name.data()] = std::make_shared<PointLight>(light);
+void Scene::addPointLight(std::string_view name, const PointLightInternal& light) {
+    pointLights[name.data()] = std::make_shared<PointLightInternal>(light);
 }
 
-void Scene::addSpotLight(std::string_view name, const SpotLight& light) {
-    spotLights[name.data()] = std::make_shared<SpotLight>(light);
+void Scene::addSpotLight(std::string_view name, const SpotLightInternal& light) {
+    spotLights[name.data()] = std::make_shared<SpotLightInternal>(light);
 }
 
-ptr<DirLight> Scene::getDirLight(std::string_view name) {
+ptr<DirLightInternal> Scene::getDirLight(std::string_view name) {
     auto it = dirLights.find(name.data());
 
     if (it != dirLights.end()) return it->second;
     return nullptr;
 }
 
-ptr<PointLight> Scene::getPointLight(std::string_view name) {
+ptr<PointLightInternal> Scene::getPointLight(std::string_view name) {
     auto it = pointLights.find(name.data());
 
     if (it != pointLights.end()) return it->second;
     return nullptr;
 }
 
-ptr<SpotLight> Scene::getSpotLight(std::string_view name) {
+ptr<SpotLightInternal> Scene::getSpotLight(std::string_view name) {
     auto it = spotLights.find(name.data());
 
     if (it != spotLights.end()) return it->second;
@@ -72,7 +72,7 @@ ptr<SpotLight> Scene::getSpotLight(std::string_view name) {
 
 void Scene::render() {
     if (!dirLights.empty()) {
-        std::vector<DirLight> raw;
+        std::vector<DirLightInternal> raw;
         raw.reserve(dirLights.size());
 
         for (const auto& [_, l] : dirLights) {
@@ -83,7 +83,7 @@ void Scene::render() {
     }
 
     if (!pointLights.empty()) {
-        std::vector<PointLight> raw;
+        std::vector<PointLightInternal> raw;
         raw.reserve(pointLights.size());
 
         for (const auto& [_, l] : pointLights) {
@@ -94,7 +94,7 @@ void Scene::render() {
     }
 
     if (!spotLights.empty()) {
-        std::vector<SpotLight> raw;
+        std::vector<SpotLightInternal> raw;
         raw.reserve(spotLights.size());
 
         for (const auto& [_, l] : spotLights) {

@@ -7,10 +7,10 @@ using namespace phys;
 AABB Transform::aabb() const {
 	glm::vec3 half = scale_fac * 0.5f;
 
-	glm::mat4 rot(1.0f);
-	rot = glm::rotate(rot, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	rot = glm::rotate(rot, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	rot = glm::rotate(rot, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 rot(1.f);
+	rot = glm::rotate(rot, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f));
+	rot = glm::rotate(rot, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f));
+	rot = glm::rotate(rot, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	glm::vec3 corners[8];
 	int i = 0;
@@ -18,7 +18,7 @@ AABB Transform::aabb() const {
 		for (int yi = -1; yi <= 1; yi += 2) {
 			for (int zi = -1; zi <= 1; zi += 2) {
 				glm::vec3 local = glm::vec3(half.x * xi, half.y * yi, half.z * zi);
-				glm::vec3 rotated = glm::vec3(rot * glm::vec4(local, 1.0f));
+				glm::vec3 rotated = glm::vec3(rot * glm::vec4(local, 1.f));
 				corners[i++] = rotated + position;
 			}
 		}

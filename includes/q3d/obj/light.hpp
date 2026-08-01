@@ -1,15 +1,10 @@
 #pragma once
 
-#include <glm/vec3.hpp>
-#include <variant>
-
-namespace q3d::gl {
-    class Shader;
-}
+#include <q3d/core/object.hpp>
 
 namespace q3d::object {
 
-struct alignas(16) DirLight {
+struct alignas(16) DirLightInternal {
     glm::vec3 direction = glm::vec3(-1.f);
     float pad1 = 0.f; // those are padding variable they doesn't serve any function
 
@@ -23,7 +18,7 @@ struct alignas(16) DirLight {
     float pad4 = 0.f;
 };
 
-struct alignas(16) PointLight {
+struct alignas(16) PointLightInternal {
     glm::vec3 position = glm::vec3(0.f);
     float constant = 1.f;
 
@@ -37,7 +32,7 @@ struct alignas(16) PointLight {
     float pad = 0.f;
 };
 
-struct alignas(16) SpotLight {
+struct alignas(16) SpotLightInternal {
     glm::vec3 position = glm::vec3(0.f);
     float cutOff = 0.91f;
 
@@ -54,6 +49,16 @@ struct alignas(16) SpotLight {
     float quadratic = 0.032f;
 };
 
-using Light = std::variant<DirLight, PointLight, SpotLight>;
+class LightObj : public core::Object {
+public:
+    LightObj(ptr<gl::Shader> shader, phys::Transform transform);
+};
+
+struct LightProperties {
+    core::Color color = core::Color::White;
+    float ambient;
+    float diffuse;
+    float specular;
+};
 
 } // namespace q3d::object

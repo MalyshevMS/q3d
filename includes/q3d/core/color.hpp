@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 namespace q3d::core {
 
@@ -19,6 +21,14 @@ public:
     Color(byte r, byte g, byte b, byte a = (byte)255);
     Color(float r, float g, float b, float a = 1.f);
     Color(uint64_t color);
+
+    glm::vec4 vec4() const {
+        return glm::vec4(r, g, b, a);
+    }
+
+    glm::vec3 vec3() const {
+        return glm::vec3(r, g, b);
+    }
 
     static const Color Red;
     static const Color Green;

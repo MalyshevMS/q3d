@@ -18,9 +18,9 @@ class Scene {
 protected:
     std::unordered_map<std::string, ptr<Object>> objects = {};
 
-    std::unordered_map<std::string, ptr<object::DirLight>> dirLights = {};
-    std::unordered_map<std::string, ptr<object::SpotLight>> spotLights = {};
-    std::unordered_map<std::string, ptr<object::PointLight>> pointLights = {};
+    std::unordered_map<std::string, ptr<object::DirLightInternal>> dirLights = {};
+    std::unordered_map<std::string, ptr<object::SpotLightInternal>> spotLights = {};
+    std::unordered_map<std::string, ptr<object::PointLightInternal>> pointLights = {};
 
     gl::Ssbo dirLightSsbo = gl::Ssbo(0);
     gl::Ssbo spotLightSsbo = gl::Ssbo(1);
@@ -52,13 +52,13 @@ public:
         return obj;
     }
 
-    void addDirLight(std::string_view name, const object::DirLight& light);
-    void addSpotLight(std::string_view name, const object::SpotLight& light);
-    void addPointLight(std::string_view name, const object::PointLight& light);
+    void addDirLight(std::string_view name, const object::DirLightInternal& light);
+    void addSpotLight(std::string_view name, const object::SpotLightInternal& light);
+    void addPointLight(std::string_view name, const object::PointLightInternal& light);
 
-    ptr<object::DirLight>   getDirLight(std::string_view name);
-    ptr<object::SpotLight>  getSpotLight(std::string_view name);
-    ptr<object::PointLight> getPointLight(std::string_view name);
+    ptr<object::DirLightInternal>   getDirLight(std::string_view name);
+    ptr<object::SpotLightInternal>  getSpotLight(std::string_view name);
+    ptr<object::PointLightInternal> getPointLight(std::string_view name);
 
     void removeDirLight(std::string_view name);
 
