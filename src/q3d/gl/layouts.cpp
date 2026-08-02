@@ -6,7 +6,7 @@ using namespace buffer;
 
 const Layout Layout::l_xyz = {
     DataType::float3
-},
+};
 
 const Layout Layout::l_xy_uv = {
     DataType::float2,

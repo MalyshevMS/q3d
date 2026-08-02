@@ -4,11 +4,11 @@
 #include <unordered_map>
 #include <concepts>
 #include <q3d/res/ptr.hpp>
-#include <q3d/obj/light.hpp>
 #include <q3d/gl/ssbo.hpp>
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/shadow_map.hpp>
 #include <q3d/gl/cubemap.hpp>
+#include <q3d/obj/dirlight.hpp>
 
 namespace q3d::core {
 
@@ -18,7 +18,7 @@ class Scene {
 protected:
     std::unordered_map<std::string, ptr<Object>> objects = {};
 
-    std::unordered_map<std::string, ptr<object::DirLightInternal>> dirLights = {};
+    std::unordered_map<std::string, ptr<object::DirLight>> dirLights = {};
     std::unordered_map<std::string, ptr<object::SpotLightInternal>> spotLights = {};
     std::unordered_map<std::string, ptr<object::PointLightInternal>> pointLights = {};
 
@@ -52,15 +52,17 @@ public:
         return obj;
     }
 
-    void addDirLight(std::string_view name, const object::DirLightInternal& light);
+    void addDirLight(std::string_view name, object::DirLight light);
     void addSpotLight(std::string_view name, const object::SpotLightInternal& light);
     void addPointLight(std::string_view name, const object::PointLightInternal& light);
 
-    ptr<object::DirLightInternal>   getDirLight(std::string_view name);
+    ptr<object::DirLight>   getDirLight(std::string_view name);
     ptr<object::SpotLightInternal>  getSpotLight(std::string_view name);
     ptr<object::PointLightInternal> getPointLight(std::string_view name);
 
     void removeDirLight(std::string_view name);
+    void removeSpotLight(std::string_view name);
+    void removePointLight(std::string_view name);
 
     virtual void render();
 };

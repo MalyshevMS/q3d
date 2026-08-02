@@ -10,10 +10,11 @@ private:
 public:
     LightProperties properties;
 
-    DirLight(ptr<gl::Shader> shader, phys::Transform transform) : obj(std::make_unique<LightObj>(shader, transform)) {}
+    DirLight(ptr<gl::Shader> shader, phys::Transform transform = {}) : obj(std::make_unique<LightObj>(shader, transform)) {}
 
     void draw() const {
-        if (obj) obj->draw(); }
+        if (obj) obj->draw();
+    }
 
     DirLightInternal getInternal() const;
 };

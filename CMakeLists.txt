@@ -34,6 +34,9 @@ set(Q3D_HEADERS
     includes/q3d/obj/plane.hpp
     includes/q3d/obj/box.hpp
     includes/q3d/obj/model.hpp
+    includes/q3d/obj/dirlight.hpp
+    includes/q3d/obj/spotlight.hpp
+    includes/q3d/obj/pointlight.hpp
 
     includes/q3d/ui/canvas.hpp
     includes/q3d/ui/font.hpp
@@ -72,6 +75,10 @@ set(Q3D_SOURCES
     src/q3d/obj/plane.cpp
     src/q3d/obj/box.cpp
     src/q3d/obj/model.cpp
+    src/q3d/obj/light.cpp
+    src/q3d/obj/dirlight.cpp
+    src/q3d/obj/spotlight.cpp
+    src/q3d/obj/pointlight.cpp
 
     src/q3d/ui/canvas.cpp
     src/q3d/ui/font.cpp

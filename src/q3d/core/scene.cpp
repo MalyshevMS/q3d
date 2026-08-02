@@ -37,8 +37,8 @@ ptr<Object> Scene::get(std::string_view name) {
     return nullptr;
 }
 
-void Scene::addDirLight(std::string_view name, const DirLightInternal& light) {
-    dirLights[name.data()] = std::make_shared<DirLightInternal>(light);
+void Scene::addDirLight(std::string_view name, DirLight light) {
+    dirLights[name.data()] = std::make_shared<DirLight>(std::move(light));
 }
 
 void Scene::addPointLight(std::string_view name, const PointLightInternal& light) {
@@ -49,7 +49,7 @@ void Scene::addSpotLight(std::string_view name, const SpotLightInternal& light) 
     spotLights[name.data()] = std::make_shared<SpotLightInternal>(light);
 }
 
-ptr<DirLightInternal> Scene::getDirLight(std::string_view name) {
+ptr<DirLight> Scene::getDirLight(std::string_view name) {
     auto it = dirLights.find(name.data());
 
     if (it != dirLights.end()) return it->second;
@@ -76,7 +76,7 @@ void Scene::render() {
         raw.reserve(dirLights.size());
 
         for (const auto& [_, l] : dirLights) {
-            raw.push_back(*l);
+            raw.push_back(l->getInternal());
         }
 
         dirLightSsbo.updateData(std::span(raw));
@@ -127,7 +127,7 @@ void Scene::render() {
 
         if (!dirLights.empty()) {
             for (const auto& [_, l] : dirLights) {
-                glm::vec3 pos  = -l->direction * 25.f;
+                glm::vec3 pos  = -l->getInternal().direction * 25.f;
                 glm::mat4 proj = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 100.f);
                 glm::mat4 view = glm::lookAt(pos, glm::vec3(0.f), world::up);
 
