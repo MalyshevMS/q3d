@@ -45,9 +45,11 @@ LightObj::LightObj(ptr<Shader> shader, phys::Transform transform)
     };
 
     vbo = std::make_unique<Vbo>(vertices, sizeof(vertices), buffer::Layout::l_xyz);
-    ibo = std::make_unique<Ibo>(ind, 6);
+    ibo = std::make_unique<Ibo>(ind, 36);
     vao = std::make_unique<Vao>();
 
     vao->addVbo(*vbo);
     vao->setIbo(*ibo);
+
+    features[feature::cullFace] = false;
 }

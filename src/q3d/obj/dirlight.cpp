@@ -4,8 +4,7 @@ using namespace q3d;
 using namespace object;
 
 DirLightInternal DirLight::getInternal() const {
-    auto model = obj->transform.getModelMatrix();
-    auto direction = glm::normalize(-glm::vec3(model[2]));
+    auto direction = glm::normalize(-obj->transform.position);
 
     return {
         .direction = direction,

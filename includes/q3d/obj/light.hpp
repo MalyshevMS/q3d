@@ -56,9 +56,9 @@ public:
 
 struct LightProperties {
     core::Color color = core::Color::White;
-    float ambient;
-    float diffuse;
-    float specular;
+    float ambient = 0.1f;
+    float diffuse = 1.f;
+    float specular = 1.f;
 };
 
 } // namespace q3d::object

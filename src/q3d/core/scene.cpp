@@ -237,9 +237,15 @@ void Scene::render() {
         sorted[distance] = obj;
     }
 
-    for(auto it = sorted.rbegin(); it != sorted.rend(); it++) {
+    for (auto it = sorted.rbegin(); it != sorted.rend(); it++) {
         if (it->second) {
             it->second->draw();
+        }
+    }
+
+    for (const auto& [_, l] : dirLights) {
+        if (l) {
+            l->draw();
         }
     }
 }

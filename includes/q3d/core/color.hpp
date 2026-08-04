@@ -8,19 +8,29 @@ namespace q3d::core {
 
 using byte = unsigned char;
 
-class Color {
-private:
-    float color[4]; // GL-formated color [0..1] (4-components)
-public:
-    float& r = color[0];
-    float& g = color[1];
-    float& b = color[2];
-    float& a = color[3];
+struct Color {
+    union {
+        struct {
+            float r, g, b, a;
+        };
 
-    Color();
-    Color(byte r, byte g, byte b, byte a = (byte)255);
-    Color(float r, float g, float b, float a = 1.f);
-    Color(uint64_t color);
+        float raw[4];
+    };
+
+    Color() : r(0.f), g(0.f), b(0.f), a(0.f) {}
+
+    Color(byte r, byte g, byte b, byte a = 255)
+     : r(r / 255.f), g(g / 255.f), b(b / 255.f), a(a / 255.f) {}
+
+    Color(float r, float g, float b, float a = 1.f)
+     : r(r), g(g), b(b), a(a) {}
+
+    Color(uint32_t hex)
+     : r(((hex >> 24) & 0xFF) / 255.f),
+       g(((hex >> 16) & 0xFF) / 255.f),
+       b(((hex >>  8) & 0xFF) / 255.f),
+       a(((hex >>  0) & 0xFF) / 255.f)
+    {}
 
     glm::vec4 vec4() const {
         return glm::vec4(r, g, b, a);
