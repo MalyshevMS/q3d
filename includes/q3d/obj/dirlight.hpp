@@ -10,6 +10,7 @@ private:
     ptr<gl::Shader> shader;
 public:
     LightProperties properties;
+    phys::Transform& transform = obj->transform;
 
     DirLight(ptr<gl::Shader> shader, phys::Transform transform = {}) : obj(std::make_unique<LightObj>(shader, transform)), shader(shader), properties() {}
 
