@@ -8,8 +8,8 @@ AABB Transform::aabb() const {
 	glm::vec3 half = scale_fac * 0.5f;
 
 	glm::mat4 rot(1.f);
-	rot = glm::rotate(rot, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f));
-	rot = glm::rotate(rot, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f));
+    rot = glm::rotate(rot, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f));
+    rot = glm::rotate(rot, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f));
 	rot = glm::rotate(rot, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	glm::vec3 corners[8];
@@ -51,8 +51,8 @@ glm::mat4 Transform::getModelMatrix() const {
 
     mat = glm::translate(mat, position);
 
-    mat = glm::rotate(mat, glm::radians(rotation.x), {1,0,0});
     mat = glm::rotate(mat, glm::radians(rotation.y), {0,1,0});
+    mat = glm::rotate(mat, glm::radians(rotation.x), {1,0,0});
     mat = glm::rotate(mat, glm::radians(rotation.z), {0,0,1});
 
     mat = glm::scale(mat, scale_fac);
