@@ -8,6 +8,9 @@ SpotLightInternal SpotLight::getInternal() const {
     float outer = glm::radians(angle * 0.5f);
     float inner = outer * (1.f - glm::clamp(blend, 0.f, 1.f));
 
+    outer = glm::cos(outer);
+    inner = glm::cos(inner);
+
     auto model = obj->transform.getModelMatrix();
     auto direction = glm::normalize(-glm::vec3(model[2]));
 

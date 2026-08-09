@@ -41,12 +41,12 @@ void Scene::addDirLight(std::string_view name, DirLight light) {
     dirLights[name.data()] = std::make_shared<DirLight>(std::move(light));
 }
 
-void Scene::addPointLight(std::string_view name, const PointLightInternal& light) {
-    pointLights[name.data()] = std::make_shared<PointLightInternal>(light);
+void Scene::addSpotLight(std::string_view name, SpotLight light) {
+    spotLights[name.data()] = std::make_shared<SpotLight>(std::move(light));
 }
 
-void Scene::addSpotLight(std::string_view name, const SpotLightInternal& light) {
-    spotLights[name.data()] = std::make_shared<SpotLightInternal>(light);
+void Scene::addPointLight(std::string_view name, const PointLightInternal& light) {
+    pointLights[name.data()] = std::make_shared<PointLightInternal>(light);
 }
 
 ptr<DirLight> Scene::getDirLight(std::string_view name) {
@@ -63,7 +63,7 @@ ptr<PointLightInternal> Scene::getPointLight(std::string_view name) {
     return nullptr;
 }
 
-ptr<SpotLightInternal> Scene::getSpotLight(std::string_view name) {
+ptr<SpotLight> Scene::getSpotLight(std::string_view name) {
     auto it = spotLights.find(name.data());
 
     if (it != spotLights.end()) return it->second;
@@ -82,6 +82,17 @@ void Scene::render() {
         dirLightSsbo.updateData(std::span(raw));
     }
 
+    if (!spotLights.empty()) {
+        std::vector<SpotLightInternal> raw;
+        raw.reserve(spotLights.size());
+
+        for (const auto& [_, l] : spotLights) {
+            raw.push_back(l->getInternal());
+        }
+
+        spotLightSsbo.updateData(std::span(raw));
+    }
+
     if (!pointLights.empty()) {
         std::vector<PointLightInternal> raw;
         raw.reserve(pointLights.size());
@@ -91,17 +102,6 @@ void Scene::render() {
         }
 
         pointLightSsbo.updateData(std::span(raw));
-    }
-
-    if (!spotLights.empty()) {
-        std::vector<SpotLightInternal> raw;
-        raw.reserve(spotLights.size());
-
-        for (const auto& [_, l] : spotLights) {
-            raw.push_back(*l);
-        }
-
-        spotLightSsbo.updateData(std::span(raw));
     }
 
     // PASS 1 - Shadows
@@ -151,12 +151,13 @@ void Scene::render() {
 
         if (!spotLights.empty()) {
             for (const auto& [_, l] : spotLights) {
-                glm::vec3 pos  = l->position;
-                float fov = 2.f * std::acos(l->outerCutOff);
+                const auto& internal = l->getInternal();
+                glm::vec3 pos  = internal.position;
+                float fov = 2.f * std::acos(internal.outerCutOff);
                 glm::mat4 proj = glm::perspective(fov, 1.f, 0.1f, 100.f);
                 glm::vec3 up = world::up;
-                if (glm::abs(glm::dot(l->direction, up)) > 0.99f) up = world::forward;
-                glm::mat4 view = glm::lookAt(pos, pos + l->direction, up);
+                if (glm::abs(glm::dot(internal.direction, up)) > 0.99f) up = world::forward;
+                glm::mat4 view = glm::lookAt(pos, pos + internal.direction, up);
 
                 auto mat = proj * view;
 
@@ -244,6 +245,12 @@ void Scene::render() {
     }
 
     for (const auto& [_, l] : dirLights) {
+        if (l) {
+            l->draw();
+        }
+    }
+
+    for (const auto& [_, l] : spotLights) {
         if (l) {
             l->draw();
         }
