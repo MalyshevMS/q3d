@@ -45,8 +45,8 @@ void Scene::addSpotLight(std::string_view name, SpotLight light) {
     spotLights[name.data()] = std::make_shared<SpotLight>(std::move(light));
 }
 
-void Scene::addPointLight(std::string_view name, const PointLightInternal& light) {
-    pointLights[name.data()] = std::make_shared<PointLightInternal>(light);
+void Scene::addPointLight(std::string_view name, PointLight light) {
+    pointLights[name.data()] = std::make_shared<PointLight>(std::move(light));
 }
 
 ptr<DirLight> Scene::getDirLight(std::string_view name) {
@@ -56,7 +56,7 @@ ptr<DirLight> Scene::getDirLight(std::string_view name) {
     return nullptr;
 }
 
-ptr<PointLightInternal> Scene::getPointLight(std::string_view name) {
+ptr<PointLight> Scene::getPointLight(std::string_view name) {
     auto it = pointLights.find(name.data());
 
     if (it != pointLights.end()) return it->second;
@@ -98,7 +98,7 @@ void Scene::render() {
         raw.reserve(pointLights.size());
 
         for (const auto& [_, l] : pointLights) {
-            raw.push_back(*l);
+            raw.push_back(l->getInternal());
         }
 
         pointLightSsbo.updateData(std::span(raw));
@@ -192,7 +192,7 @@ void Scene::render() {
         size_t index = 0;
 
         for (const auto& [_, l] : pointLights) {
-            glm::vec3 pos = l->position;
+            glm::vec3 pos = l->getInternal().position;
 
             std::array<glm::mat4, 6> shadowTransforms = {
                 proj * glm::lookAt(pos, pos + world::right, -world::up),
@@ -251,6 +251,11 @@ void Scene::render() {
     }
 
     for (const auto& [_, l] : spotLights) {
+        if (l) {
+            l->draw();
+        }
+    }
+    for (const auto& [_, l] : pointLights) {
         if (l) {
             l->draw();
         }

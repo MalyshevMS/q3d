@@ -10,6 +10,7 @@
 #include <q3d/gl/cubemap.hpp>
 #include <q3d/obj/dirlight.hpp>
 #include <q3d/obj/spotlight.hpp>
+#include <q3d/obj/pointlight.hpp>
 
 namespace q3d::core {
 
@@ -21,7 +22,7 @@ protected:
 
     std::unordered_map<std::string, ptr<object::DirLight>> dirLights = {};
     std::unordered_map<std::string, ptr<object::SpotLight>> spotLights = {};
-    std::unordered_map<std::string, ptr<object::PointLightInternal>> pointLights = {};
+    std::unordered_map<std::string, ptr<object::PointLight>> pointLights = {};
 
     gl::Ssbo dirLightSsbo = gl::Ssbo(0);
     gl::Ssbo spotLightSsbo = gl::Ssbo(1);
@@ -55,11 +56,11 @@ public:
 
     void addDirLight(std::string_view name, object::DirLight light);
     void addSpotLight(std::string_view name, object::SpotLight light);
-    void addPointLight(std::string_view name, const object::PointLightInternal& light);
+    void addPointLight(std::string_view name, object::PointLight light);
 
     ptr<object::DirLight>   getDirLight(std::string_view name);
     ptr<object::SpotLight>  getSpotLight(std::string_view name);
-    ptr<object::PointLightInternal> getPointLight(std::string_view name);
+    ptr<object::PointLight> getPointLight(std::string_view name);
 
     void removeDirLight(std::string_view name);
     void removeSpotLight(std::string_view name);

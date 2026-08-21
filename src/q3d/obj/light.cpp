@@ -8,14 +8,14 @@ using namespace object;
 LightObj::LightObj(ptr<Shader> shader, phys::Transform transform)
  : core::Object(shader, nullptr, transform) {
     const float vertices[] = {
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+         0.25f,  0.25f,  0.25f,
+         0.25f,  0.25f, -0.25f,
+         0.25f, -0.25f,  0.25f,
+         0.25f, -0.25f, -0.25f,
+        -0.25f,  0.25f,  0.25f,
+        -0.25f,  0.25f, -0.25f,
+        -0.25f, -0.25f,  0.25f,
+        -0.25f, -0.25f, -0.25f,
     };
 
     const unsigned int ind[] = {
