@@ -48,7 +48,12 @@ set(Q3D_SOURCES
     src/q3d/window/screen.cpp
 
     src/q3d/res/resources.cpp
-    src/q3d/res/objparser.cpp
+    src/q3d/res/texture_loader.cpp
+    src/q3d/res/shader_loader.cpp
+    src/q3d/res/model_loader.cpp
+    src/q3d/res/font_loader.cpp
+    src/q3d/res/material_loader.cpp
+    src/q3d/res/fs.cpp
 
     src/q3d/core/color.cpp
     src/q3d/core/camera.cpp

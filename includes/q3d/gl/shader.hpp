@@ -24,7 +24,6 @@ public:
     void init();
 
     Shader();
-    Shader(std::string_view vert_src, std::string_view frag_src);
     Shader(std::string_view vert_src, std::string_view frag_src, std::string_view geom_src);
     ~Shader();
 

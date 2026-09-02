@@ -4,7 +4,7 @@
 using namespace q3d;
 using namespace object;
 
-Model::Model(ptr<gl::Shader> shader, const Resources::ObjData& objData, ptr<gl::Texture> texture, phys::Transform transform)
+Model::Model(ptr<gl::Shader> shader, const ObjData& objData, ptr<gl::Texture> texture, phys::Transform transform)
  : core::Object(shader, texture, transform) {
 
     if (objData.vertices.empty() || objData.indices.empty()) {

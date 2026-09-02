@@ -1,24 +1,26 @@
 #include <q3d/res/resources.hpp>
+#include <q3d/res/vertex.hpp>
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <q3d/res/tiny_obj_loader.h>
-#include <q3d/log/log.hpp>
+#include <q3d/obj/model.hpp>
 
 using namespace q3d;
+using namespace object;
 
-Resources::ObjData Resources::parseObjFile(std::string_view path) {
+ObjData parseObjFile(const fs::path& path) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.data());
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str());
 
     if (!warn.empty()) {
-        log::warn("Resources::parseObjFile('{}'): warning from loader: {}", path, warn);
+        log::warn("parseObjFile('{}'): warning from loader: {}", path.string(), warn);
     }
 
     if (!err.empty()) {
-        log::warn("Resources::parseObjFile('{}'): error from loader: {}", path, err);
+        log::warn("parseObjFile('{}'): error from loader: {}", path.string(), err);
     }
 
     if (!ret) return {};
@@ -68,4 +70,29 @@ Resources::ObjData Resources::parseObjFile(std::string_view path) {
     }
 
     return data;
+}
+
+ptr<Model> ResourceManager::loadModel(const std::string& name, const fs::path& path, const std::string& shader, const std::string& texture) {
+    const auto& shad = getShader(shader);
+    const auto& tex = getTexture(texture);
+
+    if (!shad) {
+        log::error("ResourceManager::loadModel('{}'): Shader not found!", name);
+        return nullptr;
+    }
+
+    auto objData = parseObjFile(path);
+
+    const auto& model = models.emplace(
+        name, std::make_shared<Model>(shad, objData, tex, phys::Transform())
+    );
+
+    if (!model.second) {
+        log::error("ResourceManager::loadModel('{}'): Failed to emplace model!", name);
+        return nullptr;
+    }
+
+    log::info("Loaded model '{}'", name);
+
+    return model.first->second;
 }

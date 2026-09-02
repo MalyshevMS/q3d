@@ -46,15 +46,6 @@ Shader::Shader() {
     init();
 }
 
-Shader::Shader(std::string_view vert_src, std::string_view frag_src) {
-    init();
-    GLuint vs_id = attach(vert_src, Type::Vertex);
-    GLuint fs_id = attach(frag_src, Type::Fragment);
-    link();
-    if (vs_id) glDeleteShader(vs_id);
-    if (fs_id) glDeleteShader(fs_id);
-}
-
 Shader::Shader(std::string_view vert_src, std::string_view frag_src, std::string_view geom_src) {
     init();
     GLuint vs_id = attach(vert_src, Type::Vertex);
@@ -67,6 +58,8 @@ Shader::Shader(std::string_view vert_src, std::string_view frag_src, std::string
 }
 
 unsigned int Shader::attach(std::string_view src, const Type type) {
+    if (src.empty()) return 0;
+
     GLuint shader_id;
     if (!compileShader(src, type, shader_id)) {
         glDeleteShader(shader_id);
