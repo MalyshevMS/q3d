@@ -5,27 +5,12 @@
 #include <q3d/res/fs.hpp>
 #include <q3d/res/ptr.hpp>
 #include <q3d/log/log.hpp>
+#include <q3d/res/loaders.hpp>
 
-// Forward declarations
 namespace q3d {
-
-namespace gl {
-    class Texture;
-    class Shader;
-}
-
-namespace object {
-    class Model;
-}
-
-namespace ui {
-    class Font;
-}
-
-namespace core {
-    struct Material;
-}
-
+    namespace object {
+        class Model;
+    }
 }
 
 namespace q3d {
@@ -60,6 +45,9 @@ public:
     ptr<object::Model>  getModel(const std::string& name) const;
     ptr<ui::Font>       getFont(const std::string& name) const;
     ptr<core::Material> getMaterial(const std::string& name) const;
+
+    // Archive utils
+    void load(const fs::path& path);
 
     void clear();
 };

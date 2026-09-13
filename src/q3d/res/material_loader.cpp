@@ -1,3 +1,4 @@
+#include <q3d/res/loaders.hpp>
 #include <q3d/res/resources.hpp>
 #include <q3d/core/material.hpp>
 #include <nlohmann/json.hpp>
@@ -7,10 +8,8 @@ using namespace core;
 
 using json = nlohmann::json;
 
-ptr<Material> ResourceManager::loadMaterial(const std::string& name, const fs::path& path) {
-    auto content = fs::readFile(path);
-
-    json j = json::parse(content);
+ptr<Material> loader::material(std::string raw) {
+    json j = json::parse(raw);
 
     auto mat = std::make_shared<core::Material>();
 
@@ -28,8 +27,14 @@ ptr<Material> ResourceManager::loadMaterial(const std::string& name, const fs::p
 
     mat->shininess = j["shininess"];
 
+    return mat;
+}
+
+ptr<Material> ResourceManager::loadMaterial(const std::string& name, const fs::path& path) {
+    auto mat = loader::material(fs::readFile(path));
+
     const auto& material = materials.emplace(
-        name, mat
+        name, std::move(mat)
     );
 
     if (!material.second) {

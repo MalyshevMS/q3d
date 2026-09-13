@@ -1,3 +1,4 @@
+#include <q3d/res/loaders.hpp>
 #include <q3d/res/resources.hpp>
 #include <q3d/ui/font.hpp>
 #include <ft2build.h>
@@ -33,16 +34,16 @@ void loadGlyph(FT_Face& face, ui::CharMap& charmap, unsigned long c) {
     charmap.insert({c, ch});
 }
 
-ptr<Font> ResourceManager::loadFont(const std::string& name, const fs::path& path, unsigned int size) {
+ptr<Font> loader::font(bytes raw, unsigned int size) {
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
-        log::error("ResourceManager::loadFont('{}'): FreeType failed to init!", name);
+        log::error("loader::font(): FreeType failed to init");
         return nullptr;
     }
 
     FT_Face face;
-    if (FT_New_Face(ft, path.c_str(), 0, &face)) {
-        log::error("ResourceManager::loadFont('{}'): failed to load font at '{}'!", name, path.string());
+    if (FT_New_Memory_Face(ft, raw.data(), raw.size(), 0, &face)) {
+        log::error("loader::font(): failed to load font");
         return nullptr;
     }
 
@@ -63,8 +64,14 @@ ptr<Font> ResourceManager::loadFont(const std::string& name, const fs::path& pat
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-    const auto& font= fonts.emplace(
-        name, std::make_shared<Font>(charmap)
+    return std::make_shared<Font>(charmap);
+}
+
+ptr<Font> ResourceManager::loadFont(const std::string& name, const fs::path& path, unsigned int size) {
+    auto f = loader::font(fs::readFileBytes(path), size);
+
+    const auto& font = fonts.emplace(
+        name, std::move(f)
     );
 
     if (!font.second) {

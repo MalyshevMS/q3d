@@ -50,4 +50,25 @@ std::string readFile(const path& filepath) {
     return oss.str();
 }
 
+std::vector<uint8_t> readFileBytes(const path& filepath) {
+    auto path = resolve(filepath);
+    std::ifstream ifs;
+    ifs.open(path, std::ios::in | std::ios::binary);
+    if (!ifs.is_open()) {
+        log::warn("fs::readFile('{}'): Failed to open file '{}'!", filepath.string(), path.string());
+        return {};
+    }
+
+    ifs.seekg(0, std::ios::end);
+    auto size = ifs.tellg();
+    ifs.seekg(0, std::ios::beg);
+
+    std::vector<uint8_t> buffer(static_cast<size_t>(size));
+    ifs.read(reinterpret_cast<char*>(buffer.data()), size);
+
+    return buffer;
+}
+
+
+
 } // namespace q3d::fs

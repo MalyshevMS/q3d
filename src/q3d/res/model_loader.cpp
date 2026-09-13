@@ -1,3 +1,4 @@
+#include <sstream>
 #include <q3d/res/resources.hpp>
 #include <q3d/res/vertex.hpp>
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -7,20 +8,21 @@
 using namespace q3d;
 using namespace object;
 
-ObjData parseObjFile(const fs::path& path) {
+ObjData loader::model(std::string raw) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
+    std::istringstream iss(raw);
 
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str());
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &iss);
 
     if (!warn.empty()) {
-        log::warn("parseObjFile('{}'): warning from loader: {}", path.string(), warn);
+        log::warn("loader::model(): warning from loader: {}", warn);
     }
 
     if (!err.empty()) {
-        log::warn("parseObjFile('{}'): error from loader: {}", path.string(), err);
+        log::warn("loader::model(): error from loader: {}", err);
     }
 
     if (!ret) return {};
@@ -81,7 +83,7 @@ ptr<Model> ResourceManager::loadModel(const std::string& name, const fs::path& p
         return nullptr;
     }
 
-    auto objData = parseObjFile(path);
+    auto objData = loader::model(fs::readFile(path));
 
     const auto& model = models.emplace(
         name, std::make_shared<Model>(shad, objData, tex, phys::Transform())
