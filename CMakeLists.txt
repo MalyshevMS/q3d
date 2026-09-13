@@ -54,6 +54,7 @@ set(Q3D_SOURCES
     src/q3d/res/font_loader.cpp
     src/q3d/res/material_loader.cpp
     src/q3d/res/fs.cpp
+    src/q3d/res/vfs.cpp
 
     src/q3d/core/color.cpp
     src/q3d/core/camera.cpp
@@ -112,17 +113,26 @@ add_subdirectory(ext/glad-core/glad)
 
 add_subdirectory(ext/glm)
 
-set(FT_DISABLE_ZLIB TRUE CACHE BOOL "Disable ZLib" FORCE)
-set(FT_DISABLE_BZIP2 TRUE CACHE BOOL "Disable Bzip2" FORCE)
-set(FT_DISABLE_PNG TRUE CACHE BOOL "Disable PNG" FORCE)
-set(FT_DISABLE_HARFBUZZ TRUE CACHE BOOL "Disable Harfbuzz" FORCE)
-set(FT_DISABLE_BROTLI TRUE CACHE BOOL "Disable Brotli" FORCE)
+set(FT_DISABLE_ZLIB TRUE CACHE BOOL "" FORCE)
+set(FT_DISABLE_BZIP2 TRUE CACHE BOOL "" FORCE)
+set(FT_DISABLE_PNG TRUE CACHE BOOL "" FORCE)
+set(FT_DISABLE_HARFBUZZ TRUE CACHE BOOL "" FORCE)
+set(FT_DISABLE_BROTLI TRUE CACHE BOOL "" FORCE)
+
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED !${Q3D_STATIC} CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_STATIC ${Q3D_STATIC} CACHE BOOL "" FORCE)
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
 
 add_subdirectory(ext/freetype)
 
 add_subdirectory(ext/nlohmann_json)
+
+add_subdirectory(ext/zstd/build/cmake)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ext/zstd/lib)
 
 # Linking
 
@@ -133,3 +143,13 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC freetype
     PUBLIC nlohmann_json::nlohmann_json
 )
+
+if(${Q3D_STATIC})
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC libzstd_static
+    )
+else()
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC libzstd_shared
+    )
+endif()
