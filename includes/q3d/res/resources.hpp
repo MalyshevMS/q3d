@@ -60,6 +60,8 @@ public:
     ptr<object::Model>  getModel(const std::string& name) const;
     ptr<ui::Font>       getFont(const std::string& name) const;
     ptr<core::Material> getMaterial(const std::string& name) const;
+
+    void clear();
 };
 
 }

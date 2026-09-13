@@ -2,6 +2,7 @@
 #include <q3d/gl/shader.hpp>
 #include <q3d/gl/fbo.hpp>
 #include <glad/glad.h>
+#include <q3d/log/log.hpp>
 
 using namespace q3d;
 using namespace gl;
@@ -29,6 +30,15 @@ Texture::Texture(const Image data, unsigned int width, unsigned int height, unsi
 
 Texture::~Texture() {
     glDeleteTextures(1, &id);
+}
+
+Texture& Texture::operator=(Texture&& other) noexcept {
+    if (this != &other) {
+        if (id != 0) glDeleteTextures(1, &id);
+        id = std::exchange(other.id, 0);
+    }
+
+    return *this;
 }
 
 void Texture::bind() {

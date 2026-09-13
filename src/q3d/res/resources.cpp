@@ -27,3 +27,11 @@ ptr<core::Material> ResourceManager::getMaterial(const std::string& name) const 
     auto it = materials.find(name);
     return it != materials.end() ? it->second : nullptr;
 }
+
+void ResourceManager::clear() {
+    models.clear();
+    fonts.clear();
+    materials.clear();
+    shaders.clear();
+    textures.clear();
+}

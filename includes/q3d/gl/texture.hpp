@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/vec2.hpp>
+#include <utility>
 
 namespace q3d::gl {
 
@@ -31,6 +32,12 @@ public:
 
     Texture(const Image data, unsigned int width, unsigned int height, unsigned int channels);
     ~Texture();
+
+    Texture(const Texture&) = delete;
+    Texture& operator=(const Texture&) = delete;
+
+    Texture(Texture&& other) noexcept : id(std::exchange(other.id, 0)) {}
+    Texture& operator=(Texture&& other) noexcept;
 
     void bind();
     static void unbind();
