@@ -18,6 +18,8 @@ static size_t parseOctal(const char* str, size_t maxLen) {
 }
 
 bool VFS::openArchive(const fs::path& path) {
+    name = path.filename().string();
+
     std::ifstream file(path, std::ios::binary | std::ios::ate);
 
     if (!file.is_open()) {

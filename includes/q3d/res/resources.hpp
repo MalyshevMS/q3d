@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <q3d/res/fs.hpp>
+#include <q3d/res/vfs.hpp>
 #include <q3d/res/ptr.hpp>
 #include <q3d/log/log.hpp>
 #include <q3d/res/loaders.hpp>
@@ -48,6 +49,8 @@ public:
 
     // Archive utils
     void load(const fs::path& path);
+
+    void loadTextures(const vfs::VFS& vfs);
 
     void clear();
 };

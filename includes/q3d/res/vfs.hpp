@@ -26,6 +26,7 @@ private:
     bool parseTar(const std::vector<uint8_t>& tar);
 
     std::unordered_map<std::string, FileBuffer> files;
+    std::string name;
 public:
     VFS() = default;
     ~VFS() = default;
@@ -37,6 +38,8 @@ public:
     [[nodiscard]] bool hasFile(const std::string& internalPath) const;
 
     [[nodiscard]] std::vector<std::string> listFiles() const;
+
+    [[nodiscard]] std::string getName() const { return name; }
 };
 
 } // namespace q3d::vfs
